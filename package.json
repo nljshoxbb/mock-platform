@@ -4,13 +4,15 @@
   "description": "mock服务平台",
   "main": "index.js",
   "scripts": {
-    "dev-server": "nodemon -e ts -w server --exec 'tsc && tsc-alias && node --inspect dist/server/app.js'"
+    "dev-server": "nodemon -e ts -w server --exec 'tsc && tsc-alias && node --inspect dist/server/app.js'",
+    "init-server": "tsc && tsc-alias && node --inspect dist/server/install.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@koa/cors": "^3.1.0",
     "chalk": "^4.1.2",
+    "fs-extra": "^10.0.1",
     "koa": "^2.13.4",
     "koa-bodyparser": "^4.3.0",
     "koa-compose": "^4.1.0",
@@ -18,13 +20,16 @@
     "koa-logger": "^3.2.1",
     "koa-multer": "^1.0.2",
     "koa-router": "^10.1.1",
-    "koa-static": "^5.0.0"
+    "koa-static": "^5.0.0",
+    "mongoose": "^6.2.3",
+    "mongoose-auto-increment": "^5.0.1"
   },
   "devDependencies": {
     "@types/koa-bodyparser": "^4.3.5",
     "@types/koa-multer": "^1.0.1",
     "@types/koa-router": "^7.4.4",
     "@types/koa-static": "^4.0.2",
+    "@types/mongoose-auto-increment": "^5.0.34",
     "@types/node": "^17.0.21",
     "@typescript-eslint/eslint-plugin": "^5.12.1",
     "eslint": "^8.9.0",

@@ -7,8 +7,8 @@ function routes() {
   const router = new KoaRouter();
 
   router.prefix(Config.prefix);
-
   router.get('/v1/project', project.Find);
+  router.post('/v1/project/create', project.Create);
 
   return compose([router.routes(), router.allowedMethods()]);
 }
