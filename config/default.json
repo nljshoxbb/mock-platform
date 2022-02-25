@@ -1,0 +1,10 @@
+{
+  "port": 3888,
+  "db": {
+    "server": "127.0.0.1",
+    "database": "mock-platform",
+    "port": 27017,
+    "user": "test",
+    "pwd": "test"
+  }
+}
