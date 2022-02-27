@@ -1,10 +1,10 @@
 import path from 'path';
 
 import Config from '@/server/config';
-import fs from 'fs-extra';
 import mongoose from 'mongoose';
 
 import connectDatabase from './database';
+import Log from './utils/Log';
 import { fileExist } from './utils/utils';
 
 /** 初始化数据库脚本 */
@@ -24,6 +24,8 @@ async function initDatabse() {
   const projectCollection = mongoose.connection.db.collection('project');
   projectCollection.createIndex({ uid: 1 });
   projectCollection.createIndex({ name: 1 });
+  Log.info('初始化成功');
+  process.exit(0);
 }
 
 install();

@@ -18,7 +18,7 @@ class ProjectModel extends BaseModel<ProjectModelI> {
 
   getSchema(): SchemaDefinition {
     return {
-      name: { required: true, type: String },
+      name: { required: true, type: String, validate: { validator: async () => await Promise.resolve(false), message: '不能为空' } },
       description: { required: false, type: String }
     };
   }

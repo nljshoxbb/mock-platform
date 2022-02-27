@@ -24,3 +24,12 @@ export const deleteModelInstance = (m) => {
     console.error(error);
   }
 };
+
+export const responseBody = <T>(data: T, code: number = 200, msg: string = '') => {
+  return {
+    data,
+    code,
+    msg,
+    hasError: code > 200
+  };
+};
