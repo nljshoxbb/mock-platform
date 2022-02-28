@@ -20,11 +20,23 @@ export const Create = async (ctx: Context) => {
     await model.create(data);
     return (ctx.body = responseBody(null, 200, '成功'));
   } catch (error) {
-    console.log(error.errors);
     return (ctx.body = responseBody(null, 500, '系统错误'));
   }
 };
 
-export const Find = async (ctx: Context) => {
-  return 2222;
+export const List = async (ctx: Context) => {
+  // return 2222;
+  try {
+    const params = ctx.request.query;
+    const model = getModelInstance<ProjectModel>(ProjectModel);
+    const data = await model.get(params);
+    console.log(data);
+    const list = data.map((i) => {
+      return {
+        id: i._id,
+        name: i.name
+      };
+    });
+    return (ctx.body = responseBody(list, 200));
+  } catch (error) {}
 };

@@ -30,6 +30,10 @@ class ProjectModel extends BaseModel<ProjectModelI> {
   public checkNameRepeat(name) {
     return this.model.find({ name }).count();
   }
+
+  public get(params: any) {
+    return this.model.find({});
+  }
 }
 
 export default ProjectModel;
