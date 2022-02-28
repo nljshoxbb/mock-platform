@@ -502,6 +502,11 @@
     "@types/mime" "^1"
     "@types/node" "*"
 
+"@types/swagger-jsdoc@^6.0.1":
+  version "6.0.1"
+  resolved "https://registry.npmmirror.com/@types/swagger-jsdoc/-/swagger-jsdoc-6.0.1.tgz#94a99aca0356cb64ad2a6eb903ed034703453801"
+  integrity sha512-+MUpcbyxD528dECUBCEVm6abNuORdbuGjbrUdHDeAQ+rkPuo2a+L4N02WJHF3bonSSE6SJ3dUJwF2V6+cHnf0w==
+
 "@types/webidl-conversions@*":
   version "6.1.1"
   resolved "https://registry.npmjs.org/@types/webidl-conversions/-/webidl-conversions-6.1.1.tgz#e33bc8ea812a01f63f90481c666334844b12a09e"
@@ -3148,7 +3153,7 @@ supports-preserve-symlinks-flag@^1.0.0:
 
 swagger-jsdoc@^6.1.0:
   version "6.1.0"
-  resolved "https://registry.npmjs.org/swagger-jsdoc/-/swagger-jsdoc-6.1.0.tgz#c2b86321f2c4dde8947b418fe8a4bc94431d5522"
+  resolved "https://registry.npmmirror.com/swagger-jsdoc/-/swagger-jsdoc-6.1.0.tgz#c2b86321f2c4dde8947b418fe8a4bc94431d5522"
   integrity sha512-xgep5M8Gq31MxpCbQLvJZpNqHfGPfI+sILCzujZbEXIQp2COtkZgoGASs0gacRs4xHmLDH+GuMGdorPITSG4tA==
   dependencies:
     commander "6.2.0"

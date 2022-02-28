@@ -1,77 +1,74 @@
 import * as interfaceController from '@/server/controllers/project';
 import KoaRouter from 'koa-router';
 
-// *     InterfaceItem:
-// *       type: object
-// *       properties:
-// *         id:
-// *           type: number
-// *           descriptions: 接口id
-// *         name:
-// *           type: string
-// *           descriptions: 接口名称
-// *         path:
-// *           type: string
-// *           descriptions: 接口地址
-// *         requestRaw:
-// *           type: string
-// *           descriptions: 同步的swagger对应的接口请求内容。json 格式字符串
-// *         responseRaw:
-// *           type: string
-// *           descriptions: 同步的swagger对应的接口返回内容。json 格式字符串
-// *     CategoryItem:
-// *       type: object
-// *       properties:
-// *         id:
-// *           type: number
-// *           descriptions: 类目id
-// *         name:
-// *           type: string
-// *           descriptions: 类目名
-// *         apiList:
-// *           type: array
-// *           items:
-// *             $ref: '#/components/schemas/InterfaceItem'
-// *     InterfaceOperationRequest:
-// *       type: object
-// *       properties:
-// *         id:
-// *           type: number
-// *           description: 接口id
-// *         params:
-// *           type: string
-// *           description: 接口参数
-// *     InterfaceOperationResponse:
-// *        type: object
-// *        properties:
-// *          id:
-// *          type: integer
-// *     InterfaceListRequest:
-// *     InterfaceListResponseProjectItem:
-// *       type: object
-// *       properties:
-// *         project_id:
-// *           type: number
-// *           description: 项目id
-// *         project_name:
-// *           type: string
-// *           description: 项目名称
-// *         categoryList:
-// *           type: array
-// *           items:
-// *             $ref: '#/components/schemas/CategoryItem'
-
 export default function interfaceRouter(router: KoaRouter) {
   /**
    * @openapi
    * components:
    *   schemas:
-   *     InterfaceListRequest:
-   *     InterfaceListResponse:
+   *      InterfaceOperationRequest:
+   *        type: object
+   *        properties:
+   *          api: string
+   *          required: true
+   *          description: 请求地址
+   *     ApiItem:
+   *        type: object
+   *        properties:
+   *          id:
+   *            type: number
+   *            description: 接口id
+   *          name:
+   *            type: string
+   *            description: 接口名
+   *          path:
+   *            type: string
+   *            description: 接口地址
+   *          requestRaw:
+   *            type: string
+   *            description: 同步的swagger对应的接口请求内容。json 格式字符串
+   *          responseRaw:
+   *            type: string
+   *            description: 同步的swagger对应的接口返回内容。json 格式字符串
+   *     CategoryItem:
    *       type: object
    *       properties:
-   *         projectList:
-   *           type: string
+   *         id:
+   *            type: number
+   *            description: 类目id
+   *         name:
+   *             type: string
+   *             description: 类目名
+   *         api_list:
+   *             type: string
+   *             description: api列表
+   *     InterfaceListRequest:
+   *     InterfaceListResponse:
+   *       type: array
+   *       items:
+   *         type: object
+   *         properties:
+   *           project_id:
+   *             type: number
+   *             description: 项目id
+   *           project_name:
+   *              type: string
+   *              description: 项目名称
+   *           category_list:
+   *              type: array
+   *              items:
+   *                type: object
+   *                properties:
+   *                   category_id:
+   *                      type: number
+   *                      description: 类目id
+   *                   category_name:
+   *                      type: string
+   *                      description: 类目名
+   *                   api_list:
+   *                      type: array
+   *                      items:
+   *                        $ref: '#/components/schemas/ApiItem'
    *     InterfaceDeleteRequest:
    *       type: object
    *       properties:

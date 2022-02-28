@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@koa/cors": "^3.1.0",
+    "@types/swagger-jsdoc": "^6.0.1",
     "chalk": "^4.1.2",
     "fs-extra": "^10.0.1",
     "koa": "^2.13.4",

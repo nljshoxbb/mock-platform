@@ -1,0 +1,54 @@
+  components:
+    schemas:
+      ApiItem:
+         type: object
+         properties:
+           id:
+             type: number
+             description: 接口id
+      CategoryItem:
+        type: object
+        properties:
+          id:
+             type: number
+             description: 类目id
+          name:
+              type: string
+              description: 类目名
+          api_list:
+              type: string
+              description: api列表
+      InterfaceListRequest:
+      InterfaceListResponse:
+        type: array
+        items:
+          type: object
+          properties:
+            project_id:
+              type: number
+              description: 项目id
+      InterfaceDeleteRequest:
+        type: object
+        properties:
+          id:
+            type: string
+            required: true
+            description: 项目id
+  /api/v1/interface:
+    get:
+      summary: 接口列表.
+      tags:
+        - interface
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InterfaceListRequest'
+      responses:
+        200:
+          description: 返回结果
+          content:
+             application/json:
+               schema:
+                 $ref: '#/components/schemas/InterfaceListResponse'
+ 
