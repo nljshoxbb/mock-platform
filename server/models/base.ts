@@ -13,7 +13,14 @@ export default abstract class BaseModel<T extends Document> {
   constructor() {
     this.name = this.getName();
     this.schema = this.getSchema();
-    this.innerSchema = new Schema(this.schema, { collection: this.name });
+    this.innerSchema = new Schema(this.schema, {
+      collection: this.name,
+      timestamps: {
+        createdAt: 'created_at',
+        currentTime: () => Math.floor(Date.now() / 1000),
+        updatedAt: 'update_at'
+      }
+    });
     this.innerSchema.plugin(AutoIncrement.plugin, {
       model: this.name,
       field: this.getPrimaryKey(),

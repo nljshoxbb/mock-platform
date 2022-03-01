@@ -13,21 +13,35 @@ export default function projectRouter(router: KoaRouter) {
    *     responses:
    *       200:
    *         description: 返回结果
-   *         schema:
-   *           type: array
-   *           items:
-   *             properties:
-   *               id:
-   *                 type: integer
-   *                 description: id
-   *               name:
-   *                 type: string
-   *                 description: 项目名
-   *               desc:
-   *                 type: string
-   *                 description: 描述
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: array
+   *               items:
+   *                 properties:
+   *                   id:
+   *                     type: integer
+   *                     description: id
+   *                   name:
+   *                     type: string
+   *                     description: 项目名
+   *                   desc:
+   *                     type: string
+   *                     description: 描述
+   *                   created_at:
+   *                     type: number
+   *                     description: 创建时间
+   *                   update_at:
+   *                     type: number
+   *                     description: 更新时间
    * components:
    *   schemas:
+   *     ProjectListRequest:
+   *       type: object
+   *     ProjectListResponse:
+   *       type: object
+   *       properties:
+   *        name
    *     ProjectCreateRequest:
    *       type: object
    *       properties:
@@ -105,7 +119,7 @@ export default function projectRouter(router: KoaRouter) {
    *              schema:
    *                $ref: '#/components/schemas/ProjectCreateResponse'
    */
-  router.put('/v1/project');
+  router.put('/v1/project', project.Edit);
   /**
    * @openapi
    * /api/v1/project:
@@ -125,5 +139,6 @@ export default function projectRouter(router: KoaRouter) {
    *            application/json:
    *              schema:
    */
-  router.put('/v1/project');
+
+  router.delete('/v1/project', project.Delete);
 }

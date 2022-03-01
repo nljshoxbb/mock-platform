@@ -1,9 +1,9 @@
 import path from 'path';
 
 import Config from '@/server/config';
+import catchError from '@/server/middlewares/catchError';
 import routes from '@/server/routes';
 import Log from '@/server/utils/Log';
-// import swagger from '@/server/utils/swagger';
 import Koa from 'koa';
 import bodyParser from 'koa-bodyparser';
 import serverStatic from 'koa-static';
@@ -13,16 +13,15 @@ import connectDatabase from './database';
 
 const app = new Koa();
 
-// app.use(swagger.routes());
+app.use(catchError);
 app.use(bodyParser({ strict: false, jsonLimit: '2mb', formLimit: '2mb', textLimit: '2mb' }));
 app.use(routes());
 app.use(serverStatic(path.join(Config.APP_RUNTIME, 'public'), { gzip: true }));
 app.use(
   koaSwagger({
-    specPrefix: '/api',
     routePrefix: '/swagger',
     swaggerOptions: {
-      url: '/api/swagger.json'
+      url: '/swagger.json'
     }
   })
 );

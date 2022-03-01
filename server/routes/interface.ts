@@ -1,4 +1,4 @@
-import * as interfaceController from '@/server/controllers/project';
+import * as interfaceController from '@/server/controllers/interface';
 import KoaRouter from 'koa-router';
 
 export default function interfaceRouter(router: KoaRouter) {
@@ -6,12 +6,27 @@ export default function interfaceRouter(router: KoaRouter) {
    * @openapi
    * components:
    *   schemas:
-   *      InterfaceOperationRequest:
+   *     InterfaceSyncRequest:
    *        type: object
    *        properties:
-   *          api: string
-   *          required: true
-   *          description: 请求地址
+   *          api:
+   *            type: string
+   *            description: 需要同步的 swagger 文档地址,只支持http
+   *          type:
+   *            type: string
+   *            enum:
+   *              - yaml
+   *              - json
+   *            description: 文档类型
+   *     InterfaceSyncResponse:
+   *       type: object
+   *       properties:
+   *        status:
+   *          type: number
+   *          descrpition: 状态 0 失败，1成功
+   *          enums:
+   *            - 0
+   *            - 1
    *     ApiItem:
    *        type: object
    *        properties:
@@ -76,10 +91,25 @@ export default function interfaceRouter(router: KoaRouter) {
    *           type: string
    *           required: true
    *           description: 项目id
-   *
-   *
-   *
-   *
+   *     InterfaceOperationRequest:
+   *       type: object
+   *       properties:
+   *         api:
+   *           type: string
+   *           required: true
+   *           description: 请求地址
+   *     InterfaceOperationResponse:
+   *       type: object
+   *       properties:
+   *           status:
+   *             type: number
+   *             description: http状态码
+   *           mock_response:
+   *             type: string
+   *             description: 响应结果
+   *     InterfaceCreateResponse:
+   *       type: object
+   *       properties:
    * /api/v1/interface:
    *   get:
    *     summary: 接口列表.
@@ -98,7 +128,7 @@ export default function interfaceRouter(router: KoaRouter) {
    *              schema:
    *                $ref: '#/components/schemas/InterfaceListResponse'
    */
-  router.get('/v1/interface/list', interfaceController.List);
+  router.get('/v1/interface/list', interfaceController.SyncData);
   /**
    * @openapi
    * /api/v1/interface/sync:
@@ -110,16 +140,16 @@ export default function interfaceRouter(router: KoaRouter) {
    *       content:
    *         application/json:
    *           schema:
-   *             $ref: '#/components/schemas/interfaceCreateRequest'
+   *             $ref: '#/components/schemas/InterfaceSyncRequest'
    *     responses:
    *       200:
    *         description: 返回结果
    *         content:
    *            application/json:
    *              schema:
-   *                $ref: '#/components/schemas/InterfaceListResponse'
+   *                $ref: '#/components/schemas/InterfaceSyncResponse'
    */
-  router.post('/v1/interface/sync');
+  router.post('/v1/interface/sync', interfaceController.SyncData);
   /**
    * @openapi
    * /api/v1/interface/operation:
@@ -131,14 +161,14 @@ export default function interfaceRouter(router: KoaRouter) {
    *       content:
    *         application/json:
    *           schema:
-   *             $ref: '#/components/schemas/interfaceOperationRequest'
+   *             $ref: '#/components/schemas/InterfaceOperationRequest'
    *     responses:
    *       200:
    *         description: 返回结果
    *         content:
    *            application/json:
    *              schema:
-   *                $ref: '#/components/schemas/interfaceCreateResponse'
+   *                $ref: '#/components/schemas/InterfaceOperationResponse'
    */
   router.get('/v1/interface/operation');
 }

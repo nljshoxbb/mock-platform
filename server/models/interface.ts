@@ -2,37 +2,38 @@ import { Document } from 'mongoose';
 
 import BaseModel, { SchemaDefinition } from './base';
 
-export interface ProjectItem {
-  name: string;
-  desc?: string;
+export interface InterfaceItem {
+  path: string;
+  method: string;
+  mark?: string;
   created_at?: number;
   update_at?: number;
   soft_del?: number;
+  response_raw: string;
+  request_raw: string;
 }
 
-export interface ProjectModelI extends ProjectItem, Document {}
+export interface InterfaceModelI extends InterfaceItem, Document {}
 
-class ProjectModel extends BaseModel<ProjectModelI> {
+class InterfaceModel extends BaseModel<InterfaceModelI> {
   getName(): string {
-    return 'project';
+    return 'interface';
   }
 
   getSchema(): SchemaDefinition {
     return {
-      name: { required: true, type: String },
-      desc: { required: false, type: String },
+      path: { required: true, type: String },
+      mark: { required: false, type: String },
       created_at: { required: false, type: Number },
       update_at: { required: false, type: Number },
-      soft_del: { required: false, type: Number }
+      soft_del: { required: false, type: Number },
+      response_raw: { required: false, type: String },
+      request_raw: { required: false, type: String }
     };
   }
 
-  public async create(data: ProjectItem) {
+  public async create(data: InterfaceItem) {
     return await this.model.create({ ...data });
-  }
-
-  public checkNameRepeat(name) {
-    return this.model.find({ name }).count();
   }
 
   public get(params: any) {
@@ -43,7 +44,7 @@ class ProjectModel extends BaseModel<ProjectModelI> {
     return this.model.findById(id);
   }
 
-  public update(id: number, item: ProjectItem) {
+  public update(id: number, item: InterfaceItem) {
     return this.model.findByIdAndUpdate(id, item);
   }
 
@@ -52,4 +53,4 @@ class ProjectModel extends BaseModel<ProjectModelI> {
   }
 }
 
-export default ProjectModel;
+export default InterfaceModel;

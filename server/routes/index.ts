@@ -7,13 +7,15 @@ import compose from 'koa-compose';
 import KoaRouter from 'koa-router';
 import swaggerJSDoc from 'swagger-jsdoc';
 
+const apiRouter = new KoaRouter();
+
 const router = new KoaRouter();
 
 function routes() {
-  router.prefix(Config.prefix);
+  apiRouter.prefix(Config.prefix);
+  projectRouter(apiRouter);
+  interfaceRouter(apiRouter);
 
-  projectRouter(router);
-  interfaceRouter(router);
   const swaggerDefinition = {
     openapi: '3.0.0',
     info: {
@@ -30,12 +32,14 @@ function routes() {
     apis: [path.join(__dirname, '../routes/*.js')]
   };
 
-  const swaggerSpec = swaggerJSDoc(options);
+  router.use(apiRouter.routes());
 
+  const swaggerSpec = swaggerJSDoc(options);
   router.get('/swagger.json', async function (ctx) {
     ctx.set('Content-Type', 'application/json');
     ctx.body = swaggerSpec;
   });
+  /** 兼容旧mock工具 */
 
   return compose([router.routes(), router.allowedMethods()]);
 }
