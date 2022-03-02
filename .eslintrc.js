@@ -13,6 +13,7 @@ module.exports = {
     '@typescript-eslint/restrict-template-expressions': 0,
     '@typescript-eslint/member-delimiter-style': 0,
     '@typescript-eslint/no-floating-promises': 0,
-    '@typescript-eslint/return-await': 0
+    '@typescript-eslint/return-await': 0,
+    '@typescript-eslint/naming-convention': 0
   }
 };

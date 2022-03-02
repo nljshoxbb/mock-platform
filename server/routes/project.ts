@@ -1,7 +1,12 @@
-import * as project from '@/server/controllers/project';
-import KoaRouter from 'koa-router';
+import ProjectController from '@/server/controllers/project';
+import { Context } from 'koa';
+import Router from 'koa-router';
 
-export default function projectRouter(router: KoaRouter) {
+const initController = (ctx) => {
+  return new ProjectController(ctx);
+};
+
+export default function projectRouter(router: Router) {
   /**
    * @openapi
    *
@@ -77,7 +82,9 @@ export default function projectRouter(router: KoaRouter) {
    *           required: true
    *           description: 项目id
    */
-  router.get('/v1/project', project.List);
+  router.get('/v1/project', async (ctx: Context) => {
+    await initController(ctx).getList(ctx);
+  });
   /**
    * @openapi
    * /api/v1/project:
@@ -98,7 +105,9 @@ export default function projectRouter(router: KoaRouter) {
    *              schema:
    *                $ref: '#/components/schemas/ProjectCreateResponse'
    */
-  router.post('/v1/project', project.Create);
+  router.post('/v1/project', async (ctx: Context) => {
+    await initController(ctx).create(ctx);
+  });
   /**
    * @openapi
    * /api/v1/project:
@@ -119,7 +128,9 @@ export default function projectRouter(router: KoaRouter) {
    *              schema:
    *                $ref: '#/components/schemas/ProjectCreateResponse'
    */
-  router.put('/v1/project', project.Edit);
+  router.put('/v1/project', (ctx: Context) => {
+    initController(ctx).edit(ctx);
+  });
   /**
    * @openapi
    * /api/v1/project:
@@ -139,6 +150,14 @@ export default function projectRouter(router: KoaRouter) {
    *            application/json:
    *              schema:
    */
-
-  router.delete('/v1/project', project.Delete);
+  router.put('/v1/project', async (ctx: Context) => {
+    await initController(ctx).remove(ctx);
+  });
 }
+
+// const generateRoute = (router: Router, method: Method, api: string, Controller, action) => {
+//   router[method](api, async (ctx: Context) => {
+//     const ctrl = new Controller(ctx);
+//     await ctrl[action](ctx);
+//   });
+// };

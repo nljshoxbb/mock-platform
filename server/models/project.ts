@@ -1,13 +1,10 @@
 import { Document } from 'mongoose';
 
-import BaseModel, { SchemaDefinition } from './base';
+import BaseModel, { CommonSchema, SchemaDefinition } from './base';
 
-export interface ProjectItem {
+export interface ProjectItem extends CommonSchema {
   name: string;
   desc?: string;
-  created_at?: number;
-  update_at?: number;
-  soft_del?: number;
 }
 
 export interface ProjectModelI extends ProjectItem, Document {}
@@ -21,9 +18,7 @@ class ProjectModel extends BaseModel<ProjectModelI> {
     return {
       name: { required: true, type: String },
       desc: { required: false, type: String },
-      created_at: { required: false, type: Number },
-      update_at: { required: false, type: Number },
-      soft_del: { required: false, type: Number }
+      ...this.commonSchema
     };
   }
 

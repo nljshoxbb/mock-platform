@@ -1,5 +1,10 @@
-import * as interfaceController from '@/server/controllers/interface';
+import InterfaceController from '@/server/controllers/interface';
+import { Context } from 'koa';
 import KoaRouter from 'koa-router';
+
+const initController = (ctx) => {
+  return new InterfaceController(ctx);
+};
 
 export default function interfaceRouter(router: KoaRouter) {
   /**
@@ -21,12 +26,6 @@ export default function interfaceRouter(router: KoaRouter) {
    *     InterfaceSyncResponse:
    *       type: object
    *       properties:
-   *        status:
-   *          type: number
-   *          descrpition: 状态 0 失败，1成功
-   *          enums:
-   *            - 0
-   *            - 1
    *     ApiItem:
    *        type: object
    *        properties:
@@ -39,12 +38,25 @@ export default function interfaceRouter(router: KoaRouter) {
    *          path:
    *            type: string
    *            description: 接口地址
-   *          requestRaw:
+   *          description:
    *            type: string
-   *            description: 同步的swagger对应的接口请求内容。json 格式字符串
-   *          responseRaw:
+   *            description: 备注信息
+   *          mock_url:
+   *            type: string
+   *            description: 接口mock地址
+   *          method:
+   *            type: string
+   *            description: 请求类型
+   *          request_body:
+   *            type: string
+   *            description: 同步的swagger对应的接口请求body。json 格式字符串
+   *          response:
    *            type: string
    *            description: 同步的swagger对应的接口返回内容。json 格式字符串
+   *          parameter:
+   *            type: string
+   *            description: 同步的swagger对应的接口query请求参数。json 格式字符串
+
    *     CategoryItem:
    *       type: object
    *       properties:
@@ -128,7 +140,9 @@ export default function interfaceRouter(router: KoaRouter) {
    *              schema:
    *                $ref: '#/components/schemas/InterfaceListResponse'
    */
-  router.get('/v1/interface/list', interfaceController.SyncData);
+  router.get('/v1/interface/list', async (ctx: Context) => {
+    await initController(ctx).syncData(ctx);
+  });
   /**
    * @openapi
    * /api/v1/interface/sync:
@@ -149,7 +163,9 @@ export default function interfaceRouter(router: KoaRouter) {
    *              schema:
    *                $ref: '#/components/schemas/InterfaceSyncResponse'
    */
-  router.post('/v1/interface/sync', interfaceController.SyncData);
+  router.post('/v1/interface/sync', async (ctx: Context) => {
+    await initController(ctx).syncData(ctx);
+  });
   /**
    * @openapi
    * /api/v1/interface/operation:

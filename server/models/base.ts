@@ -2,6 +2,12 @@ import { Document, Model, Schema, SchemaDefinition, model } from 'mongoose';
 import AutoIncrement from 'mongoose-auto-increment';
 export { SchemaDefinition };
 
+export interface CommonSchema {
+  created_at?: number;
+  update_at?: number;
+  soft_del?: number;
+}
+
 export default abstract class BaseModel<T extends Document> {
   name: string;
   schema: SchemaDefinition;
@@ -9,6 +15,11 @@ export default abstract class BaseModel<T extends Document> {
   innerSchema: Schema;
   initAutoIncrement: boolean;
   instance: BaseModel<T>;
+  commonSchema: SchemaDefinition = {
+    created_at: { required: false, type: Number },
+    update_at: { required: false, type: Number },
+    soft_del: { required: false, type: Number }
+  };
 
   constructor() {
     this.name = this.getName();
