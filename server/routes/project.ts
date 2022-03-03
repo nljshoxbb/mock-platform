@@ -128,8 +128,8 @@ export default function projectRouter(router: Router) {
    *              schema:
    *                $ref: '#/components/schemas/ProjectCreateResponse'
    */
-  router.put('/v1/project', (ctx: Context) => {
-    initController(ctx).edit(ctx);
+  router.put('/v1/project', async (ctx: Context) => {
+    await initController(ctx).edit(ctx);
   });
   /**
    * @openapi
@@ -150,14 +150,7 @@ export default function projectRouter(router: Router) {
    *            application/json:
    *              schema:
    */
-  router.put('/v1/project', async (ctx: Context) => {
+  router.delete('/v1/project', async (ctx: Context) => {
     await initController(ctx).remove(ctx);
   });
 }
-
-// const generateRoute = (router: Router, method: Method, api: string, Controller, action) => {
-//   router[method](api, async (ctx: Context) => {
-//     const ctrl = new Controller(ctx);
-//     await ctrl[action](ctx);
-//   });
-// };

@@ -3,7 +3,7 @@ import { Document } from 'mongoose';
 import BaseModel, { CommonSchema, SchemaDefinition } from './base';
 
 export interface CategoryItem extends CommonSchema {
-  project_id: number;
+  project_id: string;
   name: number;
   apis: string[];
 }
@@ -17,34 +17,18 @@ class CategoryModel extends BaseModel<CategoryModelI> {
 
   getSchema(): SchemaDefinition {
     return {
-      project_id: { required: true, type: Number },
+      project_id: { required: true, type: String },
       name: { required: true, type: String },
       ...this.commonSchema
     };
   }
 
-  public async create(data: CategoryItem[]) {
-    return await this.model.create(data);
-  }
-
-  public get() {
-    return this.model.find({});
-  }
-
-  public isExit(id: number) {
-    return this.model.findById(id);
+  public async get(params: Partial<CategoryItem> = {}, select: string = 'name project_id _id') {
+    return this.model.find(params).lean().select('name project_id _id').exec();
   }
 
   public isExitByName(names: string[]) {
     return this.model.find({ name: names });
-  }
-
-  public update(id: number, item: CategoryItem) {
-    return this.model.findByIdAndUpdate(id, item);
-  }
-
-  public remove(id: number) {
-    return this.model.findByIdAndUpdate(id, { soft_del: 1 });
   }
 }
 

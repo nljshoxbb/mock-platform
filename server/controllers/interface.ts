@@ -25,11 +25,13 @@ const getSchema = (params) => {
 export default class InterfaceController extends BaseController {
   model: InterfaceModel;
   categoryModel: CategoryModel;
-  interfaceModel: InterfaceModel;
+  projectModel: ProjectModel;
+
   constructor(ctx: Context) {
     super(ctx);
     this.model = getModelInstance<InterfaceModel>(InterfaceModel);
     this.categoryModel = getModelInstance<CategoryModel>(CategoryModel);
+    this.projectModel = getModelInstance<ProjectModel>(ProjectModel);
   }
 
   public async syncData(ctx: Context) {
@@ -44,9 +46,9 @@ export default class InterfaceController extends BaseController {
 
       const projectModel = getModelInstance<ProjectModel>(ProjectModel);
 
-      const isExit = await projectModel.isExit(project_id);
+      const isExist = await projectModel.isExist(project_id);
 
-      if (!isExit) {
+      if (!isExist) {
         return (ctx.body = responseBody(null, 200, 'project_id不存在'));
       }
 
@@ -92,28 +94,27 @@ export default class InterfaceController extends BaseController {
 
         /** category去重处理 */
         const catArr = Object.keys(categoryMap).map((i) => categoryMap[i]);
-        const currentCategory = await this.categoryModel.get();
-        const catName = currentCategory.map((i) => i.name);
-        const newCategory = catArr.filter((i) => !catName.includes(i.name));
+        const categoryOperation: any[] = [];
 
-        let result;
+        catArr.forEach((i) => {
+          const updateObj = {
+            updateOne: {
+              filter: { name: i.name, project_id: project_id },
+              update: i,
+              upsert: true
+            }
+          };
+          categoryOperation.push(updateObj);
+        });
 
-        if (newCategory.length > 0) {
-          result = await this.categoryModel.create(catArr);
-          const categoryNameIdMap = {};
-          if (result) {
-            result.forEach((i) => {
-              categoryNameIdMap[i.name] = i._id;
-            });
-          }
-        }
+        await this.categoryModel.bulkWrite(categoryOperation);
 
         /** category_id 赋值 */
         const nowCategory = await this.categoryModel.get();
-
+        console.log(nowCategory);
         const nowCategoryMap = {};
         nowCategory.forEach((i) => {
-          nowCategoryMap[i.name] = i._id;
+          nowCategoryMap[i.name] = i._id.toString();
         });
 
         interfaceBatchUpdate.forEach((i) => {
@@ -122,18 +123,74 @@ export default class InterfaceController extends BaseController {
           }
         });
 
-        /** 接口去重，覆盖处理 */
-        // this.model.ge
+        const operations: any[] = [];
 
-        // await this.model.updateManyByFilter(interfaceBatchUpdate, {
-        //   // project_id
-        //   // path: pathArr
-        // });
+        interfaceBatchUpdate.forEach((i) => {
+          const updateObj = {
+            updateOne: {
+              filter: { path: i.path, method: i.method, project_id: project_id },
+              update: i,
+              upsert: true
+            }
+          };
+          operations.push(updateObj);
+        });
+
+        /** 接口去重，覆盖处理 */
+        await this.model.bulkWrite(operations);
 
         ctx.body = responseBody(null, 200, '操作成功');
       }
     } catch (error) {
       Log.error(error.message);
     }
+  }
+
+  public async list(ctx: Context) {
+    try {
+      const projectArray = await this.projectModel.get();
+      const result: any[] = [];
+
+      for (let i = 0; i < projectArray.length; i++) {
+        const projectItem = projectArray[i];
+        const categoryList = await this.categoryModel.get({ project_id: projectItem.id });
+        const catResult: any = [];
+
+        for (let k = 0; k < categoryList.length; k++) {
+          const catId = categoryList[k]._id.toString();
+
+          const interfaceList = await this.model.get({ category_id: catId });
+
+          const categoryItem: Record<string, any> = {
+            category_id: catId,
+            category_name: categoryList[k].name,
+            interface_list: interfaceList.map((i) => ({
+              id: i._id,
+              method: i.method,
+              path: i.path,
+              description: i.description
+            }))
+          };
+
+          catResult.push(categoryItem);
+        }
+
+        result.push({ project_id: projectItem.id, project_name: projectItem.name, category_list: catResult });
+      }
+
+      ctx.body = result;
+    } catch (error) {}
+  }
+
+  public async detail(ctx: Context) {
+    const { id } = ctx.request.query;
+
+    const result = await this.model.getDetail(id as string);
+
+    if (!result) {
+      return (ctx.body = responseBody(null, 404, 'id不存在'));
+    }
+
+    ctx.body = responseBody(result);
   }
 }

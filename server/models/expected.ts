@@ -2,27 +2,33 @@ import { Document } from 'mongoose';
 
 import BaseModel, { CommonSchema, SchemaDefinition } from './base';
 
-export interface ProjectItem extends CommonSchema {
+export interface ExpectedItem extends CommonSchema {
   name: string;
+  interface_id: string;
+  response_body: string;
+  delay: number;
   desc?: string;
 }
 
-export interface ProjectModelI extends ProjectItem, Document {}
+export interface ExpectedModelI extends ExpectedItem, Document {}
 
-class ProjectModel extends BaseModel<ProjectModelI> {
+class ExpectedModel extends BaseModel<ExpectedModelI> {
   getName(): string {
-    return 'project';
+    return 'expected';
   }
 
   getSchema(): SchemaDefinition {
     return {
       name: { required: true, type: String },
+      interface_id: { required: true, type: String },
+      response_body: { required: true, type: String },
+      delay: { required: true, type: String },
       desc: { required: false, type: String },
       ...this.commonSchema
     };
   }
 
-  public async create(data: ProjectItem) {
+  public async create(data: ExpectedItem) {
     return await this.model.create({ ...data, soft_del: 0 });
   }
 
@@ -34,7 +40,7 @@ class ProjectModel extends BaseModel<ProjectModelI> {
     return this.model.find({ ...data, soft_del: { $lte: 0 } }).select('id name desc created_at update_at');
   }
 
-  public update(id: number, item: ProjectItem) {
+  public update(id: number, item: ExpectedItem) {
     return this.model.findByIdAndUpdate(id, item);
   }
 
@@ -43,4 +49,4 @@ class ProjectModel extends BaseModel<ProjectModelI> {
   }
 }
 
-export default ProjectModel;
+export default ExpectedModel;

@@ -17,7 +17,8 @@ export default class ProjectController extends BaseController {
     try {
       const params = ctx.request.body;
       const data: ProjectItem = {
-        name: params.name
+        name: params.name,
+        desc: params.desc
       };
 
       const count = await this.model.checkNameRepeat(params.name);
@@ -41,18 +42,16 @@ export default class ProjectController extends BaseController {
       const params = ctx.request.query;
 
       const data = await this.model.get(params);
-      const list = data
-        .map((i) => {
-          return {
-            id: i._id,
-            name: i.name,
-            desc: i.desc,
-            soft_del: i.soft_del,
-            created_at: i.created_at,
-            updated_at: i.update_at
-          };
-        })
-        .filter((i) => !i.soft_del);
+      const list = data.map((i) => {
+        return {
+          id: i._id,
+          name: i.name,
+          desc: i.desc,
+          soft_del: i.soft_del,
+          created_at: i.created_at,
+          updated_at: i.update_at
+        };
+      });
       return (ctx.body = responseBody(list, 200));
     } catch (error) {}
   }
@@ -66,24 +65,25 @@ export default class ProjectController extends BaseController {
         return (ctx.body = responseBody(null, 400, '缺少id'));
       }
 
-      const isExit = await this.model.isExit(id);
+      const isExist = await this.model.isExist(id);
 
-      if (!isExit) {
+      if (!isExist) {
         return (ctx.body = responseBody(null, 200, 'id不存在'));
       }
 
       await this.model.update(id, { name: parmas.name, desc: parmas.desc });
-
-      return (ctx.body = responseBody(null, 200, '更新成功'));
-    } catch (error) {}
+      ctx.body = responseBody(null, 200, '更新成功');
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   public async remove(ctx: Context) {
     try {
       const { id } = ctx.request.body;
 
-      const isExit = await this.model.isExit(id);
-      if (!isExit) {
+      const isExist = await this.model.isExist(id);
+      if (!isExist) {
         return (ctx.body = responseBody(null, 200, 'id不存在'));
       }
       await this.model.remove(id);

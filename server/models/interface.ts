@@ -5,7 +5,7 @@ import BaseModel, { CommonSchema, SchemaDefinition } from './base';
 export interface InterfaceItem extends CommonSchema {
   path: string;
   method: string;
-  project_id: number;
+  project_id: string;
 
   responses: string;
   request_body: string;
@@ -28,8 +28,8 @@ class InterfaceModel extends BaseModel<InterfaceModelI> {
     return {
       path: { required: true, type: String },
       method: { required: true, type: String },
-      project_id: { required: true, type: Number },
-      category_id: { required: true, type: Number },
+      project_id: { required: true, type: String },
+      category_id: { required: true, type: String },
 
       responses: { required: false, type: String },
       request_body: { required: false, type: String },
@@ -42,28 +42,12 @@ class InterfaceModel extends BaseModel<InterfaceModelI> {
     };
   }
 
-  public async create(data: InterfaceItem[]) {
-    return await this.model.create(data);
+  public async get(params: Partial<InterfaceItem> = {}, select: string = 'method name _id  description path  ') {
+    return this.model.find(params).select(select).exec();
   }
 
-  public get(params: any) {
-    return this.model.find({});
-  }
-
-  public isExit(id: number) {
-    return this.model.findById(id);
-  }
-
-  public updateById(id: number, item: InterfaceItem) {
-    return this.model.findByIdAndUpdate(id, item);
-  }
-
-  public updateManyByFilter(item: InterfaceItem[], filter) {
-    return this.model.updateMany(filter, item, { upsert: true });
-  }
-
-  public remove(id: number) {
-    return this.model.findByIdAndUpdate(id, { soft_del: 1 });
+  public async getDetail(id: string) {
+    return this.model.findById(id).exec();
   }
 }
 
