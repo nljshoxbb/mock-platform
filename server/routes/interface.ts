@@ -14,7 +14,7 @@ export default function interfaceRouter(router: KoaRouter) {
    *     InterfaceSyncRequest:
    *        type: object
    *        properties:
-   *          api:
+   *          api_address:
    *            type: string
    *            description: 需要同步的 swagger 文档地址,只支持http
    *          type:
@@ -143,6 +143,9 @@ export default function interfaceRouter(router: KoaRouter) {
    *         id:
    *           type: string
    *           description: 接口id
+   *     InterfaceUpdateResponse:
+   *       tyoe: object
+   *       properties:
    *
    * /api/v1/interface/list:
    *   get:
@@ -160,7 +163,7 @@ export default function interfaceRouter(router: KoaRouter) {
    *         content:
    *            application/json:
    *              schema:
-   *                $ref: '#/components/schemas/InterfaceExpectedListResponse'
+   *                $ref: '#/components/schemas/InterfaceListResponse'
    */
   router.get('/v1/interface/list', async (ctx: Context) => {
     await initController(ctx).list(ctx);

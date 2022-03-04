@@ -33,11 +33,11 @@ class ExpectedModel extends BaseModel<ExpectedModelI> {
   }
 
   public checkNameRepeat(name) {
-    return this.model.find({ name }).count();
+    return this.model.find({ name, soft_del: { $lte: 0 } }).count();
   }
 
   public get(data: any = {}) {
-    return this.model.find({ ...data, soft_del: { $lte: 0 } }).select('id name desc created_at update_at');
+    return this.model.find({ ...data, soft_del: { $lte: 0 } }).select('id name desc response_body delay created_at update_at');
   }
 
   public update(id: number, item: ExpectedItem) {

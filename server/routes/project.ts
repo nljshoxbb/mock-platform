@@ -53,9 +53,21 @@ export default function projectRouter(router: Router) {
    *         name:
    *           type: string
    *           description: 项目名
+   *           required: true
    *         desc:
    *           type: string
    *           description: 描述信息
+   *         api_address:
+   *           type: string
+   *           description: 需要同步的 swagger 文档地址,只支持http
+   *           required: true
+   *         type:
+   *           type: string
+   *           enum:
+   *             - yaml
+   *             - json
+   *           description: 文档类型
+   *           required: true
    *     ProjectCreateResponse:
    *        type: object
    *        properties:
@@ -135,7 +147,7 @@ export default function projectRouter(router: Router) {
    * @openapi
    * /api/v1/project:
    *   delete:
-   *     summary: 编辑项目.
+   *     summary: 删除项目.
    *     tags:
    *       - project
    *     requestBody:

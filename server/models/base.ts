@@ -1,5 +1,4 @@
 import { Document, Model, Schema, SchemaDefinition, Types, model } from 'mongoose';
-import AutoIncrement from 'mongoose-auto-increment';
 export { SchemaDefinition };
 
 export interface CommonSchema {

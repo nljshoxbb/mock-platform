@@ -2,9 +2,11 @@ import InterfaceModel, { InterfaceItem } from '@/server/models/interface';
 import Log from '@/server/utils/Log';
 import SwaggerParser from '@apidevtools/swagger-parser';
 import axios from 'axios';
+// import yamljs from 'yamljs';
+import jsYaml from 'js-yaml';
 import { Context } from 'koa';
-import yamljs from 'yamljs';
 
+import { SyncDataTypeEnum } from '../constants/syncDataTypeEnum';
 import CategoryModel from '../models/category';
 import ProjectModel from '../models/project';
 import { getModelInstance, responseBody } from '../utils/utils';
@@ -34,15 +36,124 @@ export default class InterfaceController extends BaseController {
     this.projectModel = getModelInstance<ProjectModel>(ProjectModel);
   }
 
-  public async syncData(ctx: Context) {
+  public async synchronousData(projectId: string, apiAddress: string, type: keyof typeof SyncDataTypeEnum) {
     try {
-      const { api, project_id } = ctx.request.body;
+      const res = await axios.get(apiAddress);
+      let jsonData;
+      if (res.status === 200 && res.data) {
+        if (type === SyncDataTypeEnum.yaml) {
+          jsonData = jsYaml.load(res.data);
+        }
 
-      if (!project_id) {
-        return (ctx.body = responseBody(null, 400, '缺少project_id'));
+        if (type === SyncDataTypeEnum.json) {
+          jsonData = res.data;
+        }
+      }
+      if (!jsonData) {
+        return Promise.resolve(undefined);
       }
 
-      const res = await axios.get(api);
+      const api = await SwaggerParser.dereference(jsonData);
+      const interfaceBatchUpdate: InterfaceItem[] = [];
+
+      const { paths } = api;
+      const categoryMap = {};
+      const pathArr: string[] = [];
+
+      Object.keys(paths).forEach((i) => {
+        pathArr.push(i);
+        const method = Object.keys(paths[i])[0];
+        const { tags, description, requestBody, responses, parameters } = paths[i][method];
+
+        let responseSchema;
+
+        const tag = tags[0];
+        categoryMap[tag] = {
+          name: tag,
+          project_id: projectId
+        };
+
+        Object.keys(responses).forEach((k) => {
+          if (k === '200') {
+            responseSchema = getSchema(responses[k]);
+          }
+        });
+
+        interfaceBatchUpdate.push({
+          path: i,
+          method,
+          project_id: projectId,
+          tags: tag,
+          description,
+          responses: JSON.stringify(responseSchema),
+          request_body: JSON.stringify(requestBody),
+          parameters: JSON.stringify(parameters)
+        });
+      });
+
+      /** category去重处理 */
+      const catArr = Object.keys(categoryMap).map((i) => categoryMap[i]);
+      const categoryOperation: any[] = [];
+
+      catArr.forEach((i) => {
+        const updateObj = {
+          updateOne: {
+            filter: { name: i.name, project_id: projectId },
+            update: i,
+            upsert: true
+          }
+        };
+        categoryOperation.push(updateObj);
+      });
+
+      await this.categoryModel.bulkWrite(categoryOperation);
+
+      /** category_id 赋值 */
+      const nowCategory = await this.categoryModel.get();
+      const nowCategoryMap = {};
+      nowCategory.forEach((i) => {
+        nowCategoryMap[i.name] = i._id.toString();
+      });
+
+      interfaceBatchUpdate.forEach((i) => {
+        if (nowCategoryMap[i.tags]) {
+          i.category_id = nowCategoryMap[i.tags];
+        }
+      });
+
+      const operations: any[] = [];
+
+      interfaceBatchUpdate.forEach((i) => {
+        const updateObj = {
+          updateOne: {
+            filter: { path: i.path, method: i.method, project_id: projectId },
+            update: i,
+            upsert: true
+          }
+        };
+        operations.push(updateObj);
+      });
+
+      /** 接口去重，覆盖处理 */
+      await this.model.bulkWrite(operations);
+      return Promise.resolve({});
+    } catch (error) {
+      return Promise.reject(error);
+    }
+  }
+
+  /**
+   * 同步数据
+   * @param ctx
+   * @returns
+   */
+  public async syncData(ctx: Context) {
+    try {
+      const { api_address, project_id, type } = ctx.request.body;
+
+      if (!project_id || !api_address || !type) {
+        return (ctx.body = responseBody(null, 400, '参数错误'));
+      }
 
       const projectModel = getModelInstance<ProjectModel>(ProjectModel);
 
@@ -51,101 +162,24 @@ export default class InterfaceController extends BaseController {
       if (!isExist) {
         return (ctx.body = responseBody(null, 200, 'project_id不存在'));
       }
-
-      if (res.status === 200 && res.data) {
-        const jsonData = yamljs.parse(res.data);
-        const api = await SwaggerParser.dereference(jsonData);
-        const interfaceBatchUpdate: InterfaceItem[] = [];
-
-        const { paths } = api;
-        const categoryMap = {};
-        const pathArr: string[] = [];
-
-        Object.keys(paths).forEach((i) => {
-          pathArr.push(i);
-          const method = Object.keys(paths[i])[0];
-          const { tags, description, requestBody, responses, parameters } = paths[i][method];
-
-          let responseSchema;
-
-          const tag = tags[0];
-          categoryMap[tag] = {
-            name: tag,
-            project_id
-          };
-
-          Object.keys(responses).forEach((k) => {
-            if (k === '200') {
-              responseSchema = getSchema(responses[k]);
-            }
-          });
-
-          interfaceBatchUpdate.push({
-            path: i,
-            method,
-            project_id,
-            tags: tag,
-            description,
-            responses: JSON.stringify(responseSchema),
-            request_body: JSON.stringify(requestBody),
-            parameters: JSON.stringify(parameters)
-          });
-        });
-
-        /** category去重处理 */
-        const catArr = Object.keys(categoryMap).map((i) => categoryMap[i]);
-        const categoryOperation: any[] = [];
-
-        catArr.forEach((i) => {
-          const updateObj = {
-            updateOne: {
-              filter: { name: i.name, project_id: project_id },
-              update: i,
-              upsert: true
-            }
-          };
-          categoryOperation.push(updateObj);
-        });
-
-        await this.categoryModel.bulkWrite(categoryOperation);
-
-        /** category_id 赋值 */
-        const nowCategory = await this.categoryModel.get();
-        console.log(nowCategory);
-        const nowCategoryMap = {};
-        nowCategory.forEach((i) => {
-          nowCategoryMap[i.name] = i._id.toString();
-        });
-
-        interfaceBatchUpdate.forEach((i) => {
-          if (nowCategoryMap[i.tags]) {
-            i.category_id = nowCategoryMap[i.tags];
-          }
-        });
-
-        const operations: any[] = [];
-
-        interfaceBatchUpdate.forEach((i) => {
-          const updateObj = {
-            updateOne: {
-              filter: { path: i.path, method: i.method, project_id: project_id },
-              update: i,
-              upsert: true
-            }
-          };
-          operations.push(updateObj);
-        });
-
-        /** 接口去重，覆盖处理 */
-        await this.model.bulkWrite(operations);
-
-        ctx.body = responseBody(null, 200, '操作成功');
+      const result = await this.synchronousData(project_id, api_address, type);
+      if (!result) {
+        return (ctx.body = responseBody(null, 500, '地址错误'));
       }
+      ctx.body = responseBody(result, 200, '操作成功');
     } catch (error) {
-      Log.error(error.message);
+      Log.error(error);
+      if (error.message.indexOf('ENOTFOUND') !== -1) {
+        ctx.body = responseBody(null, 400, '地址错误');
+      }
     }
   }
 
+  /**
+   * 获取接口列表
+   * 包含项目-类目-接口 的树层级
+   * @param ctx
+   */
   public async list(ctx: Context) {
     try {
       const projectArray = await this.projectModel.get();
@@ -182,6 +216,11 @@ export default class InterfaceController extends BaseController {
     } catch (error) {}
   }
 
+  /**
+   * 获取接口详情
+   * @param ctx
+   * @returns
+   */
   public async detail(ctx: Context) {
     const { id } = ctx.request.query;
 

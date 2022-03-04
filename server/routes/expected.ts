@@ -1,4 +1,4 @@
-import InterfaceController from '@/server/controllers/interface';
+import InterfaceController from '@/server/controllers/expected';
 import { Context } from 'koa';
 import KoaRouter from 'koa-router';
 
@@ -17,6 +17,9 @@ export default function interfaceRouter(router: KoaRouter) {
    *         id:
    *           type: string
    *           description: id
+   *         interface_id:
+   *           type: string
+   *           description: 对应接口id
    *         delay:
    *           type: number
    *           description: 模拟延迟返回时间.单位 ms
@@ -131,7 +134,7 @@ export default function interfaceRouter(router: KoaRouter) {
    *                $ref: '#/components/schemas/InterfaceExpectedListResponse'
    */
   router.get('/v1/expected', async (ctx: Context) => {
-    await initController(ctx).list(ctx);
+    await initController(ctx).getList(ctx);
   });
   /**
    * @openapi
@@ -154,7 +157,7 @@ export default function interfaceRouter(router: KoaRouter) {
    *                $ref: '#/components/schemas/InterfaceExpectedAddResponse'
    */
   router.post('/v1/expected', async (ctx: Context) => {
-    await initController(ctx).list(ctx);
+    await initController(ctx).create(ctx);
   });
   /**
    * @openapi
@@ -177,7 +180,7 @@ export default function interfaceRouter(router: KoaRouter) {
    *                $ref: '#/components/schemas/InterfaceExpectedUpdateResponse'
    */
   router.put('/v1/expected', async (ctx: Context) => {
-    await initController(ctx).list(ctx);
+    await initController(ctx).edit(ctx);
   });
   /**
    * @openapi
@@ -200,6 +203,6 @@ export default function interfaceRouter(router: KoaRouter) {
    *                $ref: '#/components/schemas/InterfaceExpectedDeleteResponse'
    */
   router.delete('/v1/expected', async (ctx: Context) => {
-    await initController(ctx).list(ctx);
+    await initController(ctx).remove(ctx);
   });
 }

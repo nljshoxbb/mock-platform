@@ -1,39 +1,40 @@
 import BaseController from '@/server/controllers/base';
-import ProjectModel, { ProjectItem } from '@/server/models/project';
+import ExpectedModel, { ExpectedItem } from '@/server/models/expected';
 import { Context } from 'koa';
+import { isEmpty } from 'lodash';
 
-import InterfaceModel from '../models/interface';
 import Log from '../utils/Log';
 import { getModelInstance, responseBody } from '../utils/utils';
-import InterfaceController from './interface';
 
-export default class ProjectController extends BaseController {
-  model: ProjectModel;
-  interfaceMode: InterfaceModel;
+export default class ExpectedController extends BaseController {
+  model: ExpectedModel;
+
   constructor(ctx: Context) {
     super(ctx);
-    this.model = getModelInstance<ProjectModel>(ProjectModel);
-    this.interfaceMode = getModelInstance<InterfaceModel>(InterfaceModel);
+    this.model = getModelInstance<ExpectedModel>(ExpectedModel);
   }
 
   public async create(ctx: Context) {
     try {
-      const params = ctx.request.body;
-      const data: ProjectItem = {
-        name: params.name,
-        desc: params.desc
+      const { name, interface_id, response_body, delay, desc } = ctx.request.body;
+      const data: ExpectedItem = {
+        name,
+        interface_id,
+        response_body,
+        delay: delay || 0,
+        desc: desc
       };
-
-      const count = await this.model.checkNameRepeat(params.name);
-      if (!data.name) {
+      if (isEmpty(name) || isEmpty(interface_id) || isEmpty(response_body)) {
         return (ctx.body = responseBody(null, 400, '参数错误'));
       }
 
+      const count = await this.model.checkNameRepeat(name);
+
       if (count > 0) {
-        return (ctx.body = responseBody(null, 400, '项目名重复'));
+        return (ctx.body = responseBody(null, 400, '已存在'));
       }
-      const res = await this.model.create(data);
-      console.log(res);
+
+      await this.model.create(data);
       return (ctx.body = responseBody(null, 200, '成功'));
     } catch (error) {
       Log.error(error);
@@ -50,8 +51,10 @@ export default class ProjectController extends BaseController {
         return {
           id: i._id,
           name: i.name,
+          response_body: i.response_body,
+          interface_id: i.interface_id,
+          delay: i.delay,
           desc: i.desc,
-          soft_del: i.soft_del,
           created_at: i.created_at,
           updated_at: i.update_at
         };
@@ -63,19 +66,15 @@ export default class ProjectController extends BaseController {
   public async edit(ctx: Context) {
     try {
       const parmas = ctx.request.body;
-      const { id } = parmas;
-
+      const { id, name, desc, response_body, delay, interface_id } = parmas;
       if (!id) {
-        return (ctx.body = responseBody(null, 400, '缺少id'));
+        return (ctx.body = responseBody(null, 400, '参数不正确'));
       }
-
       const isExist = await this.model.isExist(id);
-
       if (!isExist) {
         return (ctx.body = responseBody(null, 200, 'id不存在'));
       }
-
-      await this.model.update(id, { name: parmas.name, desc: parmas.desc });
+      await this.model.update(id, { name, desc, response_body, delay, interface_id });
       ctx.body = responseBody(null, 200, '更新成功');
     } catch (error) {
       console.log(error);
@@ -85,7 +84,6 @@ export default class ProjectController extends BaseController {
   public async remove(ctx: Context) {
     try {
       const { id } = ctx.request.body;
-
       const isExist = await this.model.isExist(id);
       if (!isExist) {
         return (ctx.body = responseBody(null, 200, 'id不存在'));

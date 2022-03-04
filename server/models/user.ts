@@ -2,40 +2,43 @@ import { Document } from 'mongoose';
 
 import BaseModel, { CommonSchema, SchemaDefinition } from './base';
 
-export interface ProjectItem extends CommonSchema {
-  name: string;
-  desc?: string;
+export interface UserItem extends CommonSchema {
+  username: string;
+  password: string;
+  role: string;
+  mark?: string;
 }
 
-export interface ProjectModelI extends ProjectItem, Document {}
+export interface UserModelI extends UserItem, Document {}
 
-class ProjectModel extends BaseModel<ProjectModelI> {
+class UserModel extends BaseModel<UserModelI> {
   getName(): string {
-    return 'project';
+    return 'user';
   }
 
   getSchema(): SchemaDefinition {
     return {
-      name: { required: true, type: String },
-      desc: { required: false, type: String },
-      uid: { required: true, type: String },
+      username: { required: true, type: String },
+      password: { required: true, type: String },
+      role: { required: true, type: String },
+      mark: String,
       ...this.commonSchema
     };
   }
 
-  public async create(data: ProjectItem) {
+  public async create(data: UserItem) {
     return await this.model.create({ ...data, soft_del: 0 });
   }
 
   public checkNameRepeat(name) {
-    return this.model.find({ name, soft_del: { $lte: 0 } }).count();
+    return this.model.find({ name }).count();
   }
 
   public get(data: any = {}) {
     return this.model.find({ ...data, soft_del: { $lte: 0 } }).select('id name desc created_at update_at');
   }
 
-  public update(id: number, item: ProjectItem) {
+  public update(id: number, item: UserItem) {
     return this.model.findByIdAndUpdate(id, item);
   }
 
@@ -44,4 +47,4 @@ class ProjectModel extends BaseModel<ProjectModelI> {
   }
 }
 
-export default ProjectModel;
+export default UserModel;
