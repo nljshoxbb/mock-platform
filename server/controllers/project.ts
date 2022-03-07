@@ -1,10 +1,11 @@
 import BaseController from '@/server/controllers/base';
 import ProjectModel, { ProjectItem } from '@/server/models/project';
 import { Context } from 'koa';
+import { isEmpty } from 'lodash';
 
 import InterfaceModel from '../models/interface';
 import Log from '../utils/Log';
-import { getModelInstance, responseBody } from '../utils/utils';
+import { getModelInstance, objectIdToString, responseBody } from '../utils/utils';
 import InterfaceController from './interface';
 
 export default class ProjectController extends BaseController {
@@ -18,14 +19,16 @@ export default class ProjectController extends BaseController {
 
   public async create(ctx: Context) {
     try {
-      const params = ctx.request.body;
+      const { name, desc, api_address, type } = ctx.request.body;
       const data: ProjectItem = {
-        name: params.name,
-        desc: params.desc
+        name,
+        desc
       };
 
-      const count = await this.model.checkNameRepeat(params.name);
-      if (!data.name) {
+      const interfaceController = new InterfaceController(ctx);
+
+      const count = await this.model.checkNameRepeat(name);
+      if (isEmpty(name) || isEmpty(api_address) || isEmpty(type)) {
         return (ctx.body = responseBody(null, 400, '参数错误'));
       }
 
@@ -33,7 +36,10 @@ export default class ProjectController extends BaseController {
         return (ctx.body = responseBody(null, 400, '项目名重复'));
       }
       const res = await this.model.create(data);
-      console.log(res);
+      if (res) {
+        await interfaceController.syncByPorjectId(objectIdToString(res._id), api_address, type);
+      }
+
       return (ctx.body = responseBody(null, 200, '成功'));
     } catch (error) {
       Log.error(error);
@@ -43,7 +49,7 @@ export default class ProjectController extends BaseController {
 
   public async getList(ctx: Context) {
     try {
-      const params = ctx.request.query;
+      const params = ctx.request.body;
 
       const data = await this.model.get(params);
       const list = data.map((i) => {

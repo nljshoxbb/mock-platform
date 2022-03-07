@@ -20,7 +20,7 @@ export default function userRouter(router: Router) {
    *         page:
    *           type: number
    *           description: 当前页数
-   *     UserItem:
+   *     User:
    *       type: object
    *       properties:
    *         id:
@@ -41,10 +41,10 @@ export default function userRouter(router: Router) {
    *     UserListResponse:
    *       type: object
    *       properties:
-   *         data:
+   *         list:
    *           type: array
    *           items:
-   *             $ref : '#/components/schemas/UserItem'
+   *             $ref : '#/components/schemas/User'
    *         size:
    *           type: number
    *           description: 每页数目
@@ -77,16 +77,16 @@ export default function userRouter(router: Router) {
    *     UserEditRequest:
    *       type: object
    *       properties:
-   *         uid:
+   *         id:
    *           type: string
    *           required: true
    *           description: 用户id
-   *         username:
-   *           type: string
-   *           description: 用户名
    *         mark:
    *           type: string
    *           description: 备注
+   *         role:
+   *           type: string
+   *           description: 角色
    *     UserEditResponse:
    *       type: object
    *     UserDeleteRequest:
@@ -121,7 +121,9 @@ export default function userRouter(router: Router) {
    *         uid:
    *           type: string
    *           description: 用户id
-   *
+   *         token:
+   *           type: string
+   *           description: 登录令牌
    *     UserLogoutRequest:
    *       type: object
    *       properties:
@@ -129,8 +131,8 @@ export default function userRouter(router: Router) {
    *           type: string
    *
    *
-   * /api/v1/user:
-   *   get:
+   * /api/v1/user/list:
+   *   post:
    *     summary: 用户列表.
    *     tags:
    *       - user
@@ -147,12 +149,12 @@ export default function userRouter(router: Router) {
    *             schema:
    *               $ref: '#/components/schemas/UserListResponse'
    */
-  router.get('/v1/user', async (ctx: Context) => {
+  router.post('/v1/user/list', async (ctx: Context) => {
     await initController(ctx).getList(ctx);
   });
   /**
    * @openapi
-   * /api/v1/user:
+   * /api/v1/user/create:
    *   post:
    *     summary: 创建用户.
    *     tags:
@@ -170,12 +172,12 @@ export default function userRouter(router: Router) {
    *              schema:
    *                $ref: '#/components/schemas/UserCreateResponse'
    */
-  router.post('/v1/user', async (ctx: Context) => {
+  router.post('/v1/user/create', async (ctx: Context) => {
     await initController(ctx).create(ctx);
   });
   /**
    * @openapi
-   * /api/v1/user:
+   * /api/v1/user/edit:
    *   put:
    *     summary: 编辑用户.
    *     tags:
@@ -193,12 +195,12 @@ export default function userRouter(router: Router) {
    *              schema:
    *                $ref: '#/components/schemas/UserEditResponse'
    */
-  router.put('/v1/user', async (ctx: Context) => {
+  router.put('/v1/user/edit', async (ctx: Context) => {
     await initController(ctx).edit(ctx);
   });
   /**
    * @openapi
-   * /api/v1/user:
+   * /api/v1/user/remove:
    *   delete:
    *     summary: 删除用户.
    *     tags:
@@ -215,7 +217,7 @@ export default function userRouter(router: Router) {
    *            application/json:
    *              schema:
    */
-  router.delete('/v1/user', async (ctx: Context) => {
+  router.delete('/v1/user/remove', async (ctx: Context) => {
     await initController(ctx).remove(ctx);
   });
   /**

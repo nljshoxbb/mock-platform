@@ -10,7 +10,6 @@ import { fileExist } from './utils/utils';
 /** 初始化数据库脚本 */
 
 function install() {
-  console.log(Config.APP_RUNTIME, Config.APP_SERVER);
   if (fileExist(path.join(Config.APP_RUNTIME, 'db.lock'))) {
     throw new Error('db.lock文件已存在。可重删除db.lock重新安装');
   }

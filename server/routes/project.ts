@@ -10,8 +10,9 @@ export default function projectRouter(router: Router) {
   /**
    * @openapi
    *
-   * /api/v1/project:
-   *   get:
+
+   * /api/v1/project/list:
+   *   post:
    *     summary: 项目列表.
    *     tags:
    *       - project
@@ -23,30 +24,30 @@ export default function projectRouter(router: Router) {
    *             schema:
    *               type: array
    *               items:
-   *                 properties:
-   *                   id:
-   *                     type: integer
-   *                     description: id
-   *                   name:
-   *                     type: string
-   *                     description: 项目名
-   *                   desc:
-   *                     type: string
-   *                     description: 描述
-   *                   created_at:
-   *                     type: number
-   *                     description: 创建时间
-   *                   update_at:
-   *                     type: number
-   *                     description: 更新时间
+   *                 $ref: '#/components/schemas/ProjectListResponse'
    * components:
    *   schemas:
-   *     ProjectListRequest:
+   *     ProjectRequest:
    *       type: object
+   *       properties:
    *     ProjectListResponse:
    *       type: object
    *       properties:
-   *        name
+   *         id:
+   *           type: integer
+   *           description: id
+   *         name:
+   *           type: string
+   *           description: 项目名
+   *         desc:
+   *           type: string
+   *           description: 描述
+   *         created_at:
+   *           type: number
+   *           description: 创建时间
+   *         update_at:
+   *           type: number
+   *           description: 更新时间
    *     ProjectCreateRequest:
    *       type: object
    *       properties:
@@ -94,12 +95,12 @@ export default function projectRouter(router: Router) {
    *           required: true
    *           description: 项目id
    */
-  router.get('/v1/project', async (ctx: Context) => {
+  router.post('/v1/project/list', async (ctx: Context) => {
     await initController(ctx).getList(ctx);
   });
   /**
    * @openapi
-   * /api/v1/project:
+   * /api/v1/project/create:
    *   post:
    *     summary: 创建项目.
    *     tags:
@@ -117,12 +118,12 @@ export default function projectRouter(router: Router) {
    *              schema:
    *                $ref: '#/components/schemas/ProjectCreateResponse'
    */
-  router.post('/v1/project', async (ctx: Context) => {
+  router.post('/v1/project/create', async (ctx: Context) => {
     await initController(ctx).create(ctx);
   });
   /**
    * @openapi
-   * /api/v1/project:
+   * /api/v1/project/edit:
    *   put:
    *     summary: 编辑项目.
    *     tags:
@@ -140,12 +141,12 @@ export default function projectRouter(router: Router) {
    *              schema:
    *                $ref: '#/components/schemas/ProjectCreateResponse'
    */
-  router.put('/v1/project', async (ctx: Context) => {
+  router.put('/v1/project/edit', async (ctx: Context) => {
     await initController(ctx).edit(ctx);
   });
   /**
    * @openapi
-   * /api/v1/project:
+   * /api/v1/project/remove:
    *   delete:
    *     summary: 删除项目.
    *     tags:
@@ -162,7 +163,7 @@ export default function projectRouter(router: Router) {
    *            application/json:
    *              schema:
    */
-  router.delete('/v1/project', async (ctx: Context) => {
+  router.delete('/v1/project/remove', async (ctx: Context) => {
     await initController(ctx).remove(ctx);
   });
 }

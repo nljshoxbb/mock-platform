@@ -6,7 +6,8 @@
   "scripts": {
     "dev-server": "cross-env nodemon -e ts -w server --exec 'yarn start'",
     "init-server": "tsc && tsc-alias && node --inspect dist/server/install.js",
-    "start": "tsc && tsc-alias && node --inspect dist/server/app.js"
+    "start": "tsc && tsc-alias && node --inspect dist/server/app.js",
+    "stateless": "cross-env tsc && tsc-alias && node --inspect dist/server/app.js"
   },
   "author": "",
   "license": "ISC",
@@ -16,6 +17,7 @@
     "@types/swagger-jsdoc": "^6.0.1",
     "axios": "^0.26.0",
     "chalk": "^4.1.2",
+    "crypto-js": "^4.1.1",
     "fs-extra": "^10.0.1",
     "js-yaml": "^4.1.0",
     "json-schema-faker": "^0.5.0-rcv.41",
@@ -36,6 +38,8 @@
   },
   "devDependencies": {
     "@apidevtools/swagger-parser": "^10.0.3",
+    "@types/crypto-js": "^4.1.1",
+    "@types/jsonwebtoken": "^8.5.8",
     "@types/koa": "^2.13.4",
     "@types/koa-bodyparser": "^4.3.5",
     "@types/koa-multer": "^1.0.1",

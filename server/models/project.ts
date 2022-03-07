@@ -18,7 +18,7 @@ class ProjectModel extends BaseModel<ProjectModelI> {
     return {
       name: { required: true, type: String },
       desc: { required: false, type: String },
-      uid: { required: true, type: String },
+      // uid: { required: true, type: String },
       ...this.commonSchema
     };
   }

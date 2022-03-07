@@ -36,7 +36,7 @@ export default class InterfaceController extends BaseController {
     this.projectModel = getModelInstance<ProjectModel>(ProjectModel);
   }
 
-  public async synchronousData(projectId: string, apiAddress: string, type: keyof typeof SyncDataTypeEnum) {
+  public async syncByPorjectId(projectId: string, apiAddress: string, type: keyof typeof SyncDataTypeEnum) {
     try {
       const res = await axios.get(apiAddress);
       let jsonData;
@@ -162,7 +162,7 @@ export default class InterfaceController extends BaseController {
       if (!isExist) {
         return (ctx.body = responseBody(null, 200, 'project_id不存在'));
       }
-      const result = await this.synchronousData(project_id, api_address, type);
+      const result = await this.syncByPorjectId(project_id, api_address, type);
       if (!result) {
         return (ctx.body = responseBody(null, 500, '地址错误'));
       }
@@ -209,10 +209,10 @@ export default class InterfaceController extends BaseController {
           catResult.push(categoryItem);
         }
 
-        result.push({ project_id: projectItem.id, project_name: projectItem.name, category_list: catResult });
+        result.push({ project_id: projectItem.id, project_name: projectItem.name, desc: projectItem.desc, category_list: catResult });
       }
 
-      ctx.body = result;
+      ctx.body = responseBody({ list: result }, 200);
     } catch (error) {}
   }
 
@@ -222,7 +222,7 @@ export default class InterfaceController extends BaseController {
    * @returns
    */
   public async detail(ctx: Context) {
-    const { id } = ctx.request.query;
+    const { id } = ctx.request.body;
 
     const result = await this.model.getDetail(id as string);
 

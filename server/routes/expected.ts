@@ -115,8 +115,8 @@ export default function interfaceRouter(router: KoaRouter) {
    *       type: object
    *
    *
-   * /api/v1/expected:
-   *   get:
+   * /api/v1/expected/list:
+   *   post:
    *     summary: 期望列表
    *     tags:
    *       - expected
@@ -133,12 +133,12 @@ export default function interfaceRouter(router: KoaRouter) {
    *              schema:
    *                $ref: '#/components/schemas/InterfaceExpectedListResponse'
    */
-  router.get('/v1/expected', async (ctx: Context) => {
+  router.post('/v1/expected/list', async (ctx: Context) => {
     await initController(ctx).getList(ctx);
   });
   /**
    * @openapi
-   * /api/v1/expected:
+   * /api/v1/expected/create:
    *   post:
    *     summary: 新增期望
    *     tags:
@@ -156,12 +156,12 @@ export default function interfaceRouter(router: KoaRouter) {
    *              schema:
    *                $ref: '#/components/schemas/InterfaceExpectedAddResponse'
    */
-  router.post('/v1/expected', async (ctx: Context) => {
+  router.post('/v1/expected/create', async (ctx: Context) => {
     await initController(ctx).create(ctx);
   });
   /**
    * @openapi
-   * /api/v1/expected:
+   * /api/v1/expected/edit:
    *   put:
    *     summary: 更新期望
    *     tags:
@@ -179,12 +179,12 @@ export default function interfaceRouter(router: KoaRouter) {
    *              schema:
    *                $ref: '#/components/schemas/InterfaceExpectedUpdateResponse'
    */
-  router.put('/v1/expected', async (ctx: Context) => {
+  router.put('/v1/expected/edit', async (ctx: Context) => {
     await initController(ctx).edit(ctx);
   });
   /**
    * @openapi
-   * /api/v1/expected:
+   * /api/v1/expected/remove:
    *   delete:
    *     summary: 删除期望
    *     tags:
@@ -202,7 +202,7 @@ export default function interfaceRouter(router: KoaRouter) {
    *              schema:
    *                $ref: '#/components/schemas/InterfaceExpectedDeleteResponse'
    */
-  router.delete('/v1/expected', async (ctx: Context) => {
+  router.delete('/v1/expected/remove', async (ctx: Context) => {
     await initController(ctx).remove(ctx);
   });
 }

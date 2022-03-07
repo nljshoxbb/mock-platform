@@ -1,4 +1,4 @@
-# mock 平台
+# 接口mock平台
 
 
 ## 后端开发
@@ -7,6 +7,6 @@
 2. `yarn init-server`
 3. `yarn dev-server`
 
-接口文档地址 
+### 接口文档地址 
 
-localhost:3888/doc/swagger
+localhost:3888/swagger

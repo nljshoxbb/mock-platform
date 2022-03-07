@@ -3,8 +3,8 @@ import { Document } from 'mongoose';
 import BaseModel, { CommonSchema, SchemaDefinition } from './base';
 
 export interface TokenItem extends CommonSchema {
-  name: string;
-  desc?: string;
+  token: string;
+  uid: string;
 }
 
 export interface TokenModelI extends TokenItem, Document {}
@@ -16,7 +16,7 @@ class TokenModel extends BaseModel<TokenModelI> {
 
   getSchema(): SchemaDefinition {
     return {
-      project_id: { required: true, type: String },
+      uid: { required: true, type: String },
       token: { reqiured: true, type: String },
       ...this.commonSchema
     };
@@ -24,6 +24,10 @@ class TokenModel extends BaseModel<TokenModelI> {
 
   public get(data: any = {}) {
     return this.model.find({ ...data });
+  }
+
+  public update(uid, data) {
+    return this.model.updateOne({ uid }, data, { upsert: true });
   }
 }
 

@@ -44,7 +44,7 @@ export default class ExpectedController extends BaseController {
 
   public async getList(ctx: Context) {
     try {
-      const params = ctx.request.query;
+      const params = ctx.request.body;
 
       const data = await this.model.get(params);
       const list = data.map((i) => {

@@ -31,19 +31,38 @@ class UserModel extends BaseModel<UserModelI> {
   }
 
   public checkNameRepeat(name) {
-    return this.model.find({ name }).count();
+    return this.model.find({ username: name }).count();
   }
 
   public get(data: any = {}) {
-    return this.model.find({ ...data, soft_del: { $lte: 0 } }).select('id name desc created_at update_at');
+    return this.model.find({ ...data, soft_del: { $lte: 0 } }).select('username mark created_at update_at');
   }
 
-  public update(id: number, item: UserItem) {
+  public update(id: number, item: Omit<UserItem, 'password' | 'username'>) {
     return this.model.findByIdAndUpdate(id, item);
   }
 
   public remove(id: number) {
     return this.model.findByIdAndUpdate(id, { soft_del: 1 });
+  }
+
+  public async listWithPaging(page, limit) {
+    page = parseInt(page);
+    limit = parseInt(limit);
+    return this.model
+      .find()
+      .sort({ soft_del: 1 })
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .select('_id username email role type  add_time up_time study')
+      .exec();
+  }
+
+  /**
+   * listCount
+   */
+  public listCount() {
+    return this.model.countDocuments();
   }
 }
 

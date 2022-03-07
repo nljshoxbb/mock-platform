@@ -57,7 +57,7 @@ export default function interfaceRouter(router: KoaRouter) {
    *            type: string
    *            description: 同步的swagger对应的接口query请求参数。json 格式字符串
 
-   *     CategoryItem:
+   *     Category:
    *       type: object
    *       properties:
    *         id:
@@ -72,45 +72,56 @@ export default function interfaceRouter(router: KoaRouter) {
    *     InterfaceListRequest:
    *       type: object
    *       properties:
+   *     InterfaceListApi:
+   *       type: object
+   *       description: iterface列表 api 详情
+   *       properties:
+   *         id:
+   *           type: string
+   *           description: 接口id
+   *         name:
+   *           type: string
+   *           description: 接口名
+   *         path:
+   *           type: string
+   *           description: 接口地址
+   *     InterfaceListCategory:
+   *       type: object
+   *       properties:
+   *         category_id:
+   *           type: string
+   *           description: 类目id
+   *         category_name:
+   *           type: string
+   *           description: 类目名
+   *         interface_list:
+   *           type: array
+   *           items:
+   *             $ref: "#/components/schemas/InterfaceListApi"
+   *           description: 接口列表
+   *     InterfaceList:
+   *       type: object
+   *       properties:
    *         project_id:
    *           type: number
-   *           descriptions: 项目id
+   *           description: 项目id
+   *         project_name:
+   *            type: string
+   *            description: 项目名称
+   *         category_list:
+   *            type: array
+   *            items:
+   *              $ref: '#/components/schemas/InterfaceListCategory'
+   *            description: "分类列表"
    *     InterfaceListResponse:
-   *       type: array
-   *       items:
-   *         type: object
-   *         properties:
-   *           project_id:
-   *             type: number
-   *             description: 项目id
-   *           project_name:
-   *              type: string
-   *              description: 项目名称
-   *           category_list:
-   *              type: array
-   *              items:
-   *                type: object
-   *                properties:
-   *                   category_id:
-   *                      type: string
-   *                      description: 类目id
-   *                   category_name:
-   *                      type: string
-   *                      description: 类目名
-   *                   interface_list:
-   *                      type: array
-   *                      items:
-   *                        type: object
-   *                        properties:
-   *                          id:
-   *                            type: string
-   *                            description: 接口id
-   *                          name:
-   *                            type: string
-   *                            description: 接口名
-   *                          path:
-   *                            type: string
-   *                            description: 接口地址
+   *       type: object
+   *       properties:
+   *         list:
+   *           type: array
+   *           items:
+   *             $ref: '#/components/schemas/InterfaceList'
+   *           description: "列表"
+   *       description: 详情
    *     InterfaceDeleteRequest:
    *       type: object
    *       properties:
@@ -148,7 +159,7 @@ export default function interfaceRouter(router: KoaRouter) {
    *       properties:
    *
    * /api/v1/interface/list:
-   *   get:
+   *   post:
    *     summary: 接口列表.
    *     tags:
    *       - interface
@@ -165,7 +176,7 @@ export default function interfaceRouter(router: KoaRouter) {
    *              schema:
    *                $ref: '#/components/schemas/InterfaceListResponse'
    */
-  router.get('/v1/interface/list', async (ctx: Context) => {
+  router.post('/v1/interface/list', async (ctx: Context) => {
     await initController(ctx).list(ctx);
   });
   /**
@@ -211,11 +222,11 @@ export default function interfaceRouter(router: KoaRouter) {
    *              schema:
    *                $ref: '#/components/schemas/InterfaceOperationResponse'
    */
-  router.get('/v1/interface/operation');
+  router.post('/v1/interface/operation');
   /**
    * @openapi
    * /api/v1/interface/detail:
-   *   get:
+   *   post:
    *     summary: 接口详情
    *     tags:
    *       - interface
@@ -232,7 +243,7 @@ export default function interfaceRouter(router: KoaRouter) {
    *              schema:
    *                $ref: '#/components/schemas/InterfaceDetail'
    */
-  router.get('/v1/interface/detail', async (ctx: Context) => {
+  router.post('/v1/interface/detail', async (ctx: Context) => {
     await initController(ctx).detail(ctx);
   });
   /**
@@ -249,7 +260,7 @@ export default function interfaceRouter(router: KoaRouter) {
    *           type: string
    *           description: response_body schema,根据mock字段获取 应响应的数据
    *
-   * /api/v1/interface:
+   * /api/v1/interface/edit:
    *   put:
    *     summary: 编辑接口mock字段
    *     tags:
@@ -267,7 +278,7 @@ export default function interfaceRouter(router: KoaRouter) {
    *              schema:
    *                $ref: '#/components/schemas/InterfaceUpdateResponse'
    */
-  router.put('/v1/interface', async (ctx: Context) => {
+  router.put('/v1/interface/edit', async (ctx: Context) => {
     await initController(ctx).detail(ctx);
   });
 }
