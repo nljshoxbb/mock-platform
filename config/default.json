@@ -2,7 +2,9 @@
   "port": 3888,
   "db": {
     "url":"mongodb://localhost:27017/mock-platform",
-    "user": "test",
-    "pwd": "test"
-  }
+    "user": "admin",
+    "pwd": "admin"
+  },
+  "admin":"admin",
+  "adminPwd":"admin"
 }

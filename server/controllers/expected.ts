@@ -66,15 +66,15 @@ export default class ExpectedController extends BaseController {
   public async edit(ctx: Context) {
     try {
       const parmas = ctx.request.body;
-      const { id, name, desc, response_body, delay, interface_id } = parmas;
+      const { id, name, desc, response_body, delay } = parmas;
       if (!id) {
         return (ctx.body = responseBody(null, 400, '参数不正确'));
       }
       const isExist = await this.model.isExist(id);
       if (!isExist) {
-        return (ctx.body = responseBody(null, 200, 'id不存在'));
+        return (ctx.body = responseBody(null, 400, 'id不存在'));
       }
-      await this.model.update(id, { name, desc, response_body, delay, interface_id });
+      await this.model.update(id, { name, desc, response_body, delay });
       ctx.body = responseBody(null, 200, '更新成功');
     } catch (error) {
       console.log(error);

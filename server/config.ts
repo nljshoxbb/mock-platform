@@ -15,5 +15,6 @@ export default {
   prefix,
   APP_RUNTIME,
   ...defaultConfig,
-  port: defaultConfig.port
+  port: defaultConfig.port,
+  expired: 1 * 60 * 60 * 24 * 30
 };

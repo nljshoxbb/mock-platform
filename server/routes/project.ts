@@ -48,6 +48,12 @@ export default function projectRouter(router: Router) {
    *         update_at:
    *           type: number
    *           description: 更新时间
+   *         auto_sync:
+   *           type: boolean
+   *           description: 是否开启自动同步
+   *         auto_sync_time:
+   *           type: number
+   *           description: 自动同步时间
    *     ProjectCreateRequest:
    *       type: object
    *       properties:
@@ -69,6 +75,12 @@ export default function projectRouter(router: Router) {
    *             - json
    *           description: 文档类型
    *           required: true
+   *         auto_sync:
+   *           type: boolean
+   *           description: 是否开启自动同步
+   *         auto_sync_time:
+   *           type: number
+   *           description: 自动同步时间
    *     ProjectCreateResponse:
    *        type: object
    *        properties:
@@ -87,6 +99,12 @@ export default function projectRouter(router: Router) {
    *         desc:
    *           type: string
    *           description: 描述信息
+   *         auto_sync:
+   *           type: boolean
+   *           description: 是否开启自动同步
+   *         auto_sync_time:
+   *           type: number
+   *           description: 自动同步时间
    *     ProjectDeleteRequest:
    *       type: object
    *       properties:

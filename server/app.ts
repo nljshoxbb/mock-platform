@@ -11,9 +11,11 @@ import { koaSwagger } from 'koa2-swagger-ui';
 
 import connectDatabase from './database';
 import authMiddleware from './middlewares/auth';
+import mockMiddleware from './middlewares/mock';
 
 const app = new Koa();
 
+app.use(mockMiddleware);
 app.use(authMiddleware);
 app.use(catchError);
 app.use(bodyParser({ strict: false, jsonLimit: '2mb', formLimit: '2mb', textLimit: '2mb' }));

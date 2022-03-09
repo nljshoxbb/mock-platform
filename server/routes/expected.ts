@@ -62,7 +62,6 @@ export default function interfaceRouter(router: KoaRouter) {
    *       properties:
    *         delay:
    *           type: number
-   *           required: true
    *           description: 模拟延迟返回时间.单位 ms
    *         response_body:
    *           type: string
@@ -72,6 +71,10 @@ export default function interfaceRouter(router: KoaRouter) {
    *           type: string
    *           required: true
    *           description: 期望名
+   *         interface_id:
+   *           type: string
+   *           required: true
+   *           description:  id
    *     InterfaceExpectedAddResponse:
    *       type: string
    *       description: id

@@ -103,11 +103,17 @@ export default function interfaceRouter(router: KoaRouter) {
    *       type: object
    *       properties:
    *         project_id:
-   *           type: number
+   *           type: string
    *           description: 项目id
    *         project_name:
    *            type: string
    *            description: 项目名称
+   *         auto_sync:
+   *           type: boolean
+   *           description: 是否开启同步
+   *         auto_sync_time:
+   *           type: number
+   *           description: 同步间隔
    *         category_list:
    *            type: array
    *            items:
@@ -136,6 +142,10 @@ export default function interfaceRouter(router: KoaRouter) {
    *           type: string
    *           required: true
    *           description: 请求地址
+   *         method:
+   *           type: string
+   *           required: true
+   *           description: 请求方法
    *     InterfaceOperationResponse:
    *       type: object
    *       properties:
@@ -222,7 +232,9 @@ export default function interfaceRouter(router: KoaRouter) {
    *              schema:
    *                $ref: '#/components/schemas/InterfaceOperationResponse'
    */
-  router.post('/v1/interface/operation');
+  router.post('/v1/interface/operation', async (ctx: Context) => {
+    await initController(ctx).operation(ctx);
+  });
   /**
    * @openapi
    * /api/v1/interface/detail:
@@ -258,7 +270,7 @@ export default function interfaceRouter(router: KoaRouter) {
    *           description: 接口id
    *         schema:
    *           type: string
-   *           description: response_body schema,根据mock字段获取 应响应的数据
+   *           description: response_body schema,根据mock字段获取 应响应的数据。每个字段都可添加以下属性:1.max,min(代表mock数量最大最小值). 2.default（为设定值，替代mock数据）
    *
    * /api/v1/interface/edit:
    *   put:

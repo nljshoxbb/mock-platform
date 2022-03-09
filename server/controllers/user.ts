@@ -43,7 +43,7 @@ export default class UserController extends BaseController {
 
   public async create(ctx: Context) {
     try {
-      const { username, password, role, mark } = ctx.request.body;
+      const { username, password = 123456, role, mark } = ctx.request.body;
 
       if (isEmpty(username) || isEmpty(password) || isEmpty(role)) {
         return (ctx.body = responseBody(null, 400, '请求参数错误'));
@@ -93,7 +93,7 @@ export default class UserController extends BaseController {
       }
       const isExist = (await this.model.isExist(id)) as any;
       if (!isExist || (isExist && isExist.soft_del === 1)) {
-        return (ctx.body = responseBody(null, 200, 'id不存在'));
+        return (ctx.body = responseBody(null, 400, 'id不存在'));
       }
     } catch (error) {
       console.log(error);
@@ -106,7 +106,7 @@ export default class UserController extends BaseController {
 
       const isExist = await this.model.isExist(id);
       if (!isExist) {
-        return (ctx.body = responseBody(null, 200, 'id不存在'));
+        return (ctx.body = responseBody(null, 400, 'id不存在'));
       }
       await this.model.remove(id);
       ctx.body = responseBody(null, 200, '操作成功');

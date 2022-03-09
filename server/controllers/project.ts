@@ -1,5 +1,5 @@
 import BaseController from '@/server/controllers/base';
-import ProjectModel, { ProjectItem } from '@/server/models/project';
+import ProjectModel from '@/server/models/project';
 import { Context } from 'koa';
 import { isEmpty } from 'lodash';
 
@@ -8,26 +8,59 @@ import Log from '../utils/Log';
 import { getModelInstance, objectIdToString, responseBody } from '../utils/utils';
 import InterfaceController from './interface';
 
+type Timer = ReturnType<typeof setInterval>;
+
+/** 10分钟同步一次 */
+const DEFAULT_SYNC_TIME = 60;
+
+const timerMap: Map<string, Timer> = new Map();
+
 export default class ProjectController extends BaseController {
   model: ProjectModel;
   interfaceMode: InterfaceModel;
+  interfaceController: InterfaceController;
   constructor(ctx: Context) {
     super(ctx);
     this.model = getModelInstance<ProjectModel>(ProjectModel);
     this.interfaceMode = getModelInstance<InterfaceModel>(InterfaceModel);
+    this.interfaceController = new InterfaceController(ctx);
+    /** 检测是否用同步任务，重启 */
+    const recoveryTask = async () => {
+      const data = await this.model.get({ auto_sync: true });
+      if (data) {
+        data.forEach((i) => {
+          const projectId = objectIdToString(i._id);
+          this.handleTimer(projectId, i.auto_sync, i.auto_sync_time, async () => {
+            await this.interfaceController.syncByPorjectId(projectId, i.api_address, i.type);
+          });
+        });
+      }
+    };
+
+    recoveryTask();
+  }
+
+  private async handleTimer(id, autoSync, autoSyncTime, cb) {
+    if (autoSync) {
+      const timer = setInterval(() => {
+        cb();
+      }, autoSyncTime * 1000);
+
+      if (!timerMap.get(id)) {
+        timerMap.set(id, timer);
+      }
+    } else {
+      const timer = timerMap.get(id) as any;
+      clearInterval(timer);
+    }
   }
 
   public async create(ctx: Context) {
     try {
-      const { name, desc, api_address, type } = ctx.request.body;
-      const data: ProjectItem = {
-        name,
-        desc
-      };
+      const { name, desc, api_address, type, auto_sync, auto_sync_time = DEFAULT_SYNC_TIME } = ctx.request.body;
+      const uid = await this.getUid();
 
-      const interfaceController = new InterfaceController(ctx);
-
-      const count = await this.model.checkNameRepeat(name);
+      const count = await this.model.checkNameRepeat(name, uid);
       if (isEmpty(name) || isEmpty(api_address) || isEmpty(type)) {
         return (ctx.body = responseBody(null, 400, '参数错误'));
       }
@@ -35,9 +68,25 @@ export default class ProjectController extends BaseController {
       if (count > 0) {
         return (ctx.body = responseBody(null, 400, '项目名重复'));
       }
-      const res = await this.model.create(data);
+
+      const res = await this.model.create({
+        name,
+        desc,
+        uid,
+        api_address,
+        auto_sync,
+        auto_sync_time,
+        type
+      });
+
+      const porjectId = objectIdToString(res._id);
+
+      this.handleTimer(porjectId, auto_sync, auto_sync_time, async () => {
+        await this.interfaceController.syncByPorjectId(porjectId, api_address, type);
+      });
+
       if (res) {
-        await interfaceController.syncByPorjectId(objectIdToString(res._id), api_address, type);
+        await this.interfaceController.syncByPorjectId(porjectId, api_address, type);
       }
 
       return (ctx.body = responseBody(null, 200, '成功'));
@@ -50,8 +99,9 @@ export default class ProjectController extends BaseController {
   public async getList(ctx: Context) {
     try {
       const params = ctx.request.body;
+      const uid = await this.getUid();
 
-      const data = await this.model.get(params);
+      const data = await this.model.get({ ...params, uid });
       const list = data.map((i) => {
         return {
           id: i._id,
@@ -68,8 +118,8 @@ export default class ProjectController extends BaseController {
 
   public async edit(ctx: Context) {
     try {
-      const parmas = ctx.request.body;
-      const { id } = parmas;
+      const { id, name, desc, api_address, auto_sync, auto_sync_time, type } = ctx.request.body;
+      const uid = await this.getUid();
 
       if (!id) {
         return (ctx.body = responseBody(null, 400, '缺少id'));
@@ -78,13 +128,38 @@ export default class ProjectController extends BaseController {
       const isExist = await this.model.isExist(id);
 
       if (!isExist) {
-        return (ctx.body = responseBody(null, 200, 'id不存在'));
+        return (ctx.body = responseBody(null, 400, 'id不存在'));
       }
 
-      await this.model.update(id, { name: parmas.name, desc: parmas.desc });
+      if (!type) {
+        return (ctx.body = responseBody(null, 400, '确实类型type'));
+      }
+
+      const apiDoc = api_address || isExist.api_address;
+
+      const result = await this.interfaceController.syncByPorjectId(id, apiDoc, type);
+      if (result === 'addressError') {
+        return (ctx.body = responseBody(null, 400, '地址错误,解析失败'));
+      }
+
+      /** 更新同时 同步新的接口文档地址；重新开启定时同步任务 */
+      this.handleTimer(id, auto_sync, auto_sync_time, async () => {
+        await this.interfaceController.syncByPorjectId(id, apiDoc, type);
+      });
+
+      await this.model.update(id, {
+        name,
+        desc,
+        uid,
+        api_address: apiDoc,
+        auto_sync,
+        auto_sync_time,
+        type
+      });
       ctx.body = responseBody(null, 200, '更新成功');
     } catch (error) {
-      console.log(error);
+      console.log(error, error.message);
+      // if(error.mess)
     }
   }
 
@@ -94,7 +169,7 @@ export default class ProjectController extends BaseController {
 
       const isExist = await this.model.isExist(id);
       if (!isExist) {
-        return (ctx.body = responseBody(null, 200, 'id不存在'));
+        return (ctx.body = responseBody(null, 400, 'id不存在'));
       }
       await this.model.remove(id);
       ctx.body = responseBody(null, 200, '操作成功');

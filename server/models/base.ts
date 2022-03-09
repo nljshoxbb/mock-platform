@@ -31,11 +31,6 @@ export default abstract class BaseModel<T extends Document> {
         updatedAt: 'update_at'
       }
     });
-    // this.innerSchema.plugin(AutoIncrement.plugin, {
-    //   model: this.name,
-    //   field: this.getPrimaryKey(),
-    //   startAt: 1
-    // });
 
     this.model = model<T>(this.name, this.innerSchema);
   }
@@ -58,7 +53,13 @@ export default abstract class BaseModel<T extends Document> {
 
   public isExist(id: any) {
     if (Types.ObjectId.isValid(id)) {
-      return this.model.findById(this.toObjectId(id));
+      const data = this.model.findById(this.toObjectId(id));
+
+      // @ts-expect-error
+      if (data.soft_del === 1) {
+        return false;
+      }
+      return data;
     }
     return false;
   }

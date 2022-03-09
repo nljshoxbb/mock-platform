@@ -6,10 +6,11 @@ import axios from 'axios';
 import jsYaml from 'js-yaml';
 import { Context } from 'koa';
 
+import config from '../config';
 import { SyncDataTypeEnum } from '../constants/syncDataTypeEnum';
 import CategoryModel from '../models/category';
 import ProjectModel from '../models/project';
-import { getModelInstance, responseBody } from '../utils/utils';
+import { getIPAddress, getModelInstance, responseBody } from '../utils/utils';
 import BaseController from './base';
 
 const getSchema = (params) => {
@@ -36,7 +37,14 @@ export default class InterfaceController extends BaseController {
     this.projectModel = getModelInstance<ProjectModel>(ProjectModel);
   }
 
-  public async syncByPorjectId(projectId: string, apiAddress: string, type: keyof typeof SyncDataTypeEnum) {
+  /**
+   *
+   * @param projectId
+   * @param apiAddress
+   * @param type 目前只支持yaml json
+   * @returns
+   */
+  public async syncByPorjectId(projectId: string, apiAddress: string, type: string) {
     try {
       const res = await axios.get(apiAddress);
       let jsonData;
@@ -49,8 +57,9 @@ export default class InterfaceController extends BaseController {
           jsonData = res.data;
         }
       }
+
       if (!jsonData) {
-        return Promise.resolve(undefined);
+        return Promise.resolve('addressError');
       }
 
       const api = await SwaggerParser.dereference(jsonData);
@@ -133,9 +142,9 @@ export default class InterfaceController extends BaseController {
         };
         operations.push(updateObj);
       });
-
       /** 接口去重，覆盖处理 */
       await this.model.bulkWrite(operations);
+      Log.info('接口同步成功~');
       return Promise.resolve({});
     } catch (error) {
       return Promise.reject(error);
@@ -209,7 +218,14 @@ export default class InterfaceController extends BaseController {
           catResult.push(categoryItem);
         }
 
-        result.push({ project_id: projectItem.id, project_name: projectItem.name, desc: projectItem.desc, category_list: catResult });
+        result.push({
+          project_id: projectItem.id,
+          project_name: projectItem.name,
+          desc: projectItem.desc,
+          auto_sync: projectItem.auto_sync,
+          auto_sync_time: projectItem.auto_sync_time,
+          category_list: catResult
+        });
       }
 
       ctx.body = responseBody({ list: result }, 200);
@@ -230,6 +246,33 @@ export default class InterfaceController extends BaseController {
       return (ctx.body = responseBody(null, 404, 'id不存在'));
     }
 
-    ctx.body = responseBody(result);
+    const data = {
+      ...result.toJSON(),
+      id: result._id,
+      mock_url: `http://${getIPAddress()}:${config.port}/mock/${result.project_id}${result.path}`
+    };
+    delete data._id;
+
+    ctx.body = responseBody(data);
+  }
+
+  public async operation(ctx: Context) {
+    try {
+      const { body } = ctx.request;
+      const { api, method } = body;
+      if (!method) {
+        return (ctx.body = responseBody(null, 400, '缺少method'));
+      }
+
+      if (api.indexOf('http') === -1) {
+        return (ctx.body = responseBody(null, 400, 'api地址错误'));
+      }
+      const axiosInstance = axios.create();
+
+      const data = await axiosInstance[method](api);
+      ctx.body = data.data;
+    } catch (error) {
+      Log.error(error);
+    }
   }
 }

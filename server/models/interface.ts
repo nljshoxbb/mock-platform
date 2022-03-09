@@ -49,6 +49,10 @@ class InterfaceModel extends BaseModel<InterfaceModelI> {
   public async getDetail(id: string) {
     return this.model.findById(id).exec();
   }
+
+  public async getDataByPath(projectId, method, path) {
+    return this.model.find({ project_id: projectId, method, path }).lean();
+  }
 }
 
 export default InterfaceModel;

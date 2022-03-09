@@ -1,7 +1,11 @@
+import { networkInterfaces } from 'os';
+
 import sha256 from 'crypto-js/sha256';
 import fs from 'fs-extra';
 import jwt from 'jsonwebtoken';
 import { Types } from 'mongoose';
+
+import config from '../config';
 
 export const fileExist = (filePath: string) => {
   try {
@@ -40,13 +44,26 @@ export const responseBody = <T>(data: T, code: number = 200, msg: string = '') =
 export const PASSWORD_SALT = 'mock-platform';
 
 export const generateToken = (uid, passwordSalt = PASSWORD_SALT) => {
-  return jwt.sign({ uid }, passwordSalt, { expiresIn: 1 * 60 * 24 * 30 });
+  return jwt.sign({ uid }, passwordSalt, { expiresIn: config.expired });
 };
 
 export const generatePasswod = (password: string, salt = PASSWORD_SALT) => {
-  return sha256(password + salt);
+  return sha256(password + salt).toString();
 };
 
 export const objectIdToString = (id) => {
   return new Types.ObjectId(id).toString();
+};
+
+export const getIPAddress = () => {
+  const interfaces = networkInterfaces();
+  for (const devName in interfaces) {
+    const iface = interfaces[devName] || [];
+    for (let i = 0; i < iface.length; i++) {
+      const alias = iface[i];
+      if (alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal) {
+        return alias.address;
+      }
+    }
+  }
 };

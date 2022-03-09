@@ -40,7 +40,7 @@ class ExpectedModel extends BaseModel<ExpectedModelI> {
     return this.model.find({ ...data, soft_del: { $lte: 0 } }).select('id name desc response_body delay created_at update_at');
   }
 
-  public update(id: number, item: ExpectedItem) {
+  public update(id: number, item: Omit<ExpectedItem, 'interface_id'>) {
     return this.model.findByIdAndUpdate(id, item);
   }
 

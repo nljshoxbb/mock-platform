@@ -5,42 +5,59 @@ import TokenModel from '../models/token';
 import Log from '../utils/Log';
 import { PASSWORD_SALT, getModelInstance, responseBody } from '../utils/utils';
 
+export const getAuthToken = (auth = '') => {
+  const reg = auth.match(/Bearer (\S*)/);
+  if (reg) {
+    return reg[1];
+  }
+  return '';
+};
+
 const UN_LOGIN_URL = ['/api/v1/user/login'];
 
 const authMiddleware = async (ctx: Context, next: Next) => {
+  const notLogin = () => {
+    ctx.body = responseBody(null, 401, '用户未登录');
+  };
+
+  const tokenExpired = () => {
+    ctx.body = responseBody(null, 401, 'token已过期');
+  };
   try {
     const { authorization } = ctx.request.header;
     const { url } = ctx.request;
 
-    if (typeof authorization === 'string' && !UN_LOGIN_URL.includes(url)) {
-      const reg = authorization.match(/Bearer (\S*)/);
-      let token;
-      if (reg) {
-        token = reg[1];
-
-        const tokenModal = getModelInstance<TokenModel>(TokenModel);
-        const res = jwt.verify(token, PASSWORD_SALT) as any;
-        if (res) {
-          // 是否存在，
-          const isLogin = await tokenModal.get({ token });
-
-          if (isLogin[0]) {
-            // console.log(Math.floor(+new Date() / 1000), res.exp);
-            if (Math.floor(+new Date() / 1000) > res.exp) {
-              return (ctx.body = responseBody(null, 401, 'token已过期'));
+    if (UN_LOGIN_URL.includes(url) || url.indexOf('/api') === -1 || url.indexOf('/mock/') !== -1) {
+      await next();
+    } else {
+      if (authorization) {
+        const token = getAuthToken(authorization);
+        if (token) {
+          const tokenModal = getModelInstance<TokenModel>(TokenModel);
+          const res = jwt.verify(token, PASSWORD_SALT) as any;
+          /** Authorization头是否包含token信息 */
+          if (res) {
+            /** 是否已登录 */
+            const isLogin = await tokenModal.get({ token });
+            if (isLogin[0]) {
+              /** 是否已过期 */
+              if (Math.floor(+new Date() / 1000) > res.exp) {
+                return tokenExpired();
+              }
+              await next();
+              return;
+            } else {
+              return tokenExpired();
             }
           } else {
-            return (ctx.body = responseBody(null, 401, 'token已过期'));
+            return notLogin();
           }
-        } else {
-          // return (ctx.body = responseBody(null, 401, '用户未登录'));
         }
+        return notLogin();
+      } else {
+        return notLogin();
       }
-      // return (ctx.body = responseBody(null, 401, '用户未登录'));
-
-      // const data = await tokenModal.get({ token });
     }
-    await next();
   } catch (error) {
     if (error instanceof JsonWebTokenError) {
       ctx.body = responseBody(null, 401, 'token已过期');
