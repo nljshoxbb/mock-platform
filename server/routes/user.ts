@@ -144,9 +144,6 @@ export default function userRouter(router: Router) {
    *         uid:
    *           type: string
    *           required: true
-   *         old_pwd:
-   *           type: string
-   *           required: true
    *         new_pwd:
    *           type: string
    *           required: true

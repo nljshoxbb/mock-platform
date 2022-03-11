@@ -128,6 +128,7 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
       if (types[0] === 'application/octet-stream') {
         const { schema } = content[types[0]];
         console.log(Mock.mock(generateMockField(schema)));
+        return (ctx.body = 111);
       }
     }
 

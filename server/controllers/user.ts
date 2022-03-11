@@ -7,7 +7,7 @@ import { Types } from 'mongoose';
 import TokenModel from '../models/token';
 import { generatePasswod, generateToken, getModelInstance, responseBody } from '../utils/utils';
 
-const DEFAULT_PASSWORD = 123456;
+export const DEFAULT_PASSWORD = '123456';
 
 export default class UserController extends BaseController {
   model: UserModel;
@@ -146,7 +146,7 @@ export default class UserController extends BaseController {
         return (this.ctx.body = responseBody(null, 400, '用户不存在'));
       }
 
-      await this.model.changePwd(uid, generatePasswod('123456'));
+      await this.model.changePwd(uid, generatePasswod(DEFAULT_PASSWORD));
       /** 成功后退出登录 */
       await this.tokenModel.removeByUid(uid);
 
@@ -164,9 +164,6 @@ export default class UserController extends BaseController {
 
       if (!isExit) {
         return (this.ctx.body = responseBody(null, 404, '用户不存在'));
-      }
-      if (isExit.password !== generatePasswod(old_pwd)) {
-        return (this.ctx.body = responseBody(null, 400, '旧密码不正确'));
       }
 
       await this.model.changePwd(uid, generatePasswod(new_pwd));
