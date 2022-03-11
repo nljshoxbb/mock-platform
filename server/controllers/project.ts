@@ -81,18 +81,17 @@ export default class ProjectController extends BaseController {
 
       const porjectId = objectIdToString(res._id);
 
-      this.handleTimer(porjectId, auto_sync, auto_sync_time, async () => {
-        await this.interfaceController.syncByPorjectId(porjectId, api_address, type);
-      });
-
       if (res) {
         await this.interfaceController.syncByPorjectId(porjectId, api_address, type);
+
+        this.handleTimer(porjectId, auto_sync, auto_sync_time, async () => {
+          await this.interfaceController.syncByPorjectId(porjectId, api_address, type);
+        });
       }
 
-      return (ctx.body = responseBody(null, 200, '成功'));
+      return (ctx.body = responseBody({ project_id: objectIdToString(res._id) }, 200, '成功'));
     } catch (error) {
-      Log.error(error);
-      return (ctx.body = responseBody(null, 500, '系统错误'));
+      throw Error(error);
     }
   }
 
@@ -113,7 +112,9 @@ export default class ProjectController extends BaseController {
         };
       });
       return (ctx.body = responseBody(list, 200));
-    } catch (error) {}
+    } catch (error) {
+      throw Error(error);
+    }
   }
 
   public async edit(ctx: Context) {
@@ -158,8 +159,7 @@ export default class ProjectController extends BaseController {
       });
       ctx.body = responseBody(null, 200, '更新成功');
     } catch (error) {
-      console.log(error, error.message);
-      // if(error.mess)
+      throw Error(error);
     }
   }
 
@@ -174,7 +174,7 @@ export default class ProjectController extends BaseController {
       await this.model.remove(id);
       ctx.body = responseBody(null, 200, '操作成功');
     } catch (error) {
-      console.log(error);
+      throw Error(error);
     }
   }
 }

@@ -180,6 +180,8 @@ export default class InterfaceController extends BaseController {
       Log.error(error);
       if (error.message.indexOf('ENOTFOUND') !== -1) {
         ctx.body = responseBody(null, 400, '地址错误');
+      } else {
+        throw Error(error);
       }
     }
   }
@@ -256,10 +258,20 @@ export default class InterfaceController extends BaseController {
     ctx.body = responseBody(data);
   }
 
+  /**
+   * mock功能测试，做接口转发，解决跨域问题
+   * @param ctx
+   * @returns
+   */
   public async operation(ctx: Context) {
     try {
       const { body } = ctx.request;
       const { api, method } = body;
+
+      if (!api) {
+        return (ctx.body = responseBody(null, 400, '缺少api'));
+      }
+
       if (!method) {
         return (ctx.body = responseBody(null, 400, '缺少method'));
       }
@@ -269,10 +281,17 @@ export default class InterfaceController extends BaseController {
       }
       const axiosInstance = axios.create();
 
-      const data = await axiosInstance[method](api);
+      // const data = await axiosInstance[method](api,);
+      const data = await axios({
+        method,
+        url: `${api}?name=222`,
+        data: {
+          name: 2222
+        }
+      });
       ctx.body = data.data;
     } catch (error) {
-      Log.error(error);
+      throw Error(error);
     }
   }
 }

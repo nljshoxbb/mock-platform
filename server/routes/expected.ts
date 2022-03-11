@@ -17,9 +17,6 @@ export default function interfaceRouter(router: KoaRouter) {
    *         id:
    *           type: string
    *           description: id
-   *         interface_id:
-   *           type: string
-   *           description: 对应接口id
    *         delay:
    *           type: number
    *           description: 模拟延迟返回时间.单位 ms
@@ -35,6 +32,10 @@ export default function interfaceRouter(router: KoaRouter) {
    *     InterfaceExpectedListRequest:
    *       type: object
    *       properties:
+   *         interface_id:
+   *           type: string
+   *           description: 对应的接口id
+   *           required: true
    *         size:
    *           type: number
    *           description: 每页数目
@@ -44,7 +45,7 @@ export default function interfaceRouter(router: KoaRouter) {
    *     InterfaceExpectedListResponse:
    *       type: object
    *       properties:
-   *         data:
+   *         list:
    *           type: array
    *           items:
    *             $ref : '#/components/schemas/InterfaceExpectedItem'
@@ -116,7 +117,17 @@ export default function interfaceRouter(router: KoaRouter) {
    *           description: 期望id
    *     InterfaceExpectedDeleteResponse:
    *       type: object
-   *
+   *     InterfaceExpectedStatusRequest:
+   *       type: object
+   *       properties:
+   *         id:
+   *           type: string
+   *           description: 期望id
+   *         status:
+   *           type: boolean
+   *           description: 开启状态
+   *     InterfaceExpectedStatusResponse:
+   *       type: object
    *
    * /api/v1/expected/list:
    *   post:
@@ -207,5 +218,28 @@ export default function interfaceRouter(router: KoaRouter) {
    */
   router.delete('/v1/expected/remove', async (ctx: Context) => {
     await initController(ctx).remove(ctx);
+  });
+  /**
+   * @openapi
+   * /api/v1/expected/status:
+   *   put:
+   *     summary: 开启或关闭期望
+   *     tags:
+   *       - expected
+   *     requestBody:
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: '#/components/schemas/InterfaceExpectedStatusRequest'
+   *     responses:
+   *       200:
+   *         description: 返回结果
+   *         content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/InterfaceExpectedStatusResponse'
+   */
+  router.put('/v1/expected/status', async (ctx: Context) => {
+    await initController(ctx).updateStatus(ctx);
   });
 }

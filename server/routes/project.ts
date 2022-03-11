@@ -22,15 +22,13 @@ export default function projectRouter(router: Router) {
    *         content:
    *           application/json:
    *             schema:
-   *               type: array
-   *               items:
-   *                 $ref: '#/components/schemas/ProjectListResponse'
+   *               $ref: '#/components/schemas/ProjectListResponse'
    * components:
    *   schemas:
    *     ProjectRequest:
    *       type: object
    *       properties:
-   *     ProjectListResponse:
+   *     ProjectListItem:
    *       type: object
    *       properties:
    *         id:
@@ -54,6 +52,14 @@ export default function projectRouter(router: Router) {
    *         auto_sync_time:
    *           type: number
    *           description: 自动同步时间
+   *     ProjectListResponse:
+   *       type: object
+   *       properties:
+   *         project_list:
+   *           type: array
+   *           items:
+   *             $ref : '#/components/schemas/ProjectListItem'
+   *           description: 项目列表
    *     ProjectCreateRequest:
    *       type: object
    *       properties:

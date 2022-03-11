@@ -8,6 +8,8 @@ export interface ExpectedItem extends CommonSchema {
   response_body: string;
   delay: number;
   desc?: string;
+  /** 是否启用 */
+  status: boolean;
 }
 
 export interface ExpectedModelI extends ExpectedItem, Document {}
@@ -24,6 +26,7 @@ class ExpectedModel extends BaseModel<ExpectedModelI> {
       response_body: { required: true, type: String },
       delay: { required: true, type: String },
       desc: { required: false, type: String },
+      status: { required: true, type: Boolean },
       ...this.commonSchema
     };
   }
@@ -40,8 +43,33 @@ class ExpectedModel extends BaseModel<ExpectedModelI> {
     return this.model.find({ ...data, soft_del: { $lte: 0 } }).select('id name desc response_body delay created_at update_at');
   }
 
+  public async listWithPaging(id: string, page: number = 1, limit: number = 10) {
+    // page = parseInt(page);
+    // limit = parseInt(limit);
+    return this.model
+      .find({ interface_id: id })
+      .sort({ soft_del: 1 })
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .select('id name desc response_body interface_id delay created_at update_at status')
+      .exec();
+  }
+
+  public listCount(id) {
+    return this.model.countDocuments({ interface_id: id });
+  }
+
   public update(id: number, item: Omit<ExpectedItem, 'interface_id'>) {
-    return this.model.findByIdAndUpdate(id, item);
+    return this.model.findByIdAndUpdate(id, item, {
+      omitUndefined: true
+    });
+  }
+
+  /**
+   * name
+   */
+  public updateAllStatus(id, status = false) {
+    return this.model.updateMany({ interface_id: id }, { status });
   }
 
   public remove(id: number) {

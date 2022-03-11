@@ -15,12 +15,13 @@ import mockMiddleware from './middlewares/mock';
 
 const app = new Koa();
 
+app.use(bodyParser({ strict: false, jsonLimit: '2mb', formLimit: '2mb', textLimit: '2mb' }));
+app.use(serverStatic(path.join(Config.APP_RUNTIME, 'public'), { gzip: true }));
+
 app.use(mockMiddleware);
 app.use(authMiddleware);
 app.use(catchError);
-app.use(bodyParser({ strict: false, jsonLimit: '2mb', formLimit: '2mb', textLimit: '2mb' }));
 app.use(routes());
-app.use(serverStatic(path.join(Config.APP_RUNTIME, 'public'), { gzip: true }));
 app.use(
   koaSwagger({
     routePrefix: '/swagger',
@@ -37,7 +38,7 @@ async function main(): Promise<void> {
       Log.info(`服务已启动，请打开下面链接访问: \nhttp://127.0.0.1:${Config.port}/`);
     });
   } catch (error) {
-    Log.error(error);
+    Log.error(error + 111);
   }
 }
 

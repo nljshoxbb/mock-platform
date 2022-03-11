@@ -8,6 +8,8 @@ import TokenModel from '../models/token';
 import Log from '../utils/Log';
 import { generatePasswod, generateToken, getModelInstance, responseBody } from '../utils/utils';
 
+const DEFAULT_PASSWORD = 123456;
+
 export default class UserController extends BaseController {
   model: UserModel;
   tokenModel: TokenModel;
@@ -37,13 +39,13 @@ export default class UserController extends BaseController {
         return (ctx.body = responseBody({ username, uid, token }, 200, '登录成功'));
       }
     } catch (error) {
-      Log.error(error);
+      throw Error(error);
     }
   }
 
   public async create(ctx: Context) {
     try {
-      const { username, password = 123456, role, mark } = ctx.request.body;
+      const { username, password = DEFAULT_PASSWORD, role, mark } = ctx.request.body;
 
       if (isEmpty(username) || isEmpty(password) || isEmpty(role)) {
         return (ctx.body = responseBody(null, 400, '请求参数错误'));
@@ -60,8 +62,7 @@ export default class UserController extends BaseController {
         return (ctx.body = responseBody({ username, uid: new Types.ObjectId(res._id) }, 200, '操作成功'));
       }
     } catch (error) {
-      Log.error(error);
-      return (ctx.body = responseBody(null, 500, '系统错误'));
+      throw Error(error);
     }
   }
 
@@ -81,7 +82,9 @@ export default class UserController extends BaseController {
       });
       const total = await this.model.listCount();
       return (ctx.body = responseBody({ list, page, size, total }, 200));
-    } catch (error) {}
+    } catch (error) {
+      throw Error(error);
+    }
   }
 
   public async edit(ctx: Context) {
@@ -96,7 +99,7 @@ export default class UserController extends BaseController {
         return (ctx.body = responseBody(null, 400, 'id不存在'));
       }
     } catch (error) {
-      console.log(error);
+      throw Error(error);
     }
   }
 
@@ -111,7 +114,7 @@ export default class UserController extends BaseController {
       await this.model.remove(id);
       ctx.body = responseBody(null, 200, '操作成功');
     } catch (error) {
-      console.log(error);
+      throw Error(error);
     }
   }
 }

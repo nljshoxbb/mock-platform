@@ -1,5 +1,6 @@
 import InterfaceModel from '@/server/models/interface';
 import { Context, Next } from 'koa';
+import { isEmpty } from 'lodash';
 import Mock from 'mockjs';
 import { Schema } from 'swagger-jsdoc';
 
@@ -27,41 +28,62 @@ const handleType = (type) => {
   return result;
 };
 
+/**
+ * 根据schema生成mock数据
+ * @param schema
+ * @param mockObject
+ * @returns
+ */
 const generateMockField = (schema: any, mockObject = {}) => {
   const { properties, type } = schema;
 
-  for (const d of Object.entries(properties)) {
-    const [key, value] = d as any;
+  if (type === 'object') {
+    if (properties) {
+      for (const p of Object.entries(properties)) {
+        const [key, value] = p as any;
 
-    if (typeof value === 'object' && value) {
-      if (value.type === 'array') {
-        if (value.items && value.items.type === 'object') {
-          mockObject[`${key}|3`] = [generateMockField(value.items)];
+        /** schema value中 count,default 为编辑时输入的自定义属性 */
+        if (value) {
+          if (value.type === 'array') {
+            if (value.items && value.items.type === 'object') {
+              console.log(value);
+              mockObject[`${key}|${value?.count || 5}`] = [generateMockField(value.items)];
+            }
+
+            if (value.items && value.items.type === 'number') {
+              mockObject[`${key}|${value?.count || 5}`] = [1];
+            }
+          } else if (value.type === 'object') {
+            mockObject[key] = generateMockField(value);
+          } else {
+            mockObject[key] = handleType(value.type);
+          }
         }
-      } else {
-        mockObject[key] = handleType(value.type);
+
+        if (['string', 'integer', 'boolean', 'number'].includes(value.type)) {
+          /** 处理非对象字段 */
+          mockObject[key] = handleType(value.type);
+        }
       }
     }
-
-    if (['string', 'integer', 'boolean', 'number'].includes(value.type)) {
-      /** 处理非对象字段 */
-      mockObject[key] = handleType(value.type);
-    }
   }
+
   return mockObject;
 };
 
+const getRequestBody = () => {};
+
 const mockMiddleware = async (ctx: Context, next: Next) => {
   //   console.log(ctx.request, ctx.path);
-  const { url, method } = ctx.request;
+  const { url, method, body, query } = ctx.request;
   const header = ctx.request.header;
 
   let path = ctx.path;
-  console.log(path);
   if (path.indexOf('/mock/') !== 0) {
     await next();
     return;
   }
+  console.log(body, query);
 
   const paths = ctx.path.split('/');
   const projectId = paths[2];
@@ -90,9 +112,18 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
   const res = await interfaceModel.getDataByPath(projectId, method.toLocaleLowerCase(), path);
   if (res[0]) {
     const { request_body, responses } = res[0];
-    const responseSchema = JSON.parse(responses);
-    console.log(responses, responseSchema, generateMockField(responseSchema));
-    ctx.body = Mock.mock(generateMockField(responseSchema));
+
+    const responseSchema = JSON.parse(responses || '{}');
+    const requestBody = JSON.parse(request_body || '{}');
+    let requestBodySchema;
+    console.log(responseSchema);
+    if (!isEmpty(requestBody)) {
+      requestBodySchema = requestBody.content['application/json'];
+    }
+
+    ctx.body = responseBody(Mock.mock(generateMockField(responseSchema)), 200);
+  } else {
+    ctx.body = responseBody(null, 404, '没有mock数据');
   }
 };
 

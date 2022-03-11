@@ -22,8 +22,10 @@ export default class ExpectedController extends BaseController {
         interface_id,
         response_body,
         delay: delay || 0,
-        desc: desc
+        desc: desc,
+        status: true
       };
+
       if (isEmpty(name) || isEmpty(interface_id) || isEmpty(response_body)) {
         return (ctx.body = responseBody(null, 400, '参数错误'));
       }
@@ -34,33 +36,51 @@ export default class ExpectedController extends BaseController {
         return (ctx.body = responseBody(null, 400, '已存在'));
       }
 
+      /** 批量关闭其他期望 */
+
+      await this.model.updateAllStatus(interface_id);
+
       await this.model.create(data);
+
       return (ctx.body = responseBody(null, 200, '成功'));
     } catch (error) {
-      Log.error(error);
-      return (ctx.body = responseBody(null, 500, '系统错误'));
+      throw Error(error);
     }
   }
 
   public async getList(ctx: Context) {
     try {
-      const params = ctx.request.body;
+      const { size = 10, page = 1, interface_id } = ctx.request.body;
+      if (!interface_id) {
+        return (ctx.body = responseBody(null, 400, '缺少interface_id'));
+      }
 
-      const data = await this.model.get(params);
-      const list = data.map((i) => {
-        return {
-          id: i._id,
-          name: i.name,
-          response_body: i.response_body,
-          interface_id: i.interface_id,
-          delay: i.delay,
-          desc: i.desc,
-          created_at: i.created_at,
-          updated_at: i.update_at
-        };
-      });
-      return (ctx.body = responseBody(list, 200));
-    } catch (error) {}
+      const list = await this.model.listWithPaging(interface_id, page, size);
+      const total = await this.model.listCount(interface_id);
+
+      return (ctx.body = responseBody(
+        {
+          list: list.map((i) => {
+            return {
+              id: i._id,
+              name: i.name,
+              response_body: i.response_body,
+              delay: i.delay,
+              desc: i.desc,
+              created_at: i.created_at,
+              updated_at: i.update_at,
+              status: i.status
+            };
+          }),
+          total,
+          size,
+          page
+        },
+        200
+      ));
+    } catch (error) {
+      throw Error(error);
+    }
   }
 
   public async edit(ctx: Context) {
@@ -74,10 +94,11 @@ export default class ExpectedController extends BaseController {
       if (!isExist) {
         return (ctx.body = responseBody(null, 400, 'id不存在'));
       }
-      await this.model.update(id, { name, desc, response_body, delay });
+
+      await this.model.update(id, { name, desc, response_body, delay, status: isExist.status });
       ctx.body = responseBody(null, 200, '更新成功');
     } catch (error) {
-      console.log(error);
+      throw Error(error);
     }
   }
 
@@ -91,7 +112,31 @@ export default class ExpectedController extends BaseController {
       await this.model.remove(id);
       ctx.body = responseBody(null, 200, '操作成功');
     } catch (error) {
-      console.log(error);
+      throw Error(error);
+    }
+  }
+
+  public async updateStatus(ctx: Context) {
+    try {
+      const { id, status } = ctx.request.body;
+      const isExist = await this.model.isExist(id);
+      if (!isExist) {
+        return (ctx.body = responseBody(null, 200, 'id不存在'));
+      }
+
+      if (status) {
+        await this.model.updateAllStatus(isExist.interface_id);
+      }
+      await this.model.update(id, {
+        name: isExist.name,
+        desc: isExist.desc,
+        response_body: isExist.response_body,
+        delay: isExist.delay,
+        status
+      });
+      ctx.body = responseBody(null, 200, '操作成功');
+    } catch (error) {
+      throw Error(error);
     }
   }
 }
