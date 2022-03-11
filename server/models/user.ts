@@ -42,6 +42,10 @@ class UserModel extends BaseModel<UserModelI> {
     return this.model.findByIdAndUpdate(id, item);
   }
 
+  public changePwd(id: number, password: string) {
+    return this.model.findByIdAndUpdate(id, { password });
+  }
+
   public remove(id: number) {
     return this.model.findByIdAndUpdate(id, { soft_del: 1 });
   }
@@ -50,11 +54,11 @@ class UserModel extends BaseModel<UserModelI> {
     page = parseInt(page);
     limit = parseInt(limit);
     return this.model
-      .find()
-      .sort({ soft_del: 1 })
+      .find({ soft_del: { $lte: 0 } })
+      .sort([['_id', -1]])
       .skip((page - 1) * limit)
       .limit(limit)
-      .select('_id username email role type  add_time up_time study')
+      .select('_id username role type  created_at update_at mark')
       .exec();
   }
 

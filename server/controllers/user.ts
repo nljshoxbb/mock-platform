@@ -1,11 +1,10 @@
 import BaseController from '@/server/controllers/base';
-import UserModel, { UserItem } from '@/server/models/User';
+import UserModel from '@/server/models/User';
 import { Context } from 'koa';
 import { isEmpty } from 'lodash';
 import { Types } from 'mongoose';
 
 import TokenModel from '../models/token';
-import Log from '../utils/Log';
 import { generatePasswod, generateToken, getModelInstance, responseBody } from '../utils/utils';
 
 const DEFAULT_PASSWORD = 123456;
@@ -20,22 +19,22 @@ export default class UserController extends BaseController {
     this.tokenModel = getModelInstance<TokenModel>(TokenModel);
   }
 
-  public async login(ctx: Context) {
+  public async login() {
     try {
-      const { username, password } = ctx.request.body;
+      const { username, password } = this.ctx.request.body;
       if (isEmpty(username) || isEmpty(password)) {
-        return (ctx.body = responseBody(null, 400, '请求参数错误'));
+        return (this.ctx.body = responseBody(null, 400, '请求参数错误'));
       }
 
       const userResult = await this.model.get({ username });
       if (isEmpty(userResult)) {
-        return (ctx.body = responseBody(null, 404, '用户不存在'));
+        return (this.ctx.body = responseBody(null, 404, '用户不存在'));
       }
 
       const result = await this.model.get({ username, password: generatePasswod(password).toString() });
 
       if (result.length === 0) {
-        return (ctx.body = responseBody(null, 400, '用户或密码不正确'));
+        return (this.ctx.body = responseBody(null, 400, '用户或密码不正确'));
       }
 
       if (result[0]) {
@@ -43,91 +42,139 @@ export default class UserController extends BaseController {
         const token = generateToken(uid);
         await this.tokenModel.update(uid, { uid, token });
 
-        return (ctx.body = responseBody({ username, uid, token }, 200, '登录成功'));
+        return (this.ctx.body = responseBody({ username, uid, token }, 200, '登录成功'));
       }
     } catch (error) {
       throw Error(error);
     }
   }
 
-  public async create(ctx: Context) {
+  public async create() {
     try {
-      const { username, password = DEFAULT_PASSWORD, role, mark } = ctx.request.body;
-
-      if (isEmpty(username) || isEmpty(password) || isEmpty(role)) {
-        return (ctx.body = responseBody(null, 400, '请求参数错误'));
+      const { username, password = DEFAULT_PASSWORD, role, mark } = this.ctx.request.body;
+      if (!username || !password || !role) {
+        return (this.ctx.body = responseBody(null, 400, '请求参数错误'));
       }
 
       const count = await this.model.checkNameRepeat(username);
       if (count > 0) {
-        return (ctx.body = responseBody(null, 400, '用户名重复'));
+        return (this.ctx.body = responseBody(null, 400, '用户名重复'));
       }
 
       const pwd = generatePasswod(password).toString();
       if (pwd) {
         const res = await this.model.create({ username, password: pwd, role, mark });
-        return (ctx.body = responseBody({ username, uid: new Types.ObjectId(res._id) }, 200, '操作成功'));
+        return (this.ctx.body = responseBody({ username, uid: new Types.ObjectId(res._id) }, 200, '操作成功'));
       }
     } catch (error) {
       throw Error(error);
     }
   }
 
-  public async getList(ctx: Context) {
+  public async getList() {
     try {
-      const { size = 10, page = 1 } = ctx.request.body;
+      const { size = 10, page = 1 } = this.ctx.request.body;
 
       const data = await this.model.listWithPaging(page, size);
       const list = data.map((i) => {
         return {
           id: i._id,
-          name: i.username,
+          username: i.username,
           mark: i.mark,
           created_at: i.created_at,
-          updated_at: i.update_at
+          update_at: i.update_at,
+          role: i.role
         };
       });
       const total = await this.model.listCount();
-      return (ctx.body = responseBody({ list, page, size, total }, 200));
+      return (this.ctx.body = responseBody({ list, page, size, total }, 200));
     } catch (error) {
       throw Error(error);
     }
   }
 
-  public async edit(ctx: Context) {
+  public async edit() {
     try {
-      const parmas = ctx.request.body;
+      const parmas = this.ctx.request.body;
       const { id } = parmas;
       if (!id) {
-        return (ctx.body = responseBody(null, 400, '缺少用户id'));
+        return (this.ctx.body = responseBody(null, 400, '缺少用户id'));
       }
       const isExist = (await this.model.isExist(id)) as any;
       if (!isExist || (isExist && isExist.soft_del === 1)) {
-        return (ctx.body = responseBody(null, 400, 'id不存在'));
+        return (this.ctx.body = responseBody(null, 400, 'id不存在'));
       }
     } catch (error) {
       throw Error(error);
     }
   }
 
-  public async remove(ctx: Context) {
+  public async remove() {
     try {
-      const { id } = ctx.request.body;
+      const { id } = this.ctx.request.body;
 
       const isExist = await this.model.isExist(id);
       if (!isExist) {
-        return (ctx.body = responseBody(null, 400, 'id不存在'));
+        return (this.ctx.body = responseBody(null, 400, 'id不存在'));
       }
 
       if (isExist.role === '0') {
-        return (ctx.body = responseBody(null, 400, '此账号无法删除'));
+        return (this.ctx.body = responseBody(null, 400, '此账号无法删除'));
       }
 
       /** 删除成功后，token也需要删除 */
       await this.model.remove(id);
       await this.tokenModel.removeByUid(id);
 
-      ctx.body = responseBody(null, 200, '操作成功');
+      this.ctx.body = responseBody(null, 200, '操作成功');
+    } catch (error) {
+      throw Error(error);
+    }
+  }
+
+  public async resetPwd() {
+    try {
+      const { uid } = this.ctx.request.body;
+
+      if (!uid) {
+        return (this.ctx.body = responseBody(null, 400, '缺少uid'));
+      }
+
+      const isExit = this.model.isExist(uid);
+
+      if (!isExit) {
+        return (this.ctx.body = responseBody(null, 400, '用户不存在'));
+      }
+
+      await this.model.changePwd(uid, generatePasswod('123456'));
+      /** 成功后退出登录 */
+      await this.tokenModel.removeByUid(uid);
+
+      this.ctx.body = responseBody({}, 200, '操作成功');
+    } catch (error) {
+      throw Error(error);
+    }
+  }
+
+  public async changepwd() {
+    try {
+      const { uid, new_pwd, old_pwd } = this.ctx.request.body;
+
+      const isExit = await this.model.isExist(uid);
+
+      if (!isExit) {
+        return (this.ctx.body = responseBody(null, 404, '用户不存在'));
+      }
+      if (isExit.password !== generatePasswod(old_pwd)) {
+        return (this.ctx.body = responseBody(null, 400, '旧密码不正确'));
+      }
+
+      await this.model.changePwd(uid, generatePasswod(new_pwd));
+
+      /** 成功后退出登录 */
+      await this.tokenModel.removeByUid(uid);
+
+      this.ctx.body = responseBody({}, 200, '操作成功');
     } catch (error) {
       throw Error(error);
     }

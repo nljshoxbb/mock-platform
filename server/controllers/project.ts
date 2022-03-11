@@ -11,7 +11,7 @@ import InterfaceController from './interface';
 type Timer = ReturnType<typeof setInterval>;
 
 /** 10分钟同步一次 */
-const DEFAULT_SYNC_TIME = 60;
+const DEFAULT_SYNC_TIME = 60 * 5;
 
 const timerMap: Map<string, Timer> = new Map();
 
@@ -55,18 +55,22 @@ export default class ProjectController extends BaseController {
     }
   }
 
-  public async create(ctx: Context) {
+  public async create() {
     try {
-      const { name, desc, api_address, type, auto_sync, auto_sync_time = DEFAULT_SYNC_TIME } = ctx.request.body;
+      const { name, desc, api_address, type, auto_sync, auto_sync_time = DEFAULT_SYNC_TIME } = this.ctx.request.body;
       const uid = await this.getUid();
 
       const count = await this.model.checkNameRepeat(name, uid);
       if (isEmpty(name) || isEmpty(api_address) || isEmpty(type)) {
-        return (ctx.body = responseBody(null, 400, '参数错误'));
+        return (this.ctx.body = responseBody(null, 400, '参数错误'));
       }
 
       if (count > 0) {
-        return (ctx.body = responseBody(null, 400, '项目名重复'));
+        return (this.ctx.body = responseBody(null, 400, '项目名重复'));
+      }
+
+      if (auto_sync_time < 60) {
+        return (this.ctx.body = responseBody(null, 400, '同步时间不能小于1分钟'));
       }
 
       const res = await this.model.create({
@@ -89,15 +93,15 @@ export default class ProjectController extends BaseController {
         });
       }
 
-      return (ctx.body = responseBody({ project_id: objectIdToString(res._id) }, 200, '成功'));
+      return (this.ctx.body = responseBody({ project_id: objectIdToString(res._id) }, 200, '成功'));
     } catch (error) {
       throw Error(error);
     }
   }
 
-  public async getList(ctx: Context) {
+  public async getList() {
     try {
-      const params = ctx.request.body;
+      const params = this.ctx.request.body;
       const uid = await this.getUid();
 
       const data = await this.model.get({ ...params, uid });
@@ -111,36 +115,36 @@ export default class ProjectController extends BaseController {
           updated_at: i.update_at
         };
       });
-      return (ctx.body = responseBody(list, 200));
+      return (this.ctx.body = responseBody(list, 200));
     } catch (error) {
       throw Error(error);
     }
   }
 
-  public async edit(ctx: Context) {
+  public async edit() {
     try {
-      const { id, name, desc, api_address, auto_sync, auto_sync_time, type } = ctx.request.body;
+      const { id, name, desc, api_address, auto_sync, auto_sync_time, type } = this.ctx.request.body;
       const uid = await this.getUid();
 
       if (!id) {
-        return (ctx.body = responseBody(null, 400, '缺少id'));
+        return (this.ctx.body = responseBody(null, 400, '缺少id'));
       }
 
       const isExist = await this.model.isExist(id);
 
       if (!isExist) {
-        return (ctx.body = responseBody(null, 400, 'id不存在'));
+        return (this.ctx.body = responseBody(null, 400, 'id不存在'));
       }
 
       if (!type) {
-        return (ctx.body = responseBody(null, 400, '确实类型type'));
+        return (this.ctx.body = responseBody(null, 400, '确实类型type'));
       }
 
       const apiDoc = api_address || isExist.api_address;
 
       const result = await this.interfaceController.syncByPorjectId(id, apiDoc, type);
       if (result === 'addressError') {
-        return (ctx.body = responseBody(null, 400, '地址错误,解析失败'));
+        return (this.ctx.body = responseBody(null, 400, '地址错误,解析失败'));
       }
 
       /** 更新同时 同步新的接口文档地址；重新开启定时同步任务 */
@@ -157,22 +161,22 @@ export default class ProjectController extends BaseController {
         auto_sync_time,
         type
       });
-      ctx.body = responseBody(null, 200, '更新成功');
+      this.ctx.body = responseBody(null, 200, '更新成功');
     } catch (error) {
       throw Error(error);
     }
   }
 
-  public async remove(ctx: Context) {
+  public async remove() {
     try {
-      const { id } = ctx.request.body;
+      const { id } = this.ctx.request.body;
 
       const isExist = await this.model.isExist(id);
       if (!isExist) {
-        return (ctx.body = responseBody(null, 400, 'id不存在'));
+        return (this.ctx.body = responseBody(null, 400, 'id不存在'));
       }
       await this.model.remove(id);
-      ctx.body = responseBody(null, 200, '操作成功');
+      this.ctx.body = responseBody(null, 200, '操作成功');
     } catch (error) {
       throw Error(error);
     }

@@ -31,7 +31,7 @@ export default function userRouter(router: Router) {
    *           description: 用户名
    *         role:
    *           type: string
-   *           description: 角色id
+   *           description: 角色id。0管理员，1普通用户
    *         update_at:
    *           type: number
    *           description: 更新时间
@@ -129,6 +129,29 @@ export default function userRouter(router: Router) {
    *       properties:
    *         uid:
    *           type: string
+   *           required: true
+   *     UserResetpwdRequest:
+   *       type: object
+   *       properties:
+   *         uid:
+   *           type: string
+   *           required: true
+   *     UserResetpwdResponse:
+   *       type: object
+   *     UserChangepwdRequest:
+   *       type: object
+   *       properties:
+   *         uid:
+   *           type: string
+   *           required: true
+   *         old_pwd:
+   *           type: string
+   *           required: true
+   *         new_pwd:
+   *           type: string
+   *           required: true
+   *     UserChangepwdResponse:
+   *       type: object
    *
    *
    * /api/v1/user/list:
@@ -150,7 +173,7 @@ export default function userRouter(router: Router) {
    *               $ref: '#/components/schemas/UserListResponse'
    */
   router.post('/v1/user/list', async (ctx: Context) => {
-    await initController(ctx).getList(ctx);
+    await initController(ctx).getList();
   });
   /**
    * @openapi
@@ -173,7 +196,7 @@ export default function userRouter(router: Router) {
    *                $ref: '#/components/schemas/UserCreateResponse'
    */
   router.post('/v1/user/create', async (ctx: Context) => {
-    await initController(ctx).create(ctx);
+    await initController(ctx).create();
   });
   /**
    * @openapi
@@ -196,7 +219,7 @@ export default function userRouter(router: Router) {
    *                $ref: '#/components/schemas/UserEditResponse'
    */
   router.put('/v1/user/edit', async (ctx: Context) => {
-    await initController(ctx).edit(ctx);
+    await initController(ctx).edit();
   });
   /**
    * @openapi
@@ -218,7 +241,7 @@ export default function userRouter(router: Router) {
    *              schema:
    */
   router.delete('/v1/user/remove', async (ctx: Context) => {
-    await initController(ctx).remove(ctx);
+    await initController(ctx).remove();
   });
   /**
    * @openapi
@@ -241,7 +264,7 @@ export default function userRouter(router: Router) {
    *                $ref: '#/components/schemas/UserLoginResponse'
    */
   router.post('/v1/user/login', async (ctx: Context) => {
-    await initController(ctx).login(ctx);
+    await initController(ctx).login();
   });
   /**
    * @openapi
@@ -264,6 +287,52 @@ export default function userRouter(router: Router) {
    *                $ref: '#/components/schemas/UserLoginResponse'
    */
   router.post('/v1/user/logout', async (ctx: Context) => {
-    await initController(ctx).login(ctx);
+    await initController(ctx).login();
+  });
+  /**
+   * @openapi
+   * /api/v1/user/resetPwd:
+   *   post:
+   *     summary: 重置密码.
+   *     tags:
+   *       - user
+   *     requestBody:
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: '#/components/schemas/UserResetpwdRequest'
+   *     responses:
+   *       200:
+   *         description: 返回结果
+   *         content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/UserResetpwdResponse'
+   */
+  router.post('/v1/user/resetpwd', async (ctx: Context) => {
+    await initController(ctx).resetPwd();
+  });
+  /**
+   * @openapi
+   * /api/v1/user/changepwd:
+   *   post:
+   *     summary: 修改密码.
+   *     tags:
+   *       - user
+   *     requestBody:
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: '#/components/schemas/UserChangepwdRequest'
+   *     responses:
+   *       200:
+   *         description: 返回结果
+   *         content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/UserChangepwdResponse'
+   */
+  router.post('/v1/user/changepwd', async (ctx: Context) => {
+    await initController(ctx).changepwd();
   });
 }

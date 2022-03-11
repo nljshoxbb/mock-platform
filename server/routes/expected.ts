@@ -148,7 +148,7 @@ export default function interfaceRouter(router: KoaRouter) {
    *                $ref: '#/components/schemas/InterfaceExpectedListResponse'
    */
   router.post('/v1/expected/list', async (ctx: Context) => {
-    await initController(ctx).getList(ctx);
+    await initController(ctx).getList();
   });
   /**
    * @openapi
@@ -171,7 +171,7 @@ export default function interfaceRouter(router: KoaRouter) {
    *                $ref: '#/components/schemas/InterfaceExpectedAddResponse'
    */
   router.post('/v1/expected/create', async (ctx: Context) => {
-    await initController(ctx).create(ctx);
+    await initController(ctx).create();
   });
   /**
    * @openapi
@@ -194,7 +194,7 @@ export default function interfaceRouter(router: KoaRouter) {
    *                $ref: '#/components/schemas/InterfaceExpectedUpdateResponse'
    */
   router.put('/v1/expected/edit', async (ctx: Context) => {
-    await initController(ctx).edit(ctx);
+    await initController(ctx).edit();
   });
   /**
    * @openapi
@@ -217,7 +217,7 @@ export default function interfaceRouter(router: KoaRouter) {
    *                $ref: '#/components/schemas/InterfaceExpectedDeleteResponse'
    */
   router.delete('/v1/expected/remove', async (ctx: Context) => {
-    await initController(ctx).remove(ctx);
+    await initController(ctx).remove();
   });
   /**
    * @openapi
@@ -240,6 +240,6 @@ export default function interfaceRouter(router: KoaRouter) {
    *                $ref: '#/components/schemas/InterfaceExpectedStatusResponse'
    */
   router.put('/v1/expected/status', async (ctx: Context) => {
-    await initController(ctx).updateStatus(ctx);
+    await initController(ctx).updateStatus();
   });
 }

@@ -187,7 +187,7 @@ export default function interfaceRouter(router: KoaRouter) {
    *                $ref: '#/components/schemas/InterfaceListResponse'
    */
   router.post('/v1/interface/list', async (ctx: Context) => {
-    await initController(ctx).list(ctx);
+    await initController(ctx).list();
   });
   /**
    * @openapi
@@ -210,7 +210,7 @@ export default function interfaceRouter(router: KoaRouter) {
    *                $ref: '#/components/schemas/InterfaceSyncResponse'
    */
   router.post('/v1/interface/sync', async (ctx: Context) => {
-    await initController(ctx).syncData(ctx);
+    await initController(ctx).syncData();
   });
   /**
    * @openapi
@@ -233,7 +233,7 @@ export default function interfaceRouter(router: KoaRouter) {
    *                $ref: '#/components/schemas/InterfaceOperationResponse'
    */
   router.post('/v1/interface/operation', async (ctx: Context) => {
-    await initController(ctx).operation(ctx);
+    await initController(ctx).operation();
   });
   /**
    * @openapi
@@ -256,7 +256,7 @@ export default function interfaceRouter(router: KoaRouter) {
    *                $ref: '#/components/schemas/InterfaceDetail'
    */
   router.post('/v1/interface/detail', async (ctx: Context) => {
-    await initController(ctx).detail(ctx);
+    await initController(ctx).detail();
   });
   /**
    * @openapi
@@ -291,6 +291,6 @@ export default function interfaceRouter(router: KoaRouter) {
    *                $ref: '#/components/schemas/InterfaceUpdateResponse'
    */
   router.put('/v1/interface/edit', async (ctx: Context) => {
-    await initController(ctx).detail(ctx);
+    await initController(ctx).detail();
   });
 }

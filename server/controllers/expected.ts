@@ -3,7 +3,6 @@ import ExpectedModel, { ExpectedItem } from '@/server/models/expected';
 import { Context } from 'koa';
 import { isEmpty } from 'lodash';
 
-import Log from '../utils/Log';
 import { getModelInstance, responseBody } from '../utils/utils';
 
 export default class ExpectedController extends BaseController {
@@ -14,9 +13,9 @@ export default class ExpectedController extends BaseController {
     this.model = getModelInstance<ExpectedModel>(ExpectedModel);
   }
 
-  public async create(ctx: Context) {
+  public async create() {
     try {
-      const { name, interface_id, response_body, delay, desc } = ctx.request.body;
+      const { name, interface_id, response_body, delay, desc } = this.ctx.request.body;
       const data: ExpectedItem = {
         name,
         interface_id,
@@ -27,13 +26,13 @@ export default class ExpectedController extends BaseController {
       };
 
       if (isEmpty(name) || isEmpty(interface_id) || isEmpty(response_body)) {
-        return (ctx.body = responseBody(null, 400, '参数错误'));
+        return (this.ctx.body = responseBody(null, 400, '参数错误'));
       }
 
       const count = await this.model.checkNameRepeat(name);
 
       if (count > 0) {
-        return (ctx.body = responseBody(null, 400, '已存在'));
+        return (this.ctx.body = responseBody(null, 400, '已存在'));
       }
 
       /** 批量关闭其他期望 */
@@ -42,23 +41,23 @@ export default class ExpectedController extends BaseController {
 
       await this.model.create(data);
 
-      return (ctx.body = responseBody(null, 200, '成功'));
+      return (this.ctx.body = responseBody(null, 200, '成功'));
     } catch (error) {
       throw Error(error);
     }
   }
 
-  public async getList(ctx: Context) {
+  public async getList() {
     try {
-      const { size = 10, page = 1, interface_id } = ctx.request.body;
+      const { size = 10, page = 1, interface_id } = this.ctx.request.body;
       if (!interface_id) {
-        return (ctx.body = responseBody(null, 400, '缺少interface_id'));
+        return (this.ctx.body = responseBody(null, 400, '缺少interface_id'));
       }
 
       const list = await this.model.listWithPaging(interface_id, page, size);
       const total = await this.model.listCount(interface_id);
 
-      return (ctx.body = responseBody(
+      return (this.ctx.body = responseBody(
         {
           list: list.map((i) => {
             return {
@@ -83,45 +82,45 @@ export default class ExpectedController extends BaseController {
     }
   }
 
-  public async edit(ctx: Context) {
+  public async edit() {
     try {
-      const parmas = ctx.request.body;
+      const parmas = this.ctx.request.body;
       const { id, name, desc, response_body, delay } = parmas;
       if (!id) {
-        return (ctx.body = responseBody(null, 400, '参数不正确'));
+        return (this.ctx.body = responseBody(null, 400, '参数不正确'));
       }
       const isExist = await this.model.isExist(id);
       if (!isExist) {
-        return (ctx.body = responseBody(null, 400, 'id不存在'));
+        return (this.ctx.body = responseBody(null, 400, 'id不存在'));
       }
 
       await this.model.update(id, { name, desc, response_body, delay, status: isExist.status });
-      ctx.body = responseBody(null, 200, '更新成功');
+      this.ctx.body = responseBody(null, 200, '更新成功');
     } catch (error) {
       throw Error(error);
     }
   }
 
-  public async remove(ctx: Context) {
+  public async remove() {
     try {
-      const { id } = ctx.request.body;
+      const { id } = this.ctx.request.body;
       const isExist = await this.model.isExist(id);
       if (!isExist) {
-        return (ctx.body = responseBody(null, 200, 'id不存在'));
+        return (this.ctx.body = responseBody(null, 200, 'id不存在'));
       }
       await this.model.remove(id);
-      ctx.body = responseBody(null, 200, '操作成功');
+      this.ctx.body = responseBody(null, 200, '操作成功');
     } catch (error) {
       throw Error(error);
     }
   }
 
-  public async updateStatus(ctx: Context) {
+  public async updateStatus() {
     try {
-      const { id, status } = ctx.request.body;
+      const { id, status } = this.ctx.request.body;
       const isExist = await this.model.isExist(id);
       if (!isExist) {
-        return (ctx.body = responseBody(null, 200, 'id不存在'));
+        return (this.ctx.body = responseBody(null, 200, 'id不存在'));
       }
 
       if (status) {
@@ -134,7 +133,7 @@ export default class ExpectedController extends BaseController {
         delay: isExist.delay,
         status
       });
-      ctx.body = responseBody(null, 200, '操作成功');
+      this.ctx.body = responseBody(null, 200, '操作成功');
     } catch (error) {
       throw Error(error);
     }

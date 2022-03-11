@@ -51,7 +51,7 @@ export const generatePasswod = (password: string, salt = PASSWORD_SALT) => {
   return sha256(password + salt).toString();
 };
 
-export const objectIdToString = (id) => {
+export const objectIdToString = (id): string => {
   return new Types.ObjectId(id).toString();
 };
 

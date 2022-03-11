@@ -10,7 +10,6 @@ export default function projectRouter(router: Router) {
   /**
    * @openapi
    *
-
    * /api/v1/project/list:
    *   post:
    *     summary: 项目列表.
@@ -51,7 +50,7 @@ export default function projectRouter(router: Router) {
    *           description: 是否开启自动同步
    *         auto_sync_time:
    *           type: number
-   *           description: 自动同步时间
+   *           description: 自动同步时间。单位秒
    *     ProjectListResponse:
    *       type: object
    *       properties:
@@ -86,7 +85,7 @@ export default function projectRouter(router: Router) {
    *           description: 是否开启自动同步
    *         auto_sync_time:
    *           type: number
-   *           description: 自动同步时间
+   *           description: 自动同步时间。单位秒
    *     ProjectCreateResponse:
    *        type: object
    *        properties:
@@ -110,7 +109,7 @@ export default function projectRouter(router: Router) {
    *           description: 是否开启自动同步
    *         auto_sync_time:
    *           type: number
-   *           description: 自动同步时间
+   *           description: 自动同步时间。单位秒
    *     ProjectDeleteRequest:
    *       type: object
    *       properties:
@@ -120,7 +119,7 @@ export default function projectRouter(router: Router) {
    *           description: 项目id
    */
   router.post('/v1/project/list', async (ctx: Context) => {
-    await initController(ctx).getList(ctx);
+    await initController(ctx).getList();
   });
   /**
    * @openapi
@@ -143,7 +142,7 @@ export default function projectRouter(router: Router) {
    *                $ref: '#/components/schemas/ProjectCreateResponse'
    */
   router.post('/v1/project/create', async (ctx: Context) => {
-    await initController(ctx).create(ctx);
+    await initController(ctx).create();
   });
   /**
    * @openapi
@@ -166,7 +165,7 @@ export default function projectRouter(router: Router) {
    *                $ref: '#/components/schemas/ProjectCreateResponse'
    */
   router.put('/v1/project/edit', async (ctx: Context) => {
-    await initController(ctx).edit(ctx);
+    await initController(ctx).edit();
   });
   /**
    * @openapi
@@ -188,6 +187,6 @@ export default function projectRouter(router: Router) {
    *              schema:
    */
   router.delete('/v1/project/remove', async (ctx: Context) => {
-    await initController(ctx).remove(ctx);
+    await initController(ctx).remove();
   });
 }

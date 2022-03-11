@@ -2,7 +2,6 @@ import InterfaceModel, { InterfaceItem } from '@/server/models/interface';
 import Log from '@/server/utils/Log';
 import SwaggerParser from '@apidevtools/swagger-parser';
 import axios from 'axios';
-// import yamljs from 'yamljs';
 import jsYaml from 'js-yaml';
 import { Context } from 'koa';
 
@@ -12,18 +11,6 @@ import CategoryModel from '../models/category';
 import ProjectModel from '../models/project';
 import { getIPAddress, getModelInstance, responseBody } from '../utils/utils';
 import BaseController from './base';
-
-const getSchema = (params) => {
-  if (params?.content) {
-    let result;
-    Object.keys(params.content).forEach((i) => {
-      result = params.content[i].schema;
-    });
-    return result;
-  } else {
-    return '';
-  }
-};
 
 export default class InterfaceController extends BaseController {
   model: InterfaceModel;
@@ -158,12 +145,12 @@ export default class InterfaceController extends BaseController {
    * @param ctx
    * @returns
    */
-  public async syncData(ctx: Context) {
+  public async syncData() {
     try {
-      const { api_address, project_id, type } = ctx.request.body;
+      const { api_address, project_id, type } = this.ctx.request.body;
 
       if (!project_id || !api_address || !type) {
-        return (ctx.body = responseBody(null, 400, '参数错误'));
+        return (this.ctx.body = responseBody(null, 400, '参数错误'));
       }
 
       const projectModel = getModelInstance<ProjectModel>(ProjectModel);
@@ -171,17 +158,17 @@ export default class InterfaceController extends BaseController {
       const isExist = await projectModel.isExist(project_id);
 
       if (!isExist) {
-        return (ctx.body = responseBody(null, 200, 'project_id不存在'));
+        return (this.ctx.body = responseBody(null, 200, 'project_id不存在'));
       }
       const result = await this.syncByPorjectId(project_id, api_address, type);
       if (!result) {
-        return (ctx.body = responseBody(null, 500, '地址错误'));
+        return (this.ctx.body = responseBody(null, 500, '地址错误'));
       }
-      ctx.body = responseBody(result, 200, '操作成功');
+      this.ctx.body = responseBody(result, 200, '操作成功');
     } catch (error) {
       Log.error(error);
       if (error.message.indexOf('ENOTFOUND') !== -1) {
-        ctx.body = responseBody(null, 400, '地址错误');
+        this.ctx.body = responseBody(null, 400, '地址错误');
       } else {
         throw Error(error);
       }
@@ -193,7 +180,7 @@ export default class InterfaceController extends BaseController {
    * 包含项目-类目-接口 的树层级
    * @param ctx
    */
-  public async list(ctx: Context) {
+  public async list() {
     try {
       const projectArray = await this.projectModel.get();
       const result: any[] = [];
@@ -232,7 +219,7 @@ export default class InterfaceController extends BaseController {
         });
       }
 
-      ctx.body = responseBody({ list: result }, 200);
+      this.ctx.body = responseBody({ list: result }, 200);
     } catch (error) {
       throw Error(error);
     }
@@ -243,13 +230,13 @@ export default class InterfaceController extends BaseController {
    * @param ctx
    * @returns
    */
-  public async detail(ctx: Context) {
-    const { id } = ctx.request.body;
+  public async detail() {
+    const { id } = this.ctx.request.body;
 
     const result = await this.model.getDetail(id as string);
 
     if (!result) {
-      return (ctx.body = responseBody(null, 404, 'id不存在'));
+      return (this.ctx.body = responseBody(null, 404, 'id不存在'));
     }
 
     const data = {
@@ -259,7 +246,7 @@ export default class InterfaceController extends BaseController {
     };
     delete data._id;
 
-    ctx.body = responseBody(data);
+    this.ctx.body = responseBody(data);
   }
 
   /**
@@ -267,25 +254,23 @@ export default class InterfaceController extends BaseController {
    * @param ctx
    * @returns
    */
-  public async operation(ctx: Context) {
+  public async operation() {
     try {
-      const { body } = ctx.request;
+      const { body } = this.ctx.request;
       const { api, method } = body;
 
       if (!api) {
-        return (ctx.body = responseBody(null, 400, '缺少api'));
+        return (this.ctx.body = responseBody(null, 400, '缺少api'));
       }
 
       if (!method) {
-        return (ctx.body = responseBody(null, 400, '缺少method'));
+        return (this.ctx.body = responseBody(null, 400, '缺少method'));
       }
 
       if (api.indexOf('http') === -1) {
-        return (ctx.body = responseBody(null, 400, 'api地址错误'));
+        return (this.ctx.body = responseBody(null, 400, 'api地址错误'));
       }
-      const axiosInstance = axios.create();
 
-      // const data = await axiosInstance[method](api,);
       const data = await axios({
         method,
         url: `${api}?name=222`,
@@ -293,7 +278,7 @@ export default class InterfaceController extends BaseController {
           name: 2222
         }
       });
-      ctx.body = data.data;
+      this.ctx.body = data.data;
     } catch (error) {
       throw Error(error);
     }
