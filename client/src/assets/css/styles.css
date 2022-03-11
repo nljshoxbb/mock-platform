@@ -1,0 +1,73 @@
+/* 带颜色块 */
+.line-title {
+  position: relative;
+  font-size: 16px;
+  color: #009ee9;
+  width: 100%;
+  line-height: 16px;
+  margin-bottom: 5px;
+  vertical-align: middle;
+  padding: 10px;
+}
+.line-title::before {
+  content: "";
+  display: inline-block;
+  width: 4px;
+  height: 16px;
+  background: #009ee9;
+  position: absolute;
+  top: 50%;
+  left: 0;
+  border-radius: 8px;
+  transform: translateY(-50%);
+}
+.line-title.border {
+  border-top: 1px solid #0f2757;
+  padding: 15px 0 15px 10px;
+}
+
+/* 情下划线按钮 */
+.underline-button {
+  display: inline-block;
+  margin: 0 10px;
+  color: #478ce0;
+  font-size: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/** 弹窗样式 */
+body .ant-modal-header {
+  background-color: #1674fa;
+  padding: 9px 24px;
+}
+body .ant-modal-title {
+  color: #fff;
+}
+body .ant-modal-close-x {
+  transform: translate(-20px, 10px);
+  color: #fff;
+  width: 21px;
+  height: 21px;
+  border-radius: 50%;
+  border: 1px solid #fff;
+  line-height: 21px;
+}
+body .anticon-close.ant-modal-close-icon {
+  font-size: 14px;
+  transform: translate(0px, -2px);
+}
+/* body .ant-modal-body {
+  overflow-y: auto;
+} */
+
+body .ant-btn {
+  background: #1674fa;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4);
+  border-radius: 4px;
+  font-size: 14px;
+  color: #ffffff;
+  letter-spacing: 0;
+  text-align: center;
+  line-height: 24px;
+}

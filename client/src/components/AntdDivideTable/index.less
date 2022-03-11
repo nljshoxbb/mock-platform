@@ -1,0 +1,193 @@
+// @border-radius: 8px !important;
+// @import (reference) '~/src/assets/less/theme.less';
+
+// .main {
+//   // 总数
+//   position: relative;
+
+//   .total {
+//     position: absolute;
+//     bottom: 20px;
+//     left: 6px;
+//     // color: rgb(var(--yg-text));
+//     font-size: 14px;
+//   }
+
+//   :global {
+//     .ant-table {
+//       background: transparent;
+
+//       .ant-table-body {
+//         // 分隔表单
+//         table {
+//           border-collapse: separate;
+//           border-spacing: 0 8px;
+//         }
+//         thead {
+//           // 设置为0，解决checkbox计算错误问题
+//           border-spacing: 0px;
+//         }
+//       }
+//       // // 分隔表单
+//       table {
+//         border-collapse: separate;
+//         border-spacing: 0 8px;
+//       }
+//       thead {
+//         // 设置为0，解决checkbox计算错误问题
+//         border-spacing: 0px;
+//       }
+
+//       tr {
+//         // box-shadow: 0px 4px 4px rgba(var(--yg-controlled-main), 0.1);
+//         border-radius: @border-radius;
+//         &:hover {
+//           border: 1px solid @primary-color;
+//         }
+//       }
+
+//       th {
+//         color: rgb(var(--yg-text)) !important;
+//       }
+//     }
+
+//     .ant-table-thead {
+//       .ant-table-cell {
+//         font-weight: bold;
+//         font-size: 16px;
+//       }
+//     }
+
+//     .ant-table-body {
+//       /* 滚动条凹槽的颜色，还可以设置边框属性 */
+//       &::-webkit-scrollbar-track-piece {
+//         background-color: #f8f8f8;
+//         -webkit-border-radius: 0;
+//         -moz-border-radius: 0;
+//         border-radius: 0;
+//       }
+
+//       /* 滚动条的宽度 */
+//       &::-webkit-scrollbar {
+//         width: 0px !important;
+//       }
+
+//       /* 滚动条的设置 */
+//       &::-webkit-scrollbar-thumb {
+//         background-color: #dddddd;
+//         background-clip: padding-box;
+//         -webkit-border-radius: 0;
+//         -moz-border-radius: 0;
+//         border-radius: 0;
+//       }
+
+//       /* 滚动条鼠标移上去 */
+//       ::-webkit-scrollbar-thumb:hover {
+//         background-color: #bbb;
+//       }
+//     }
+
+//     .ant-table-cell {
+//       margin-bottom: 10px;
+//       padding: 10px 15px;
+//       color: @text-color;
+//       background-color: #fff;
+//       border-width: 1px;
+//       border-top: 1px solid @desalt-border;
+//       border-bottom: 1px solid @desalt-border;
+//       /** 设置为0，解决checkbox计算错误问题 */
+//       border-spacing: 0px;
+//       &:first-child {
+//         border-left: 1px solid @desalt-border;
+//         border-top-left-radius: @border-radius;
+//         border-bottom-left-radius: @border-radius;
+//       }
+
+//       &:last-child {
+//         border-right: 1px solid @desalt-border;
+//         border-top-right-radius: @border-radius;
+//         border-bottom-right-radius: @border-radius;
+//       }
+//       &::before {
+//         display: none;
+//       }
+//     }
+
+//     // 悬浮
+//     .ant-table-tbody > tr.ant-table-row:hover > td {
+//       // background: rgba(var(--yg-box-bg), 0.65);
+//       border-top-color: @primary-color;
+//       border-bottom-color: @primary-color;
+
+//       &:first-child {
+//         border-left-color: @primary-color;
+//       }
+
+//       &:last-child {
+//         border-right-color: @primary-color;
+//       }
+//     }
+
+//     // 分页器
+//     .ant-pagination {
+//       li,
+//       button {
+//         border-radius: 8px;
+//       }
+//     }
+
+//     .ant-pagination-item-active {
+//       background: @primary-color;
+//       border-color: @primary-color;
+
+//       @textColor: #ffffff;
+//       &:hover,
+//       &:focus {
+//         a {
+//           color: @textColor;
+//         }
+//       }
+//       a {
+//         color: @textColor;
+//       }
+//     }
+
+//     .ant-table-cell-scrollbar {
+//       box-shadow: none;
+//     }
+
+//     .ant-table-expanded-row-level-1 {
+//       & > td {
+//         // background: var(--yg-bg) !important;
+//         background-color: transparent !important;
+//       }
+//       box-shadow: none;
+//     }
+//   }
+// }
+
+// .fixed-table {
+//   th {
+//     &:nth-last-child(2) {
+//       border-top-right-radius: @border-radius;
+//       border-bottom-right-radius: @border-radius;
+//     }
+//   }
+
+//   :global {
+//     .ant-table-body {
+//       margin-top: -10px;
+//     }
+//     .ant-table-cell-scrollba {
+//       display: none;
+//     }
+
+//     .ant-table-header {
+//       position: relative;
+//       z-index: 100;
+//       table {
+//         border-spacing: 0 0;
+//       }
+//     }
+//   }
+// }

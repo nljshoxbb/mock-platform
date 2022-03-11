@@ -1,0 +1,52 @@
+// @import (reference) '~/src/assets/less/theme.less';
+
+.title {
+  // color: @text-color;
+  font-weight: 600;
+  font-size: 20px;
+  font-family: PingFangSC-Semibold;
+}
+
+.notitle {
+  :global {
+    .ant-modal-header {
+      border-bottom: none;
+    }
+    .ant-modal-close {
+      display: none;
+    }
+  }
+}
+
+.wrap {
+  :global {
+    .ant-modal-header {
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+    }
+    .ant-modal-content {
+      border-radius: 12px;
+    }
+
+    .ant-modal-footer {
+      padding-top: 0px;
+      padding-right: 42px;
+      padding-bottom: 50px;
+      padding-left: 42px;
+      border-top: none;
+    }
+  }
+}
+
+.full {
+  :global {
+    .ant-modal,
+    .ant-modal-content {
+      top: 0;
+      width: 100vw;
+      max-width: 100% !important;
+      height: 100vh;
+      margin: 0;
+    }
+  }
+}

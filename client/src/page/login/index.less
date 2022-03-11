@@ -1,0 +1,76 @@
+// @import (reference) '~antd/es/style/themes/index';
+
+.container {
+  display: flex;
+  height: 100vh;
+  padding: 40px;
+  overflow: auto;
+  margin: auto;
+  background-image: url(https://gw.alipayobjects.com/zos/rmsportal/TVYTbAXWheQpRcWDaDMu.svg);
+}
+
+.form {
+  width: 500px;
+}
+
+.logo {
+  width: 80px;
+  height: 80px;
+  margin-bottom: 20px;
+}
+
+.title {
+  margin-bottom: 50px;
+  color: #171721;
+  font-weight: 600;
+  font-size: 42px;
+  font-family: PingFangSC-Semibold;
+  line-height: 56px;
+  letter-spacing: 4px;
+}
+
+.item {
+  margin-bottom: 20px;
+  padding: 10px 12px;
+  border: 1.17px solid #e4e6e8;
+  border-radius: 12px;
+  :global {
+    .ant-input {
+      padding-left: 0px;
+    }
+
+    .ant-input-affix-wrapper {
+      padding-left: 0px;
+    }
+  }
+}
+
+.btn {
+  width: 100%;
+  height: 64px;
+}
+
+.bg {
+  width: 810px;
+  height: calc(100vh - 40);
+  margin-right: 20px;
+}
+
+.checked {
+  margin-bottom: 40px;
+  :global {
+    .ant-checkbox {
+      border-radius: 9999px;
+    }
+
+    .ant-checkbox-inner {
+      background-color: #f5f6f7;
+      border: none;
+      border-radius: 9999px;
+    }
+
+    .ant-checkbox-checked .ant-checkbox-inner {
+      background-color: #1674fa;
+    }
+  }
+}
