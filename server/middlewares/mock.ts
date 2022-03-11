@@ -2,7 +2,7 @@ import InterfaceModel from '@/server/models/interface';
 import { Context, Next } from 'koa';
 import { isEmpty } from 'lodash';
 import Mock from 'mockjs';
-import { Schema } from 'swagger-jsdoc';
+import { RequestBody, Response, Schema } from 'swagger-jsdoc';
 
 import { getModelInstance, responseBody } from './../utils/utils';
 import ProjectModel from '../models/project';
@@ -113,15 +113,30 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
   if (res[0]) {
     const { request_body, responses } = res[0];
 
-    const responseSchema = JSON.parse(responses || '{}');
-    const requestBody = JSON.parse(request_body || '{}');
+    const response = JSON.parse(responses || '{}') as Response;
+    const requestBody = JSON.parse(request_body || '{}') as RequestBody;
     let requestBodySchema;
-    console.log(responseSchema);
+    console.log(response);
     if (!isEmpty(requestBody)) {
       requestBodySchema = requestBody.content['application/json'];
     }
 
-    ctx.body = responseBody(Mock.mock(generateMockField(responseSchema)), 200);
+    const { content } = response;
+
+    if (content) {
+      const types = Object.keys(content);
+      if (types[0] === 'application/octet-stream') {
+        const { schema } = content[types[0]];
+        console.log(Mock.mock(generateMockField(schema)));
+      }
+    }
+
+    // if (responseSchema.format && responseSchema.format === 'binary') {
+    //   // if(responseSchema.)
+    //   // ctx.body =
+    // } else {
+    //   ctx.body = responseBody(Mock.mock(generateMockField(responseSchema)), 200);
+    // }
   } else {
     ctx.body = responseBody(null, 404, '没有mock数据');
   }

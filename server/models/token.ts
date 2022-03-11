@@ -29,6 +29,10 @@ class TokenModel extends BaseModel<TokenModelI> {
   public update(uid, data) {
     return this.model.updateOne({ uid }, data, { upsert: true });
   }
+
+  public removeByUid(id) {
+    return this.model.remove({ uid: id });
+  }
 }
 
 export default TokenModel;

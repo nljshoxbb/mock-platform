@@ -26,7 +26,14 @@ export default class UserController extends BaseController {
       if (isEmpty(username) || isEmpty(password)) {
         return (ctx.body = responseBody(null, 400, '请求参数错误'));
       }
+
+      const userResult = await this.model.get({ username });
+      if (isEmpty(userResult)) {
+        return (ctx.body = responseBody(null, 404, '用户不存在'));
+      }
+
       const result = await this.model.get({ username, password: generatePasswod(password).toString() });
+
       if (result.length === 0) {
         return (ctx.body = responseBody(null, 400, '用户或密码不正确'));
       }
@@ -111,7 +118,15 @@ export default class UserController extends BaseController {
       if (!isExist) {
         return (ctx.body = responseBody(null, 400, 'id不存在'));
       }
+
+      if (isExist.role === '0') {
+        return (ctx.body = responseBody(null, 400, '此账号无法删除'));
+      }
+
+      /** 删除成功后，token也需要删除 */
       await this.model.remove(id);
+      await this.tokenModel.removeByUid(id);
+
       ctx.body = responseBody(null, 200, '操作成功');
     } catch (error) {
       throw Error(error);

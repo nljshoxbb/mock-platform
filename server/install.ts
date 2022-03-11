@@ -28,7 +28,7 @@ async function initDatabse() {
   userModel
     .create({
       username: Config.admin,
-      role: '1',
+      role: '0',
       password: generatePasswod(Config.adminPwd)
     })
     .then(() => {

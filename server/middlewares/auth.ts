@@ -62,7 +62,7 @@ const authMiddleware = async (ctx: Context, next: Next) => {
     if (error instanceof JsonWebTokenError) {
       ctx.body = responseBody(null, 401, 'token已过期');
     }
-    Log.error(error + 'auth middleware');
+    Log.error(error + ' auth middleware');
   }
 };
 

@@ -62,6 +62,7 @@ export default class InterfaceController extends BaseController {
         return Promise.resolve('addressError');
       }
 
+      /** 关联所有ref */
       const api = await SwaggerParser.dereference(jsonData);
       const interfaceBatchUpdate: InterfaceItem[] = [];
 
@@ -84,10 +85,11 @@ export default class InterfaceController extends BaseController {
 
         Object.keys(responses).forEach((k) => {
           if (k === '200') {
-            responseSchema = getSchema(responses[k]);
+            responseSchema = responses[k];
           }
         });
 
+        /** 批量更新 */
         interfaceBatchUpdate.push({
           path: i,
           method,
@@ -144,7 +146,7 @@ export default class InterfaceController extends BaseController {
       });
       /** 接口去重，覆盖处理 */
       await this.model.bulkWrite(operations);
-      Log.info('接口同步成功~');
+      Log.info(`projectid:${projectId}的接口同步成功`);
       return Promise.resolve({});
     } catch (error) {
       return Promise.reject(error);
@@ -231,7 +233,9 @@ export default class InterfaceController extends BaseController {
       }
 
       ctx.body = responseBody({ list: result }, 200);
-    } catch (error) {}
+    } catch (error) {
+      throw Error(error);
+    }
   }
 
   /**
