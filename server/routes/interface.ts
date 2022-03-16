@@ -270,7 +270,7 @@ export default function interfaceRouter(router: KoaRouter) {
    *           description: 接口id
    *         schema:
    *           type: string
-   *           description: response_body schema,根据mock字段获取 应响应的数据。每个字段都可添加以下属性:1.max,min(代表mock数量最大最小值). 2.default（为设定值，替代mock数据）
+   *           description: response_body schema,根据字段获取应响应的mockl数据。每个字段都可添加以下属性:1.如果该字段为数组类型，则可以添加max,min属性(代表mock数量最大最小值). 2.所有字段都可添加value属性（为编辑的值）
    *
    * /api/v1/interface/edit:
    *   put:

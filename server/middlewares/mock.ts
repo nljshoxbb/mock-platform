@@ -108,9 +108,18 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
   }
 
   /** 如果有启用的期望值，直接返回期望值 */
+  const projectRes = await interfaceModel.get({ project_id: projectId });
+
+  if (projectRes[0] && projectRes[0].method !== method.toLocaleLowerCase()) {
+    return (ctx.body = responseBody(null, 405, '请求方法不允许'));
+  }
 
   const res = await interfaceModel.getDataByPath(projectId, method.toLocaleLowerCase(), path);
+<<<<<<< HEAD
   console.log(res, projectId, method.toLocaleLowerCase(), path);
+=======
+
+>>>>>>> fix: mock功能问题修复
   if (res[0]) {
     const { request_body, responses } = res[0];
 
@@ -125,6 +134,8 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
 
     if (content) {
       const types = Object.keys(content);
+      console.log(content);
+
       if (types[0] === 'application/octet-stream') {
         const { schema } = content[types[0]];
         console.log(Mock.mock(generateMockField(schema)));

@@ -10,3 +10,7 @@
 ### 接口文档地址 
 
 localhost:3888/swagger
+
+### yaml地址
+
+localhost:3888/doc/swagger
