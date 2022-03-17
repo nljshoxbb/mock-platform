@@ -2,7 +2,7 @@ import InterfaceModel from '@/server/models/interface';
 import { Context, Next } from 'koa';
 import { isEmpty } from 'lodash';
 import Mock from 'mockjs';
-import { RequestBody, Response, Schema } from 'swagger-jsdoc';
+import { RequestBody, Response } from 'swagger-jsdoc';
 
 import { getModelInstance, responseBody } from './../utils/utils';
 import ProjectModel from '../models/project';
