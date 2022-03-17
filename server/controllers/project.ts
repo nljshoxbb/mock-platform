@@ -69,7 +69,7 @@ export default class ProjectController extends BaseController {
         return (this.ctx.body = responseBody(null, 400, '项目名重复'));
       }
 
-      if (auto_sync_time < 60) {
+      if (auto_sync && auto_sync_time < 60) {
         return (this.ctx.body = responseBody(null, 400, '同步时间不能小于1分钟'));
       }
 
