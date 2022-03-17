@@ -2,7 +2,7 @@ import InterfaceModel from '@/server/models/interface';
 import { Context, Next } from 'koa';
 import { isEmpty } from 'lodash';
 import Mock from 'mockjs';
-import { RequestBody, Response, Schema } from 'swagger-jsdoc';
+import { RequestBody, Response } from 'swagger-jsdoc';
 
 import { getModelInstance, responseBody } from './../utils/utils';
 import ProjectModel from '../models/project';
@@ -115,11 +115,6 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
   }
 
   const res = await interfaceModel.getDataByPath(projectId, method.toLocaleLowerCase(), path);
-<<<<<<< HEAD
-  console.log(res, projectId, method.toLocaleLowerCase(), path);
-=======
-
->>>>>>> fix: mock功能问题修复
   if (res[0]) {
     const { request_body, responses } = res[0];
 
