@@ -27,7 +27,6 @@ type TreeData = {
 interface ItemListProps {
   getIinterface?: (node: any) => void;
 
-  // type: string;
 }
 const dataList: DataList[] = [];
 

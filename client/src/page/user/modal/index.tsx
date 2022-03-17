@@ -1,4 +1,4 @@
-import { Checkbox, Col, Form, Input, Radio, Row, message } from "antd";
+import { Checkbox, Col, Form, Input, Radio, Row, message,Button } from "antd";
 import React, { useEffect, useState } from "react";
 
 import { CheckboxChangeEvent } from "antd/lib/checkbox";
@@ -6,7 +6,7 @@ import { CheckboxChangeEvent } from "antd/lib/checkbox";
 import Modal from "@/components/Modal";
 import type { ModalProps } from "antd";
 import { UserCreate,UserEdit } from "@/services";
-import { UserItemTypes } from "@/services";
+import { UserItemTypes,UserResetPwd } from "@/services";
 import styles from "./index.less";
 
 const layout = {
@@ -74,7 +74,14 @@ const Edit: React.FC<EditProps> = ({
       form.setFieldsValue(values);
     }
   }, [currentItem, modalProps.visible]);
+const onResetPwd=()=>{
+  UserResetPwd({uid:currentItem?.id as string}).then((res)=>{
+    if(!res.hasError) {
+      message.success('重置成功');
 
+    }
+  })
+}
   return (
     <>
       <Modal
@@ -113,10 +120,21 @@ const Edit: React.FC<EditProps> = ({
                 // },
               },
             ]}
-            // extra="说明：由英文，数字或中文组成，限制8个字符"
+            extra="提示:新创建的用户密码默认为123456"
           >
             <Input maxLength={8} />
           </Form.Item>
+    {
+      type==='info'?
+      <Form.Item name="role" label="重置密码"
+      extra="说明:默认为123456"
+      >
+        <Button type="primary" className="mt10 mb10" onClick={onResetPwd}>
+                重置密码
+              </Button>
+    </Form.Item>
+      :null
+    }
 
           <Form.Item name="role" label="选择权限" rules={[{ required: true }]}>
             <Radio.Group disabled>

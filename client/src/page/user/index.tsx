@@ -70,7 +70,7 @@ const User = () => {
       <Form className={styles.commonSearchForm} onFinish={onFinish}>
         <Row gutter={[32, 8]}>
           <Col sm={6} md={6} lg={6} xl={6}>
-            <div className={styles.filterTitle}>角色</div>
+            <div className={styles.filterTitle}>用户</div>
 
             <Form.Item name="role_name">
               <Input style={{ width: "100%" }} placeholder="请输入角色名称" />
@@ -159,7 +159,7 @@ const User = () => {
       </Spin>
 
       <Edit
-        title={editModal.type === "add" ? "新增角色" : "编辑角色"}
+        title={editModal.type === "add" ? "新增用户" : "编辑用户"}
         visible={editModal.visible}
         onCancel={() => {
           editModal.setVisible(false);

@@ -1,3 +1,5 @@
+import { useHistory } from "react-router";
+
 import { BASE_URL, REQUEST_TIMEOUT } from "../configs/request";
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 
@@ -5,9 +7,6 @@ import { LocalStorage } from "@/utils/LocalStorage";
 import { debounce } from "lodash";
 import { notification } from "antd";
 
-// import { RouteEnum } from "@/constants/RouteEnum";
-
-// import { history } from 'umi';
 
 const instance = axios.create({
   baseURL: BASE_URL,
@@ -29,11 +28,13 @@ instance.interceptors.request.use(
       showDebounceMsg(() => {
         notification.error({
           message: "提示",
-          description: "session失效，请重新登录！",
+          description: "Authorization失效，请重新登录！",
         });
       });
       setTimeout(() => {
         // history.push(RouteEnum.LOGIN);
+        useHistory().push({ pathname: "/login" });
+
       }, 200);
       return config;
     }
@@ -41,7 +42,6 @@ instance.interceptors.request.use(
       config.headers.Authorization = Authorization;
     }
     return config;
-    // return {};
   },
   (err) => {
     return Promise.reject(err);
@@ -56,25 +56,25 @@ instance.interceptors.response.use(
     /** 存在错误 */
     if (
       response.data?.hasError &&
-      (response.data?.errorId === "NoLoginError" ||
-        response.data.errorId === "SessionNotFoundOrExpired")
+      (response.data?.errorId === "token已过期")
     ) {
       showDebounceMsg(() => {
         notification.error({
           message: "提示",
-          description: `session失效，请重新登录！`,
+          description: `token已过期，请重新登录！`,
         });
       });
 
       setTimeout(() => {
-        // history.push(RouteEnum.LOGIN);
+        useHistory().push({ pathname: "/login" });
+
       }, 200);
 
       // InternalError
     } else if (response.data?.hasError) {
       notification.error({
         message: "提示",
-        description: response.data.errorDesc,
+        description: response.data.msg,
       });
     }
 

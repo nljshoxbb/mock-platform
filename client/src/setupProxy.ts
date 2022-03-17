@@ -1,15 +1,14 @@
-const proxy = require("http-proxy-middleware");
-console.log("666");
+const proxy = require('http-proxy-middleware');
 
 module.exports = function (app) {
   app.use(
-    "/api",
+    '/api',
     proxy({
-      target: "http://192.168.21.103:3888/",
+      target: 'http://nljshoxbb.natapp1.cc',
       changeOrigin: true,
       PathRewrite: {
-        "^/api": "",
-      },
+        '^/api': ''
+      }
     })
   );
 };

@@ -34,16 +34,18 @@ const Eidt: React.FC<EditProps> = ({
   const [form] = Form.useForm();
   const [disabled, setDisabled] = useState(false);
   useEffect(() => {
+    
     if (modalProps.visible) {
       form.resetFields();
     }
   }, [modalProps.visible]);
   const onSubmit = () => {
+    let autoTime:number
     if (type === "add") {
       form.validateFields().then(async (values) => {
-        console.log(values, "values");
+        autoTime = values.auto_sync_time*60
         message.success("新增成功");
-        ProjectCreate({ ...values }).then((res) => {
+        ProjectCreate({ ...values,auto_sync:disabled,auto_sync_time:autoTime }).then((res) => {
           onSuccess && onSuccess();
           //@ts-ignore
           modalProps.onCancel && modalProps.onCancel();
@@ -51,11 +53,11 @@ const Eidt: React.FC<EditProps> = ({
       });
     } else {
       form.validateFields().then(async (values) => {
-        ProjectEdit({ id: selNode.project_id, ...values }).then((res) => {
+        autoTime = values.auto_sync_time*60
+
+        ProjectEdit({ ...values ,id: selNode.project_id, auto_sync:disabled,auto_sync_time:autoTime}).then((res) => {
           if (!res.hasError) {
             message.success("修改成功");
-            console.log(modalProps.visible, "modalProps.visible");
-
             onSuccess && onSuccess();
             //@ts-ignore
             modalProps.onCancel && modalProps.onCancel();
@@ -111,7 +113,7 @@ const Eidt: React.FC<EditProps> = ({
                 SwitchOnChange(e);
               }}
             />
-            <Form.Item name="input-number" noStyle>
+            <Form.Item name="auto_sync_time" noStyle>
               <InputNumber disabled={!disabled} />
             </Form.Item>
             <span className="ant-form-text">分</span>

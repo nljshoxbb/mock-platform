@@ -5,7 +5,7 @@ import { LocalStorage } from "@/utils/LocalStorage";
 
 import Modal from '@/components/Modal';
 import type { ModalProps } from 'antd';
-// import { UserChangePassword } from '@/services';
+import { UserChangepwd } from '@/services';
 import { formatPassword } from '@/utils/utils';
 // import { history } from 'umi';
 import styles from './index.less';
@@ -28,27 +28,27 @@ const Edit: React.FC<EditProps> = ({ onSuccess, type, ...modalProps }) => {
 
     form.validateFields().then(async (values) => {
       const params = {
-        new_password: formatPassword(values.role_name),
-        user_id: JSON.parse(localStorage.getItem(LocalStorage.MOCK_USER_INFO) || '{}').user_id,
+        new_pwd:values.role_name,
+        uid: JSON.parse(localStorage.getItem(LocalStorage.MOCK_USER_INFO) || '{}').uid,
       };
       setLoading(true);
-      // try {
-      //   UserChangePassword(params).then((res: { hasError: any; }) => {
-      //     if (!res.hasError) {
-      //       message.success('修改成功');
-      //       onSuccess && onSuccess();
-      //       setTimeout(() => {
-      //         history.push({ pathname: "/login" });
+      try {
+        UserChangepwd(params).then((res: { hasError: any; }) => {
+          if (!res.hasError) {
+            message.success('修改成功');
+            onSuccess && onSuccess();
+            setTimeout(() => {
+              history.push({ pathname: "/login" });
 
-      //       }, 300);
-      //       //@ts-ignore
-      //       modalProps.onCancel && modalProps.onCancel();
-      //     }
-      //     setLoading(false);
-      //   });
-      // } catch (error) {
-      //   setLoading(false);
-      // }
+            }, 300);
+            //@ts-ignore
+            modalProps.onCancel && modalProps.onCancel();
+          }
+          setLoading(false);
+        });
+      } catch (error) {
+        setLoading(false);
+      }
     });
   };
   useEffect(() => {

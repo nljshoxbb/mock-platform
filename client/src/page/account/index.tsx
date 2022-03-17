@@ -4,7 +4,7 @@ import { Button } from 'antd';
 import Edit from './modal/index';
 import { LocalStorage } from "@/utils/LocalStorage";
 
-import { UserLoginResponse } from '@/services';
+import { UserLoginResponse,UserChangepwd } from '@/services';
 import styles from './index.less';
 import useModal from '@/hooks/useModal';
 

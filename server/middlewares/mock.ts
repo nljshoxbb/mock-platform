@@ -110,13 +110,13 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
   /** 如果有启用的期望值，直接返回期望值 */
 
   const res = await interfaceModel.getDataByPath(projectId, method.toLocaleLowerCase(), path);
+  console.log(res, projectId, method.toLocaleLowerCase(), path);
   if (res[0]) {
     const { request_body, responses } = res[0];
 
     const response = JSON.parse(responses || '{}') as Response;
     const requestBody = JSON.parse(request_body || '{}') as RequestBody;
     let requestBodySchema;
-    console.log(response);
     if (!isEmpty(requestBody)) {
       requestBodySchema = requestBody.content['application/json'];
     }
@@ -129,6 +129,16 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
         const { schema } = content[types[0]];
         console.log(Mock.mock(generateMockField(schema)));
         return (ctx.body = 111);
+      } else {
+        const { schema } = content[types[0]];
+        return (ctx.body = responseBody(
+          {
+            status: 200,
+            mock_response: Mock.mock(generateMockField(schema))
+          },
+          200
+        ));
+        // }
       }
     }
 

@@ -50,7 +50,7 @@ export default function interfaceRouter(router: KoaRouter) {
    *          request_body:
    *            type: string
    *            description: 同步的swagger对应的接口请求body。json 格式字符串
-   *          response:
+   *          responses:
    *            type: string
    *            description: 同步的swagger对应的接口返回内容。json 格式字符串
    *          parameter:
@@ -141,7 +141,7 @@ export default function interfaceRouter(router: KoaRouter) {
    *         api:
    *           type: string
    *           required: true
-   *           description: 请求地址
+   *           description: 请求地址, 格式为/mock/project_id/api地址
    *         method:
    *           type: string
    *           required: true

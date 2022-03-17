@@ -176,7 +176,6 @@ const handleResponse = (name, value, schemasObject) => {
   let properties = schemasObject[schemas].properties || {};
 
   for (const [key, value] of Object.entries(properties)) {
-    console.log(value);
     if (value && !value.type && value.$ref) {
       const dd = value.$ref.split("#/components/schemas/")[1];
       let properties = schemasObject[dd].properties;

@@ -254,7 +254,7 @@ export interface InterfaceDetailResponse {
       /** 同步的swagger对应的接口请求body。json 格式字符串 */
       request_body: string;
       /** 同步的swagger对应的接口返回内容。json 格式字符串 */
-      response: string;
+      responses: string;
       /** 同步的swagger对应的接口query请求参数。json 格式字符串 */
       parameter: string;
 }
@@ -331,7 +331,7 @@ export interface ProjectCreateRequest {
     type: "yaml"|"json";
     /** 是否开启自动同步 */
     auto_sync: boolean;
-    /** 自动同步时间 */
+    /** 自动同步时间。单位秒 */
     auto_sync_time: number;
 }
 
@@ -364,7 +364,7 @@ export interface ProjectEditRequest {
     desc: string;
     /** 是否开启自动同步 */
     auto_sync: boolean;
-    /** 自动同步时间 */
+    /** 自动同步时间。单位秒 */
     auto_sync_time: number;
 }
 
@@ -582,6 +582,54 @@ export const UserLogout = (data: UserLogoutRequest,  config?: AxiosRequestConfig
   })
 };
 
+/** ========================= **************** UserResetPwd ****************** ========================= */
+
+/** undefined 请求参数 */
+export interface UserResetPwdRequest {
+    /** undefined */
+    uid: string;
+}
+
+/** undefined 响应参数*/
+export interface UserResetPwdResponse {
+}
+/** undefined */
+export const UserResetPwd = (data: UserResetPwdRequest,  config?: AxiosRequestConfig):Promise<BaseServeResponse<UserResetPwdResponse>> => {
+  return axiosInstance({
+    url:'/api/v1/user/resetPwd',
+    method: 'post',
+    
+    data,
+    headers: { "Content-Type": "application/json" },
+    ...InjectAbort(UserResetPwd, config)
+  })
+};
+
+/** ========================= **************** UserChangepwd ****************** ========================= */
+
+/** undefined 请求参数 */
+export interface UserChangepwdRequest {
+    /** undefined */
+    uid: string;
+    /** undefined */
+    new_pwd: string;
+}
+
+/** undefined 响应参数*/
+export interface UserChangepwdResponse {
+}
+/** undefined */
+export const UserChangepwd = (data: UserChangepwdRequest,  config?: AxiosRequestConfig):Promise<BaseServeResponse<UserChangepwdResponse>> => {
+  return axiosInstance({
+    url:'/api/v1/user/changepwd',
+    method: 'post',
+    
+    data,
+    headers: { "Content-Type": "application/json" },
+    ...InjectAbort(UserChangepwd, config)
+  })
+};
+
 
 export interface InterfaceExpectedItemItemTypes {
             /** id */
@@ -636,7 +684,7 @@ export interface ProjectListItemItemTypes {
             update_at: number;
             /** 是否开启自动同步 */
             auto_sync: boolean;
-            /** 自动同步时间 */
+            /** 自动同步时间。单位秒 */
             auto_sync_time: number;
 }
 export interface UserItemTypes {
@@ -644,7 +692,7 @@ export interface UserItemTypes {
             id: string;
             /** 用户名 */
             username: string;
-            /** 角色id */
+            /** 角色id。0管理员，1普通用户 */
             role: string;
             /** 更新时间 */
             update_at: number;
