@@ -35,7 +35,9 @@ const Main = () => {
     }
 
     if (infoData.responses) {
-      const resData = JSON.parse(infoData.responses);
+      const resData = JSON.parse(infoData.request_body);
+      console.log(infoData.responses, 'nfoData.responses');
+
       const { schema } = resData.content['application/json'];
       setResponsesSchema(schema);
     }
@@ -103,7 +105,7 @@ const Main = () => {
                         columns={headersColumns}
                         key="params"
 
-                        // dataSource={headersData}
+                      // dataSource={headersData}
                       ></Table>
                     </div>
                     <div className={styles.reqData} key="Body">
@@ -118,7 +120,7 @@ const Main = () => {
             )}
           </TabPane>
           <TabPane tab="运行" key="2" disabled={node ? false : true}>
-            <Run />
+            <Run node={node} infoData={infoData} />
           </TabPane>
           <TabPane tab="编辑" key="4" disabled={node ? false : true}>
             <InterfaceEdit schema={responsesSchema} />

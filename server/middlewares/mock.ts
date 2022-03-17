@@ -71,7 +71,7 @@ const generateMockField = (schema: any, mockObject = {}) => {
   return mockObject;
 };
 
-const getRequestBody = () => {};
+const getRequestBody = () => { };
 
 const mockMiddleware = async (ctx: Context, next: Next) => {
   //   console.log(ctx.request, ctx.path);
@@ -115,11 +115,6 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
   }
 
   const res = await interfaceModel.getDataByPath(projectId, method.toLocaleLowerCase(), path);
-<<<<<<< HEAD
-  console.log(res, projectId, method.toLocaleLowerCase(), path);
-=======
-
->>>>>>> fix: mock功能问题修复
   if (res[0]) {
     const { request_body, responses } = res[0];
 

@@ -1,17 +1,36 @@
 import * as monaco from "monaco-editor";
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Col, Form, Input, InputNumber, Row, Select, Spin, Space, Checkbox, Tooltip } from "antd";
+import { Button, Col, Form, Input, InputNumber, Row, Select, Space, Checkbox, Tooltip, Spin } from "antd";
 import React, { useEffect, useState } from "react";
+// import {InterfaceOperation}  from '@/servives/'
+import { InterfaceOperation, InterfaceDetailResponse, InterfaceOperationResponse } from "@/services";
 
 import Monaco from "react-monaco-editor";
 import { color } from '@/hooks/useMonacoColor'
-import { typeAll } from "@/page/interface/run/useType";
+// import { typeAll } from "@/page/interface/run/useType";
 import styles from "./index.less";
-
+interface RunProps {
+  node: any;
+  infoData?: InterfaceDetailResponse
+}
 const { Option } = Select;
-const Run = () => {
+const Run: React.FC<RunProps> = ({ node, infoData }) => {
+  const [runLoading, setRunLoading] = useState<boolean>(false)
+  const [runData, setRunData] = useState<InterfaceOperationResponse>()
+
   const runOnFinish = (val: any) => {
     console.log(val, 55);
+    setRunLoading(true)
+    InterfaceOperation({ ...val }).then((res) => {
+      if (!res.hasError) {
+        setRunData(res.data)
+        setRunLoading(false)
+      }
+
+    }).catch((err) => {
+      console.log(err);
+      setRunLoading(false)
+    })
   };
   const responesRunOnFinish = (val: any) => {
     console.log(val, 55);
@@ -24,11 +43,11 @@ const Run = () => {
     colors: color,
   });
   monaco.editor.setTheme("vs-moonlight");
-  console.log(typeAll, 'typeAll');
+  // console.log(window.location.host, 'typeAll');
 
   return (
     <div>
-      <Form onFinish={responesRunOnFinish} autoComplete="off">
+      {/* <Form onFinish={responesRunOnFinish} autoComplete="off">
         <Form.List name="users">
           {(fields, { add, remove }) => (
             <>
@@ -89,30 +108,35 @@ const Run = () => {
             保存
           </Button>
         </Form.Item>
-      </Form>
+      </Form> */}
 
       <Form
         onFinish={runOnFinish}
         style={{ width: "100%", marginTop: 30 }}
         initialValues={{
-          Select: "POST",
+          method: node?.method,
+          api: infoData?.mock_url
+
         }}
       >
         <Row justify="start" style={{ display: "flex" }}>
           <Col span={2}>
-            <Form.Item name="Select">
-              <Select>
-                <Option value="POST">POST</Option>
-                <Option value="GET">GET</Option>
+            <Form.Item name="method">
+              <Select disabled>
+                <Option value="post">post</Option>
+                <Option value="get">get</Option>
+                <Option value="head">head</Option>
+                <Option value="put">put</Option>
+
               </Select>
             </Form.Item>
           </Col>
-          <Col span={8}>
-            <Form.Item name="Input">
-              <Input />
+          <Col span={18}>
+            <Form.Item name="api" >
+              <Input disabled />
             </Form.Item>
           </Col>
-          <Col span={2}>
+          <Col span={2} style={{ marginLeft: 20 }}>
             <Form.Item>
               <Button type="primary" htmlType="submit">
                 发送
@@ -124,36 +148,31 @@ const Run = () => {
 
       <div>
         <div className={styles.response}>Response</div>
-        <Row>
-          <Col span={8}>
-            <Monaco
-              // {...monacoEditorProps}
-              language="json"
-              height={540}
-            // onChange={onChange}
-            // editorDidMount={editorDidMount}
-            // className={styles.monacoStyle}
-            // theme="vs-dark"
+        <Spin spinning={runLoading}>
+          <Row>
+            {/* <Col span={8}>
+              <Monaco
+                language="json"
+                height={540}
+              
+              />
+            </Col> */}
+            <Col span={24}>
+              <Monaco
+                // {...monacoEditorProps}
+                language="json"
+                height={540}
+                // onChange={onChange}
+                // editorDidMount={editorDidMount}
+                // className={styles.monacoStyle}
+                // theme="vs-dark"
 
-            // minimap={enabled: false}
-            // defaultValue="6666"
-            />
-          </Col>
-          <Col span={16}>
-            <Monaco
-              // {...monacoEditorProps}
-              language="json"
-              height={540}
-            // onChange={onChange}
-            // editorDidMount={editorDidMount}
-            // className={styles.monacoStyle}
-            // theme="vs-dark"
-
-            // minimap={enabled: false}
-            // defaultValue="6666"
-            />
-          </Col>
-        </Row>
+                // minimap={enabled: false}
+                defaultValue={runData && JSON.parse(runData.mock_response)}
+              />
+            </Col>
+          </Row>
+        </Spin>
       </div>
     </div>
   );
