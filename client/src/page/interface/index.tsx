@@ -21,30 +21,57 @@ const Main = () => {
   const [infoData, setInfoData] = useState<InterfaceDetailResponse>();
   const [headersData, setHeadersData] = useState<any[]>([]);
   const [requestBody, setRequestBody] = useState<any[]>([]);
+  const [responses, setResponses] = useState<any[]>([]);
+
   const [responsesSchema, setResponsesSchema] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [activeKey, setActiveKey] = useState<string>('1');
 
   useEffect(() => {
-    if (!infoData || !infoData?.request_body) return;
-    let requestBody = infoData && infoData?.request_body && JSON.parse(infoData.request_body);
-    requestBody = requestBody.content['application/json'].schema.properties;
-    let bodyData = [];
-    for (let key in requestBody) {
-      bodyData.push({ params: key, ...requestBody[key] });
+    if (!infoData) return;
+    if (infoData?.request_body) {
+      let requestBody = infoData && infoData?.request_body && JSON.parse(infoData.request_body);
+      let { properties } = requestBody.content['application/json'].schema;
+      console.log(requestBody['content'], 'requestBody');
+      let headerData = [{
+        name: 'content',
+        params: 'application/json',
+        required: '是'
+      }];
+      setHeadersData(headerData)
+      // for (let key in requestBody) {
+
+      // }
+      setRequestBody(handleRequestBody(properties));
     }
 
     if (infoData.responses) {
-      const resData = JSON.parse(infoData.request_body);
-      console.log(infoData.responses, 'nfoData.responses');
+      const resData = JSON.parse(infoData.responses);
+      if (resData.content) {
+        const { schema } = resData?.content['application/json'];
+        setResponses(handleRequestBody(schema.properties))
+        setResponsesSchema(schema);
+      }
 
-      const { schema } = resData.content['application/json'];
-      setResponsesSchema(schema);
     }
-    // setRequestBody()
-    setHeadersData(bodyData);
-  }, [infoData]);
 
+
+  }, [infoData]);
+  const handleRequestBody = (requestBody: any): any => {
+
+    let bodyData = [];
+    for (let key in requestBody) {
+
+      if (requestBody[key].type === "array") {
+        bodyData.push({ name: key, children: handleRequestBody(requestBody[key].items), ...requestBody[key] });
+      } else {
+        bodyData.push({ name: key, ...requestBody[key] });
+
+      }
+    }
+
+    return bodyData
+  }
   const baseData: baseData[] = [
     { name: '接口名称', data: infoData?.name || '-' },
     { name: '接口信息', data: infoData?.path || '-' },
@@ -105,12 +132,24 @@ const Main = () => {
                         columns={headersColumns}
                         key="params"
 
-                      // dataSource={headersData}
+                        dataSource={headersData}
                       ></Table>
                     </div>
                     <div className={styles.reqData} key="Body">
                       <span className={styles.name}>Body:</span>
-                      <Table key="params" columns={bodyColumns} dataSource={headersData} scroll={{ y: 150 }}></Table>
+                      <Table columns={bodyColumns} dataSource={requestBody}
+                        rowKey='name'
+                      ></Table>
+                    </div>
+                  </div>
+                  <h2 className={styles.title}>返回数据</h2>
+                  <div style={{ paddingLeft: 25 }}>
+
+                    <div className={styles.reqData} key="Body">
+                      {/* <span className={styles.name}>Body:</span> */}
+                      <Table columns={bodyColumns} dataSource={responses}
+                        rowKey='name'
+                      ></Table>
                     </div>
                   </div>
                 </div>
@@ -130,7 +169,7 @@ const Main = () => {
           </TabPane>
         </Tabs>
       </div>
-    </div>
+    </div >
   );
 };
 export default Main;
