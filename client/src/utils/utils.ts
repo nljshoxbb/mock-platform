@@ -1,20 +1,20 @@
 /* eslint-disable func-names */
 /* eslint-disable no-param-reassign */
 
-import moment from "moment";
 import MD5 from 'crypto-js/md5';
+import moment from 'moment';
 
 // 获取随机id
 export function guid() {
-  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
     const r = (Math.random() * 16) | 0;
-    const v = c === "x" ? r : (r & 0x3) | 0x8;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
     return v.toString(16);
   });
 }
 // 时间格式化
 export function timeToFormat(times: number, showMs?: boolean) {
-  let result = showMs ? "00:00.000" : "00:00";
+  let result = showMs ? '00:00.000' : '00:00';
   let hour: string | number;
   let minute: string | number;
   let second: string | number;
@@ -35,9 +35,7 @@ export function timeToFormat(times: number, showMs?: boolean) {
       s = `0${s}`;
     }
     if (hour > 0) {
-      result = `${hour}:${minute}:${
-        showMs ? second.toFixed(3) : second.toFixed(0)
-      }`;
+      result = `${hour}:${minute}:${showMs ? second.toFixed(3) : second.toFixed(0)}`;
     } else {
       result = `${minute}:${s}`;
     }
@@ -61,25 +59,20 @@ export function debounce(func: Function, wait = 120) {
 }
 
 // 日期格式化 YYYY-MM-DD HH:mm:ss
-export const formatDate = (
-  time: any,
-  pattern = "YYYY-MM-DD HH:mm:ss"
-): string => {
-  if (!time) return "-";
-  if (typeof time === "string" && time.indexOf("1970-01-01") !== -1) {
-    return "-";
+export const formatDate = (time: any, pattern = 'YYYY-MM-DD HH:mm:ss'): string => {
+  if (!time) return '-';
+  if (typeof time === 'string' && time.indexOf('1970-01-01') !== -1) {
+    return '-';
   }
   let momentTime = null;
   if (/^[0-9]+$/.test(time)) {
-    momentTime = moment.unix(
-      time && `${time}`.length > 11 ? time / 1000 : time
-    );
+    momentTime = moment.unix(time && `${time}`.length > 11 ? time / 1000 : time);
   } else {
     momentTime = moment(time);
   }
   const transTime = momentTime.format(pattern);
-  if (transTime === "Invalid Date" || Number.isNaN(Date.parse(transTime))) {
-    return "";
+  if (transTime === 'Invalid Date' || Number.isNaN(Date.parse(transTime))) {
+    return '';
   }
   return transTime;
 };
@@ -98,9 +91,9 @@ function flatRouter(router: RouteConfig[], newRoutes: RouteConfig[] = []) {
 }
 
 export function addZeroes(num: number) {
-  return num.toLocaleString("en", {
+  return num.toLocaleString('en', {
     useGrouping: false,
-    minimumFractionDigits: 1,
+    minimumFractionDigits: 1
   });
 }
 
@@ -110,9 +103,9 @@ export function addZeroes(num: number) {
  * @param {String} fileName
  * @param {String} type
  */
-export function downloadBlobFile(result: any, fileName: string, type = "xlsx") {
+export function downloadBlobFile(result: any, fileName: string, type = 'xlsx') {
   const blob = new Blob([result]);
-  const downloadElement = document.createElement("a");
+  const downloadElement = document.createElement('a');
   const href = window.URL.createObjectURL(blob); // 创建下载的链接
   downloadElement.href = href;
   downloadElement.download = `${fileName}.${type}`; // 下载后文件名
@@ -128,12 +121,12 @@ export function downloadBlobFile(result: any, fileName: string, type = "xlsx") {
  * @return {String}    拼接的url
  */
 export function joinUrlParams(url: string, params: Record<string, any>) {
-  let p = "";
+  let p = '';
   let i = 0;
 
   Object.keys(params).forEach((key) => {
     const value = params[key];
-    if (i === 0 && !~url.indexOf("?")) {
+    if (i === 0 && !~url.indexOf('?')) {
       p += `?${key}=${value}`;
     } else {
       p += `&${key}=${value}`;
@@ -159,22 +152,44 @@ export function formatPassword(val: string) {
 // 文件名后缀全改为.wav
 export function changeWav(name: string) {
   if (!name) return;
-  return name.substring(0, name.lastIndexOf(".") + 1) + "wav";
+  return name.substring(0, name.lastIndexOf('.') + 1) + 'wav';
 }
 
 export function hexToRgbA(hex: string) {
   let c;
   if (/^#([A-Fa-f0-9]{3}){1,2}$/.test(hex)) {
-    c = hex.substring(1).split("");
+    c = hex.substring(1).split('');
     if (c.length === 3) {
       c = [c[0], c[0], c[1], c[1], c[2], c[2]];
     }
-    c = "0x" + c.join("");
+    c = '0x' + c.join('');
     // @ts-ignore
     return (
       //@ts-ignore
-      "rgba(" + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(",") + ",0.5)"
+      'rgba(' + [(c >> 16) & 255, (c >> 8) & 255, c & 255].join(',') + ',0.5)'
     );
   }
-  throw new Error("Bad Hex");
+  throw new Error('Bad Hex');
+}
+
+export function formatJSONObject(val: any = {}) {
+  try {
+    return JSON.stringify(val, null, 2);
+  } catch {
+    const errorJson = {
+      error: `非法返回${val}`
+    };
+    return JSON.stringify(errorJson, null, 2);
+  }
+}
+export function formatJSONString(val: any = {}) {
+  try {
+    const res = JSON.parse(val);
+    return JSON.stringify(res, null, 2);
+  } catch {
+    const errorJson = {
+      error: `非法返回${val}`
+    };
+    return JSON.stringify(errorJson, null, 2);
+  }
 }
