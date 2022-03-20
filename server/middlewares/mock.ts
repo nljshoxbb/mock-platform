@@ -71,7 +71,7 @@ const generateMockField = (schema: any, mockObject = {}) => {
   return mockObject;
 };
 
-const getRequestBody = () => {};
+const getRequestBody = () => { };
 
 const mockMiddleware = async (ctx: Context, next: Next) => {
   //   console.log(ctx.request, ctx.path);

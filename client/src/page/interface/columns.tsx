@@ -8,31 +8,31 @@ export const headersColumns = [
   },
   {
     title: "参数值",
-    dataIndex: "age",
-    key: "age",
+    dataIndex: "params",
+    key: "params",
   },
   {
     title: "是否必须",
-    dataIndex: "address",
-    key: "address",
+    dataIndex: "required",
+    key: "required",
   },
   {
     title: "示例",
     dataIndex: "address1",
-    key: "address",
+    key: "address1",
   },
   {
     title: "备注",
     dataIndex: "address2",
-    key: "address",
+    key: "address2",
   },
 ];
 
 export const bodyColumns = [
   {
     title: "名称",
-    dataIndex: "params",
-    key: "params",
+    dataIndex: "name",
+    key: "name",
   },
   {
     title: "类型",
@@ -53,7 +53,7 @@ export const bodyColumns = [
   },
   {
     title: "默认值",
-    dataIndex: "address1",
+    dataIndex: "address",
     key: "address",
   },
   {

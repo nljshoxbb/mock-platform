@@ -46,6 +46,8 @@ const AddHopeModal: React.FC<EditProps> = ({
   }, [modalProps.visible]);
   const onSubmit = () => {
     form.validateFields().then(async (values) => {
+      console.log(values, 'values');
+
       if (type === "add") {
         ExpectedCreate({ interface_id: node.id, ...values }).then((res) => {
           if (!res.hasError) {
