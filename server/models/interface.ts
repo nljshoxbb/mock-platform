@@ -1,4 +1,4 @@
-import { Document } from 'mongoose';
+import { Document, Schema } from 'mongoose';
 
 import BaseModel, { CommonSchema, SchemaDefinition } from './base';
 
@@ -52,6 +52,10 @@ class InterfaceModel extends BaseModel<InterfaceModelI> {
 
   public async getDataByPath(projectId, method, path) {
     return this.model.find({ project_id: projectId, method, path }).lean();
+  }
+
+  public async updateResponsesById(id, schema) {
+    return this.model.findByIdAndUpdate(id, { responses: schema });
   }
 }
 

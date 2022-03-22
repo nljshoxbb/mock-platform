@@ -23,7 +23,7 @@ const Main = () => {
   const [requestBody, setRequestBody] = useState<any[]>([]);
   const [responses, setResponses] = useState<any[]>([]);
 
-  const [responsesSchema, setResponsesSchema] = useState<any>({});
+  const [responsesData, setResponsesData] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [activeKey, setActiveKey] = useState<string>('1');
 
@@ -32,16 +32,14 @@ const Main = () => {
     if (infoData?.request_body) {
       let requestBody = infoData && infoData?.request_body && JSON.parse(infoData.request_body);
       let { properties } = requestBody.content['application/json'].schema;
-      console.log(requestBody['content'], 'requestBody');
-      let headerData = [{
-        name: 'content',
-        params: 'application/json',
-        required: '是'
-      }];
-      setHeadersData(headerData)
-      // for (let key in requestBody) {
-
-      // }
+      let headerData = [
+        {
+          name: 'content',
+          params: 'application/json',
+          required: '是'
+        }
+      ];
+      setHeadersData(headerData);
       setRequestBody(handleRequestBody(properties));
     }
 
@@ -49,29 +47,24 @@ const Main = () => {
       const resData = JSON.parse(infoData.responses);
       if (resData.content) {
         const { schema } = resData?.content['application/json'];
-        setResponses(handleRequestBody(schema.properties))
-        setResponsesSchema(schema);
+        setResponses(handleRequestBody(schema.properties));
+        setResponsesData(resData);
       }
-
     }
-
-
   }, [infoData]);
-  const handleRequestBody = (requestBody: any): any => {
 
+  const handleRequestBody = (requestBody: any): any => {
     let bodyData = [];
     for (let key in requestBody) {
-
-      if (requestBody[key].type === "array") {
+      if (requestBody[key].type === 'array') {
         bodyData.push({ name: key, children: handleRequestBody(requestBody[key].items), ...requestBody[key] });
       } else {
         bodyData.push({ name: key, ...requestBody[key] });
-
       }
     }
 
-    return bodyData
-  }
+    return bodyData;
+  };
   const baseData: baseData[] = [
     { name: '接口名称', data: infoData?.name || '-' },
     { name: '接口信息', data: infoData?.path || '-' },
@@ -128,28 +121,18 @@ const Main = () => {
                   <div style={{ paddingLeft: 25 }}>
                     <div className={styles.reqData} key="headers">
                       <span className={styles.name}>Headers：</span>
-                      <Table
-                        columns={headersColumns}
-                        key="params"
-
-                        dataSource={headersData}
-                      ></Table>
+                      <Table columns={headersColumns} key="params" dataSource={headersData}></Table>
                     </div>
                     <div className={styles.reqData} key="Body">
                       <span className={styles.name}>Body:</span>
-                      <Table columns={bodyColumns} dataSource={requestBody}
-                        rowKey='name'
-                      ></Table>
+                      <Table columns={bodyColumns} dataSource={requestBody} rowKey="name"></Table>
                     </div>
                   </div>
                   <h2 className={styles.title}>返回数据</h2>
                   <div style={{ paddingLeft: 25 }}>
-
                     <div className={styles.reqData} key="Body">
                       {/* <span className={styles.name}>Body:</span> */}
-                      <Table columns={bodyColumns} dataSource={responses}
-                        rowKey='name'
-                      ></Table>
+                      <Table columns={bodyColumns} dataSource={responses} rowKey="name"></Table>
                     </div>
                   </div>
                 </div>
@@ -162,14 +145,14 @@ const Main = () => {
             <Run node={node} infoData={infoData} />
           </TabPane>
           <TabPane tab="编辑" key="4" disabled={node ? false : true}>
-            <InterfaceEdit schema={responsesSchema} />
+            <InterfaceEdit response={responsesData} id={infoData?.id || ''} />
           </TabPane>
           <TabPane tab="mock期望 " key="3" disabled={node ? false : true}>
             <MockExpected node={node} />
           </TabPane>
         </Tabs>
       </div>
-    </div >
+    </div>
   );
 };
 export default Main;

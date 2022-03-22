@@ -19,4 +19,5 @@ export interface BaseServeResponse<T> {
   errorId: string;
   errorDesc: string;
   data: T;
+  msg: string;
 }

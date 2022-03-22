@@ -268,9 +268,9 @@ export default function interfaceRouter(router: KoaRouter) {
    *         id:
    *           type: string
    *           description: 接口id
-   *         schema:
+   *         responses:
    *           type: string
-   *           description: response_body schema,根据字段获取应响应的mockl数据。每个字段都可添加以下属性:1.如果该字段为数组类型，则可以添加max,min属性(代表mock数量最大最小值). 2.所有字段都可添加value属性（为编辑的值）
+   *           description: response_body ,根据字段获取应响应的mockl数据。每个字段都可添加以下属性:1.如果该字段为数组类型，则可以添加max,min属性(代表mock数量最大最小值). 2.所有字段都可添加value属性（为编辑的值）
    *
    * /api/v1/interface/edit:
    *   put:
@@ -291,6 +291,6 @@ export default function interfaceRouter(router: KoaRouter) {
    *                $ref: '#/components/schemas/InterfaceUpdateResponse'
    */
   router.put('/v1/interface/edit', async (ctx: Context) => {
-    await initController(ctx).detail();
+    await initController(ctx).edit();
   });
 }

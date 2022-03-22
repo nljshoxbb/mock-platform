@@ -1,58 +1,58 @@
-import * as monaco from "monaco-editor";
-import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Col, Form, Input, InputNumber, Row, Select, Space, Checkbox, Tooltip, Spin } from "antd";
-import React, { useEffect, useState } from "react";
-// import {InterfaceOperation}  from '@/servives/'
-import { InterfaceOperation, InterfaceDetailResponse, InterfaceOperationResponse } from "@/services";
 import 'monaco-editor/esm/vs/basic-languages/html/html.contribution';
 
-import Monaco from "react-monaco-editor";
-import { color } from '@/hooks/useMonacoColor'
+import { color } from '@/hooks/useMonacoColor';
+// import {InterfaceOperation}  from '@/servives/'
+import { InterfaceDetailResponse, InterfaceOperation, InterfaceOperationResponse } from '@/services';
+import { formatJSONObject } from '@/utils/utils';
+import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
+import { Button, Checkbox, Col, Form, Input, InputNumber, Row, Select, Space, Spin, Tooltip } from 'antd';
+import * as monaco from 'monaco-editor';
+import React, { useEffect, useState } from 'react';
+import Monaco from 'react-monaco-editor';
+
 // import { typeAll } from "@/page/interface/run/useType";
-import styles from "./index.less";
+import styles from './index.less';
+
 interface RunProps {
   node: any;
-  infoData?: InterfaceDetailResponse
+  infoData?: InterfaceDetailResponse;
 }
 const { Option } = Select;
 const Run: React.FC<RunProps> = ({ node, infoData }) => {
-  const [runLoading, setRunLoading] = useState<boolean>(false)
-  const [runData, setRunData] = useState<any>()
+  const [runLoading, setRunLoading] = useState<boolean>(false);
+  const [runData, setRunData] = useState<any>();
 
   const runOnFinish = (val: any) => {
-    setRunLoading(true)
-    InterfaceOperation({ ...val }).then((res) => {
-      if (!res.hasError) {
-        setRunData(res)
-        setRunLoading(false)
-      }
-
-    }).catch((err) => {
-      console.log(err);
-      setRunLoading(false)
-    })
+    setRunLoading(true);
+    InterfaceOperation({ ...val })
+      .then((res) => {
+        if (!res.hasError) {
+          setRunData(res);
+          setRunLoading(false);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+        setRunLoading(false);
+      });
   };
 
-  monaco.editor.defineTheme("vs-moonlight", {
-    base: "vs",
+  monaco.editor.defineTheme('vs-moonlight', {
+    base: 'vs',
     inherit: true,
-    rules: [
-    ],
-    colors: color,
+    rules: [],
+    colors: color
   });
-  monaco.editor.setTheme("vs-moonlight");
+  monaco.editor.setTheme('vs-moonlight');
   // console.log(window.location.host, 'typeAll');
   // console.log(runData, 'JSON.stringify(runData?.mock_response)');
 
   const editorDidMountHandle = (editor: any, monaco: any) => {
-
-    editor.trigger('anyString', 'editor.action.formatDocument')
+    editor.trigger('anyString', 'editor.action.formatDocument');
 
     // editor.setValue('{"status":200,"mock_response":{"task_id":"tvpskkocljqnimirjgdu"}}')
     // editor.trigger('anyString', 'editor.action.formatDocument');//自动格式化代码
     // editor.setValue(editor.getValue());//再次设置
-
-
 
     // editor.getAction('editor.action.formatDocument').run();//自动格式化代码
     // editor.setValue(editor.getValue());//再次设置
@@ -69,10 +69,7 @@ const Run: React.FC<RunProps> = ({ node, infoData }) => {
     //   editor.setValue(editor.getValue());
     //   // console.log(editor.getAction('editor.action.formatDocument').run(), '00');
     // }
-
-
-
-  }
+  };
 
   function checkJsonCode(strJsonCode: string) {
     let res = '';
@@ -100,21 +97,18 @@ const Run: React.FC<RunProps> = ({ node, infoData }) => {
       res = strJsonCode;
     }
     return res;
-
   }
   return (
     <div>
-
       <Form
         onFinish={runOnFinish}
-        style={{ width: "100%", marginTop: 30 }}
+        style={{ width: '100%', marginTop: 30 }}
         initialValues={{
           method: node?.method,
           api: infoData?.mock_url
-
         }}
       >
-        <Row justify="start" style={{ display: "flex" }}>
+        <Row justify="start" style={{ display: 'flex' }}>
           <Col span={2}>
             <Form.Item name="method">
               <Select disabled>
@@ -122,12 +116,11 @@ const Run: React.FC<RunProps> = ({ node, infoData }) => {
                 <Option value="get">get</Option>
                 <Option value="head">head</Option>
                 <Option value="put">put</Option>
-
               </Select>
             </Form.Item>
           </Col>
           <Col span={18}>
-            <Form.Item name="api" >
+            <Form.Item name="api">
               <Input disabled />
             </Form.Item>
           </Col>
@@ -160,12 +153,11 @@ const Run: React.FC<RunProps> = ({ node, infoData }) => {
                 // theme="vs-light"
                 // options={{ selectOnLineNumbers: true, automaticLayout: true, wordWrap: 'wordWrapColumn', wrappingStrategy: 'simple', wordWrapBreakBeforeCharacters: ',', wordWrapBreakAfterCharacters: ',', disableLayerHinting: true }}
                 editorDidMount={editorDidMountHandle}
-
                 // minimap={enabled: false}
                 // defaultValue={JSON.stringify(runData)}
                 // defaultValue='{"status":200,"mock_response":{"task_id":"tvpskkocljqnimirjgdu"}}'
-                value={JSON.stringify(runData)}
-              // readOnly={false}
+                value={formatJSONObject(runData)}
+                // readOnly={false}
               />
             </Col>
           </Row>

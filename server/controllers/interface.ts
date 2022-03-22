@@ -283,4 +283,29 @@ export default class InterfaceController extends BaseController {
       throw Error(error);
     }
   }
+
+  /**
+   * edit
+   */
+  public async edit() {
+    try {
+      const { body } = this.ctx.request;
+      const { id, responses } = body;
+
+      if (!id || !responses) {
+        return (this.ctx.body = responseBody(null, 400, '参数不正确'));
+      }
+
+      const { content } = JSON.parse(responses);
+
+      if (!content || !content['application/json'] || !content['application/json'].schema) {
+        return (this.ctx.body = responseBody(null, 400, 'responses格式不正确'));
+      }
+
+      await this.model.updateResponsesById(id, responses);
+      return (this.ctx.body = responseBody(null, 200, '操作成功'));
+    } catch (error) {
+      throw Error(error);
+    }
+  }
 }

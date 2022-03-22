@@ -1,8 +1,9 @@
 import Modal from '@/components/Modal';
 import useModal from '@/hooks/useModal';
+import { InterfaceEdit } from '@/services';
 import { formatJSONObject, guid } from '@/utils/utils';
 import { EditOutlined, SettingOutlined } from '@ant-design/icons';
-import { Button, Col, Collapse, Form, Input, Row } from 'antd';
+import { Button, Col, Collapse, Form, Input, Row, message } from 'antd';
 import { cloneDeep, fromPairs } from 'lodash';
 import * as monaco from 'monaco-editor';
 import * as monacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
@@ -10,7 +11,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import Monaco, { MonacoEditorProps } from 'react-monaco-editor';
 
 interface InterfaceEditI {
-  schema: any;
+  response: any;
+  id: string;
 }
 
 const { Panel } = Collapse;
@@ -19,8 +21,7 @@ const FlodField: React.FC<any> = ({ children }) => {
   return <div>{children}</div>;
 };
 
-const InterfaceEdit: React.FC<InterfaceEditI> = ({ schema }) => {
-  // const [innerSchema, setInnerSchema] = useState<any>();
+const InterfaceEditComponent: React.FC<InterfaceEditI> = ({ response, id = '' }) => {
   const innerSchema = useRef<any>();
   const [content, setContent] = useState<any>();
   const schemaModal = useModal();
@@ -33,14 +34,19 @@ const InterfaceEdit: React.FC<InterfaceEditI> = ({ schema }) => {
   const fieldMockModal = useModal();
 
   useEffect(() => {
-    const cloneSchema = cloneDeep(schema);
-    if (cloneSchema) {
-      innerSchema.current = cloneSchema;
-    }
+    const { schema } = response?.content['application/json'];
+    if (schema) {
+      const cloneSchema = cloneDeep(schema);
+      if (cloneSchema) {
+        innerSchema.current = cloneSchema;
+      }
 
-    const data = getFields(schema, '');
-    setContent(data);
-  }, [schema]);
+      const data = getFields(schema, '');
+      console.log(cloneSchema);
+      setContent(data);
+    }
+  }, [response]);
+
   const getFields = (schema: any, namePath = '', result: any[] = []) => {
     if (schema) {
       if (schema.type === 'object') {
@@ -82,7 +88,6 @@ const InterfaceEdit: React.FC<InterfaceEditI> = ({ schema }) => {
                   <SettingOutlined
                     className="cursor"
                     onClick={() => {
-                      console.log(fieldPath);
                       // 找出schema
                       const obj = findSchemaByPath(innerSchema.current, fieldPath);
                       setEditSchema(obj);
@@ -126,7 +131,23 @@ const InterfaceEdit: React.FC<InterfaceEditI> = ({ schema }) => {
   };
 
   const onSubmit = () => {
-    console.log(form.getFieldsValue(), innerSchema.current);
+    /** 保证输入输出格式正确 */
+    const data = {
+      ...response,
+      content: {
+        'application/json': {
+          schema: innerSchema.current
+        }
+      }
+    };
+    InterfaceEdit({
+      id,
+      responses: JSON.stringify(data)
+    }).then((res) => {
+      if (!res.hasError) {
+        message.success(res?.msg);
+      }
+    });
   };
 
   const onMoncaoChange: MonacoEditorProps['onChange'] = (value) => {
@@ -145,10 +166,6 @@ const InterfaceEdit: React.FC<InterfaceEditI> = ({ schema }) => {
         const target = arrs.shift();
         const key = keys[i];
 
-        if (arrs[0] === 'items') {
-          return schema;
-        }
-
         if (target === key) {
           const modifySchema = schema.properties[key];
           return findSchemaByPath(modifySchema, arrs.join('.'));
@@ -156,9 +173,10 @@ const InterfaceEdit: React.FC<InterfaceEditI> = ({ schema }) => {
       }
     } else if (schema.type === 'array') {
       const arrs = path.split('.');
-
-      if (arrs[0] === '') {
+      if (arrs.length === 1) {
         return schema;
+      } else if (arrs[0] === '' && arrs.length === 1) {
+        return schema.items;
       } else {
         arrs.shift();
         return findSchemaByPath(schema.items, arrs.join('.'));
@@ -170,12 +188,12 @@ const InterfaceEdit: React.FC<InterfaceEditI> = ({ schema }) => {
 
   const handleFieldChange = (value: any, path: string) => {
     const resultSchema = findSchemaByPath(innerSchema.current, path);
-    resultSchema.mock = { default: value };
+    resultSchema.mock = { value: value };
   };
 
   const handleModifySchema = () => {
     const obj = findSchemaByPath(innerSchema.current, currentFieldPath);
-    form.setFieldsValue({ [currentFieldPath]: editSchema.mock.default });
+    form.setFieldsValue({ [currentFieldPath]: editSchema.mock.value });
     obj.mock = editSchema.mock;
     schemaModal.toggle();
   };
@@ -235,4 +253,4 @@ const InterfaceEdit: React.FC<InterfaceEditI> = ({ schema }) => {
   );
 };
 
-export default InterfaceEdit;
+export default InterfaceEditComponent;

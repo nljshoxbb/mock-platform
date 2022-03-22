@@ -7,12 +7,18 @@ import { RequestBody, Response } from 'swagger-jsdoc';
 import { getModelInstance, responseBody } from './../utils/utils';
 import ProjectModel from '../models/project';
 
-const handleType = (type) => {
+const handleType = (data) => {
   let result;
-  switch (type) {
-    case 'array':
-      result = [];
-      break;
+  console.log(data.mock);
+
+  if (data.mock?.value) {
+    return (result = data.mock.value);
+  }
+
+  switch (data.type) {
+    // case 'array':
+    //   result = [];
+    //   break;
     case 'string':
       result = `@string("lower", 20)`;
       break;
@@ -62,7 +68,7 @@ const generateMockField = (schema: any, mockObject = {}) => {
 
         if (['string', 'integer', 'boolean', 'number'].includes(value.type)) {
           /** 处理非对象字段 */
-          mockObject[key] = handleType(value.type);
+          mockObject[key] = handleType(value);
         }
       }
     }
@@ -71,7 +77,7 @@ const generateMockField = (schema: any, mockObject = {}) => {
   return mockObject;
 };
 
-const getRequestBody = () => { };
+const getRequestBody = () => {};
 
 const mockMiddleware = async (ctx: Context, next: Next) => {
   //   console.log(ctx.request, ctx.path);
@@ -83,7 +89,6 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
     await next();
     return;
   }
-  console.log(body, query);
 
   const paths = ctx.path.split('/');
   const projectId = paths[2];
@@ -129,14 +134,14 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
 
     if (content) {
       const types = Object.keys(content);
-      console.log(content);
 
       if (types[0] === 'application/octet-stream') {
-        const { schema } = content[types[0]];
-        console.log(Mock.mock(generateMockField(schema)));
-        return (ctx.body = 111);
+        // const { schema } = content[types[0]];
+
+        return (ctx.body = 10101);
       } else {
         const { schema } = content[types[0]];
+
         return (ctx.body = responseBody(
           {
             status: 200,
