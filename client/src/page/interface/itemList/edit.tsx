@@ -1,20 +1,8 @@
-import {
-  Col,
-  Form,
-  Input,
-  InputNumber,
-  Radio,
-  Select,
-  Switch,
-  Tooltip,
-  TreeSelect,
-  message,
-} from "antd";
-import { ProjectCreate, ProjectEdit } from "@/services";
-import React, { useEffect, useState } from "react";
-
-import Modal from "@/components/Modal";
-import type { ModalProps } from "antd";
+import Modal from '@/components/Modal';
+import { ProjectCreate, ProjectEdit } from '@/services';
+import { Col, Form, Input, InputNumber, Radio, Select, Switch, Tooltip, TreeSelect, message } from 'antd';
+import type { ModalProps } from 'antd';
+import React, { useEffect, useState } from 'react';
 
 interface EditProps extends ModalProps {
   onSuccess?: (id?: number) => void;
@@ -23,29 +11,23 @@ interface EditProps extends ModalProps {
 }
 const layout = {
   labelCol: { span: 6 },
-  wrapperCol: { span: 16 },
+  wrapperCol: { span: 16 }
 };
-const Eidt: React.FC<EditProps> = ({
-  onSuccess,
-  type,
-  selNode,
-  ...modalProps
-}) => {
+const Eidt: React.FC<EditProps> = ({ onSuccess, type, selNode, ...modalProps }) => {
   const [form] = Form.useForm();
   const [disabled, setDisabled] = useState(false);
   useEffect(() => {
-    
     if (modalProps.visible) {
       form.resetFields();
     }
   }, [modalProps.visible]);
   const onSubmit = () => {
-    let autoTime:number
-    if (type === "add") {
+    let autoTime: number;
+    if (type === 'add') {
       form.validateFields().then(async (values) => {
-        autoTime = values.auto_sync_time*60
-        message.success("新增成功");
-        ProjectCreate({ ...values,auto_sync:disabled,auto_sync_time:autoTime }).then((res) => {
+        autoTime = values.auto_sync_time * 60;
+        message.success('新增成功');
+        ProjectCreate({ ...values, auto_sync: disabled, auto_sync_time: autoTime }).then((res) => {
           onSuccess && onSuccess();
           //@ts-ignore
           modalProps.onCancel && modalProps.onCancel();
@@ -53,11 +35,11 @@ const Eidt: React.FC<EditProps> = ({
       });
     } else {
       form.validateFields().then(async (values) => {
-        autoTime = values.auto_sync_time*60
+        autoTime = values.auto_sync_time * 60;
 
-        ProjectEdit({ ...values ,id: selNode.project_id, auto_sync:disabled,auto_sync_time:autoTime}).then((res) => {
+        ProjectEdit({ ...values, id: selNode.project_id, auto_sync: disabled, auto_sync_time: autoTime }).then((res) => {
           if (!res.hasError) {
-            message.success("修改成功");
+            message.success('修改成功');
             onSuccess && onSuccess();
             //@ts-ignore
             modalProps.onCancel && modalProps.onCancel();
@@ -81,18 +63,14 @@ const Eidt: React.FC<EditProps> = ({
           {...layout}
           form={form}
           initialValues={{
-            type: "yaml",
+            type: 'yaml'
           }}
         >
           <Form.Item name="name" label="项目名称" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-          {type === "add" ? (
-            <Form.Item
-              name="api_address"
-              label="同步地址"
-              rules={[{ required: true }]}
-            >
+          {type === 'add' ? (
+            <Form.Item name="api_address" label="同步地址" rules={[{ required: true }]}>
               <Input />
             </Form.Item>
           ) : null}
@@ -112,11 +90,12 @@ const Eidt: React.FC<EditProps> = ({
               onChange={(e) => {
                 SwitchOnChange(e);
               }}
+              className="mr10"
             />
             <Form.Item name="auto_sync_time" noStyle>
               <InputNumber disabled={!disabled} />
             </Form.Item>
-            <span className="ant-form-text">分</span>
+            <span className="ant-form-text ">分钟同步一次</span>
           </Form.Item>
           <Form.Item name="desc" label="备注">
             <Input.TextArea />

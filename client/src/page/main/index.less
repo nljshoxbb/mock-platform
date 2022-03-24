@@ -1,11 +1,5 @@
 .mainBigBox {
-  // padding: 20px;
   position: relative;
-  background: #eceef1;
-  // display: flex;
-  height: 100%;
-  display: flex;
-  justify-content: space-between;
   .logout {
     width: 30px;
     height: 30px;
@@ -22,6 +16,14 @@
       margin-left: 15px;
     }
   }
+
+  .tabs{
+    :global{
+      .ant-tabs-top > .ant-tabs-nav::before, .ant-tabs-bottom > .ant-tabs-nav::before, .ant-tabs-top > div > .ant-tabs-nav::before, .ant-tabs-bottom > div > .ant-tabs-nav::before{
+        display: none;
+      }
+    }
+  }
   :global {
     .ant-tabs {
       width: 100%;
@@ -31,7 +33,7 @@
     .ant-tabs-nav-wrap {
       padding: 20px;
     }
-    
+  
   }
   
 }

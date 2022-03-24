@@ -3,6 +3,7 @@
 }
 #root{
   height: 100%;
+  background: #eceef1;
 }
 .ui-vh-100 {
   height: 100vh;
@@ -161,3 +162,6 @@
   text-align: center;
 }
 
+.mr10{
+  margin-right: 10px;
+}

@@ -99,10 +99,10 @@ const Run: React.FC<RunProps> = ({ node, infoData }) => {
     return res;
   }
   return (
-    <div>
+    <div className={styles.main}>
       <Form
         onFinish={runOnFinish}
-        style={{ width: '100%', marginTop: 30 }}
+        style={{ width: '100%', marginTop: 10 }}
         initialValues={{
           method: node?.method,
           api: infoData?.mock_url

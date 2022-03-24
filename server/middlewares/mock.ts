@@ -6,10 +6,10 @@ import { RequestBody, Response } from 'swagger-jsdoc';
 
 import { getModelInstance, responseBody } from './../utils/utils';
 import ProjectModel from '../models/project';
+import Log from '../utils/Log';
 
 const handleType = (data) => {
   let result;
-  console.log(data.mock);
 
   if (data.mock?.value) {
     return (result = data.mock.value);
@@ -52,7 +52,6 @@ const generateMockField = (schema: any, mockObject = {}) => {
         if (value) {
           if (value.type === 'array') {
             if (value.items && value.items.type === 'object') {
-              console.log(value);
               mockObject[`${key}|${value?.count || 5}`] = [generateMockField(value.items)];
             }
 
@@ -141,7 +140,7 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
         return (ctx.body = 10101);
       } else {
         const { schema } = content[types[0]];
-
+        Log.info(schema);
         return (ctx.body = responseBody(
           {
             status: 200,

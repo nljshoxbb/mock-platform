@@ -1,7 +1,8 @@
 import Empty from '@/components/Empty';
+import { MethodsColorEnum, MethodsColorEnumType } from '@/constant/color';
 import { InterfaceDetail, InterfaceDetailResponse } from '@/services';
-import { Col, Row, Spin, Table, Tabs } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { Col, Row, Spin, Table, Tabs, Tag } from 'antd';
+import React, { ReactNode, useEffect, useState } from 'react';
 
 import { bodyColumns, headersColumns } from './columns';
 import InterfaceEdit from './edit';
@@ -10,9 +11,9 @@ import ItemList from './itemList';
 import MockExpected from './mockExpected';
 import Run from './run';
 
-interface baseData {
+interface BaseData {
   name: string;
-  data: string;
+  data: string | ReactNode;
 }
 const { TabPane } = Tabs;
 
@@ -29,9 +30,18 @@ const Main = () => {
 
   useEffect(() => {
     if (!infoData) return;
+
+    console.log(infoData);
+
     if (infoData?.request_body) {
       let requestBody = infoData && infoData?.request_body && JSON.parse(infoData.request_body);
-      let { properties } = requestBody.content['application/json'].schema;
+
+      const arr = Object.keys(requestBody.content).map((i) => {
+        return requestBody.content[i];
+      });
+
+      const { properties } = arr[0] || {};
+
       let headerData = [
         {
           name: 'content',
@@ -42,13 +52,18 @@ const Main = () => {
       setHeadersData(headerData);
       setRequestBody(handleRequestBody(properties));
     }
-
     if (infoData.responses) {
       const resData = JSON.parse(infoData.responses);
       if (resData.content) {
-        const { schema } = resData?.content['application/json'];
+        const arr = Object.keys(resData.content).map((i) => {
+          return resData.content[i];
+        });
+
+        const { schema } = arr[0] || {};
         setResponses(handleRequestBody(schema.properties));
         setResponsesData(resData);
+      } else {
+        setResponsesData({});
       }
     }
   }, [infoData]);
@@ -65,23 +80,29 @@ const Main = () => {
 
     return bodyData;
   };
-  const baseData: baseData[] = [
-    { name: '接口名称', data: infoData?.name || '-' },
-    { name: '接口信息', data: infoData?.path || '-' },
-    { name: '请求类型', data: infoData?.method || '-' },
-    { name: 'Mock地址', data: infoData?.mock_url || '-' },
-    { name: '备注', data: infoData?.description || '-' }
-  ];
+
+  const method = infoData?.method as MethodsColorEnumType;
+
   const tabsOnChange = (key: React.SetStateAction<string>) => {
     setActiveKey(key);
   };
+
+  const renderItem = (name: string, data: any) => {
+    return (
+      <>
+        <span className={styles.name}>{name}:</span>
+        <span className={styles.data}>{data}</span>
+      </>
+    );
+  };
+
   return (
     <div className={styles.mainBigBox}>
       <ItemList
         getIinterface={(node) => {
-          setNode(node);
-          setActiveKey('1');
           if (node) {
+            setNode(node);
+            setActiveKey('1');
             setLoading(true);
             InterfaceDetail({ id: node?.id })
               .then((res) => {
@@ -94,8 +115,6 @@ const Main = () => {
                 console.log(err, 'err');
                 setLoading(false);
               });
-          } else {
-            setInfoData(undefined);
           }
         }}
       />
@@ -107,30 +126,32 @@ const Main = () => {
               <Spin spinning={loading}>
                 <div>
                   <h2 className={styles.title}>基本信息</h2>
-                  <Row gutter={[16, 6]} style={{ paddingLeft: 25 }}>
-                    {baseData.map((iitem, j: any) => {
-                      return (
-                        <Col span={12} key={j}>
-                          <span className={styles.name}>{iitem.name}:</span>
-                          <span className={styles.data}>{iitem.data}</span>
-                        </Col>
-                      );
-                    })}
+                  <Row gutter={[16, 6]} style={{ paddingLeft: 25, marginBottom: 10 }}>
+                    <Col span={6}>{renderItem('接口名称', infoData?.name || '-')}</Col>
+                    <Col span={18}>{renderItem('接口信息', infoData?.path || '-')}</Col>
                   </Row>
+                  <Row gutter={[16, 6]} style={{ paddingLeft: 25, marginBottom: 10 }}>
+                    <Col span={6}>{renderItem('请求类型', method ? <Tag color={MethodsColorEnum[method]}>{infoData?.method}</Tag> : '-')}</Col>
+                    <Col span={18}>{renderItem('Mock地址', infoData?.mock_url || '-')}</Col>
+                  </Row>
+                  <Row gutter={[16, 6]} style={{ paddingLeft: 25, marginBottom: 10 }}>
+                    <Col span={6}>{renderItem('备注', infoData?.description || '-')}</Col>
+                  </Row>
+
                   <h2 className={styles.title}>请求参数</h2>
                   <div style={{ paddingLeft: 25 }}>
                     <div className={styles.reqData} key="headers">
                       <span className={styles.name}>Headers：</span>
-                      <Table columns={headersColumns} key="params" dataSource={headersData}></Table>
+                      <Table columns={headersColumns} key="params" dataSource={headersData} pagination={false}></Table>
                     </div>
-                    <div className={styles.reqData} key="Body">
+                    <div className={styles.reqData} key="requestBody">
                       <span className={styles.name}>Body:</span>
-                      <Table columns={bodyColumns} dataSource={requestBody} rowKey="name"></Table>
+                      <Table columns={bodyColumns} dataSource={requestBody} rowKey="name" pagination={false}></Table>
                     </div>
                   </div>
                   <h2 className={styles.title}>返回数据</h2>
                   <div style={{ paddingLeft: 25 }}>
-                    <div className={styles.reqData} key="Body">
+                    <div className={styles.reqData} key="responseBody">
                       {/* <span className={styles.name}>Body:</span> */}
                       <Table columns={bodyColumns} dataSource={responses} rowKey="name"></Table>
                     </div>

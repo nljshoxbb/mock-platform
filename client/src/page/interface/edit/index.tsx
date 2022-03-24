@@ -34,22 +34,24 @@ const InterfaceEditComponent: React.FC<InterfaceEditI> = ({ response, id = '' })
   const fieldMockModal = useModal();
 
   useEffect(() => {
-    const { schema } = response?.content['application/json'];
-    if (schema) {
-      const cloneSchema = cloneDeep(schema);
-      if (cloneSchema) {
-        innerSchema.current = cloneSchema;
-      }
+    let schema = {};
 
-      const data = getFields(schema, '');
-      console.log(cloneSchema);
-      setContent(data);
+    if (response && response.content && response?.content['application/json']) {
+      schema = response?.content['application/json'].schema;
     }
+
+    const cloneSchema = cloneDeep(schema);
+    if (cloneSchema) {
+      innerSchema.current = cloneSchema;
+    }
+
+    const data = getFields(schema, '');
+    setContent(data);
   }, [response]);
 
   const getFields = (schema: any, namePath = '', result: any[] = []) => {
     if (schema) {
-      if (schema.type === 'object') {
+      if (schema.type === 'object' && schema.properties) {
         Object.keys(schema.properties).map((i: any) => {
           const item = schema.properties[i];
 
@@ -80,13 +82,14 @@ const InterfaceEditComponent: React.FC<InterfaceEditI> = ({ response, id = '' })
                             }}
                           />
                         }
+                        className="ml10"
                       />
                     </Form.Item>
                   )}
                 </Col>
-                <Col span={3}>
+                <Col span={2}>
                   <SettingOutlined
-                    className="cursor"
+                    className="cursor ml10"
                     onClick={() => {
                       // 找出schema
                       const obj = findSchemaByPath(innerSchema.current, fieldPath);
@@ -160,15 +163,17 @@ const InterfaceEditComponent: React.FC<InterfaceEditI> = ({ response, id = '' })
 
   const findSchemaByPath = (schema: any = {}, path: string = ''): any => {
     if (schema.type === 'object') {
-      const keys = Object.keys(schema.properties);
-      for (let i = 0; i < keys.length; i++) {
-        const arrs = path.split('.');
-        const target = arrs.shift();
-        const key = keys[i];
+      if (schema.properties) {
+        const keys = Object.keys(schema.properties);
+        for (let i = 0; i < keys.length; i++) {
+          const arrs = path.split('.');
+          const target = arrs.shift();
+          const key = keys[i];
 
-        if (target === key) {
-          const modifySchema = schema.properties[key];
-          return findSchemaByPath(modifySchema, arrs.join('.'));
+          if (target === key) {
+            const modifySchema = schema.properties[key];
+            return findSchemaByPath(modifySchema, arrs.join('.'));
+          }
         }
       }
     } else if (schema.type === 'array') {
@@ -219,7 +224,7 @@ const InterfaceEditComponent: React.FC<InterfaceEditI> = ({ response, id = '' })
       >
         <Form form={mockForm}>
           <Form.Item noStyle name="mock">
-            <Input.TextArea />
+            <Input.TextArea rows={10} />
           </Form.Item>
         </Form>
       </Modal>

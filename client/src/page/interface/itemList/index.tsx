@@ -1,17 +1,18 @@
-import { Button, Input, Spin, Tree, message } from "antd";
-import { InterfaceList, ProjectRemove } from "@/services";
-import React, { Key, useEffect, useState } from "react";
+import Modal from '@/components/Modal';
+import { MethodsColorEnum } from '@/constant/color';
+import useModal from '@/hooks/useModal';
+import { listToTreeWithOption } from '@/hooks/useTree';
+import { InterfaceList, ProjectRemove } from '@/services';
+import { DownOutlined } from '@ant-design/icons';
+import { PlusCircleOutlined } from '@ant-design/icons';
+import { Button, Input, Spin, Tag, Tree, message } from 'antd';
+import type { TreeProps } from 'antd';
+import Item from 'antd/lib/list/Item';
+import { isEmpty } from 'lodash';
+import React, { Key, useEffect, useState } from 'react';
 
-import { DownOutlined } from "@ant-design/icons";
-import Eidt from "./edit";
-import Item from "antd/lib/list/Item";
-import Modal from "@/components/Modal";
-import { PlusCircleOutlined } from "@ant-design/icons";
-import type { TreeProps } from "antd";
-import { isEmpty } from "lodash";
-import { listToTreeWithOption } from "@/hooks/useTree";
-import styles from "./index.less";
-import useModal from "@/hooks/useModal";
+import Eidt from './edit';
+import styles from './index.less';
 
 const { DirectoryTree } = Tree;
 const { Search } = Input;
@@ -26,21 +27,21 @@ type TreeData = {
 };
 interface ItemListProps {
   getIinterface?: (node: any) => void;
-
 }
+
 const dataList: DataList[] = [];
 
 const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
   const [treeData, setTreeData] = useState<TreeData[]>([]);
   const [itemName, setItemName] = useState({
-    name: "",
-    desc: "",
+    name: '',
+    desc: ''
   });
   const [loading, setLoading] = useState<boolean>(false);
   const [selNode, setSelNode] = useState();
   const [expandedKeys, setExpandedKeys] = useState<Key[]>([]);
   const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true);
-  const [searchValue, setSearchValue] = useState<string>("");
+  const [searchValue, setSearchValue] = useState<string>('');
 
   const editModal = useModal();
   useEffect(() => {
@@ -51,19 +52,11 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
     setLoading(true);
     InterfaceList({ project_id: params })
       .then((res) => {
-        setTreeData(
-          treeChagenName(
-            res.data.list,
-            "project_name",
-            "project_id",
-            "category_list",
-            true
-          )
-        );
+        setTreeData(treeChagenName(res.data.list, 'project_name', 'project_id', 'category_list', true));
         setLoading(false);
       })
       .catch((err) => {
-        console.log(err, "err");
+        console.log(err, 'err');
         setLoading(false);
       });
   };
@@ -78,31 +71,19 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
     }
   };
 
-  const treeChagenName = (
-    data: any[],
-    title: string,
-    key: string,
-    children: string,
-    isEdit?: boolean
-  ) => {
+  const treeChagenName = (data: any[], title: string, key: string, children: string, isEdit?: boolean) => {
     let newData: [] = [];
     return data.map((item) => {
       if (item.id) {
         return {
           ...item,
           key: item.id,
-          title: item.path,
+          title: item.path
         };
       } else {
         if (item[children].length) {
           //@ts-ignore
-          newData = treeChagenName(
-            item[children],
-            "category_name",
-            "category_id",
-            "interface_list",
-            false
-          );
+          newData = treeChagenName(item[children], 'category_name', 'category_id', 'interface_list', false);
         } else {
           newData = [];
         }
@@ -111,7 +92,7 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
           title: item[title],
           key: item[key],
           children: newData,
-          isEdit: isEdit,
+          isEdit: isEdit
         };
       }
     });
@@ -120,8 +101,8 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
     // console.log(info, "info");
     if (info.node?.isEdit) {
       setItemName({
-        name: info.node?.title || "",
-        desc: info.node?.desc || "",
+        name: info.node?.title || '',
+        desc: info.node?.desc || ''
       });
     }
     if (info.node?.path) {
@@ -144,7 +125,7 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
     }
     return parentKey;
   };
-  const onExpand: TreeProps["onExpand"] = (expandedKeys) => {
+  const onExpand: TreeProps['onExpand'] = (expandedKeys) => {
     setExpandedKeys(expandedKeys);
     setAutoExpandParent(false);
   };
@@ -171,7 +152,7 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
         index > -1 ? (
           <span>
             {beforeStr}
-            <span style={{ color: "#ff5500" }}>{searchValue}</span>
+            <span style={{ color: '#ff5500' }}>{searchValue}</span>
             {afterStr}
           </span>
         ) : (
@@ -183,7 +164,7 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
       return {
         ...item,
         title,
-        key: item.key,
+        key: item.key
       };
     });
   };
@@ -197,21 +178,17 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
           <div
             className={styles.newItem}
             onClick={() => {
-              editModal.setTypeWithVisible("add");
+              editModal.setTypeWithVisible('add');
             }}
           >
-            <PlusCircleOutlined />
+            <PlusCircleOutlined className="mr10" />
             新增
           </div>
         </div>
-        <div>
+        <div className="mb10">
           <span className={styles.desc}>项目描述:{itemName.desc}</span>
         </div>
-        <Search
-          allowClear
-          placeholder="输入项目名称或者接口地址"
-          onSearch={(value) => onSearch(value)}
-        />
+        <Search allowClear placeholder="输入项目名称或者接口地址" onSearch={(value) => onSearch(value)} enterButton />
       </header>
       <main>
         <Spin spinning={loading}>
@@ -226,20 +203,22 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
             onExpand={onExpand}
             treeData={loop(treeData)}
             titleRender={(node: any) => {
+              const method = node?.method as keyof typeof MethodsColorEnum;
               return (
                 <div
                   className="flex just-between align-center pr10"
                   style={{
-                    position: "relative",
+                    position: 'relative',
                     minWidth: 250,
-                    justifyContent: "space-between",
+                    justifyContent: 'space-between'
                   }}
                 >
                   <div className="flex align-center">
                     {isEmpty(node.children) && (
-                      <span className={styles.method}>{node?.method}</span>
+                      <Tag className={styles.method} color={MethodsColorEnum[method]}>
+                        {method}
+                      </Tag>
                     )}
-
                     <div>{node.title}</div>
                   </div>
                   {node?.isEdit ? (
@@ -248,7 +227,7 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
                         onClick={(e) => {
                           setSelNode(node);
                           e.stopPropagation();
-                          editModal.setTypeWithVisible("info");
+                          editModal.setTypeWithVisible('info');
                         }}
                       >
                         编辑
@@ -258,7 +237,7 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
                         onClick={(e) => {
                           e.stopPropagation();
                           Modal.confirm({
-                            title: "提示",
+                            title: '提示',
                             content: `是否要删除${node.title}`,
                             onOk: () => {
                               console.log(node, 66);
@@ -267,7 +246,7 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
                               ProjectRemove({ id: node.project_id })
                                 .then((res) => {
                                   if (!res.hasError) {
-                                    message.success("删除成功");
+                                    message.success('删除成功');
                                     reqList();
                                     setLoading(false);
                                   }
@@ -275,7 +254,7 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
                                 .catch((err) => {
                                   setLoading(false);
                                 });
-                            },
+                            }
                           });
                         }}
                       >
@@ -291,7 +270,7 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
       </main>
 
       <Eidt
-        title={editModal.type === "add" ? "新增" : "编辑"}
+        title={editModal.type === 'add' ? '新增' : '编辑'}
         visible={editModal.visible}
         onCancel={() => {
           editModal.setVisible(false);
