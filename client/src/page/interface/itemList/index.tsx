@@ -164,7 +164,8 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
       return {
         ...item,
         title,
-        key: item.key
+        key: item.key,
+        isLeaf: true
       };
     });
   };

@@ -2,7 +2,7 @@ import Empty from '@/components/Empty';
 import { MethodsColorEnum, MethodsColorEnumType } from '@/constant/color';
 import { InterfaceDetail, InterfaceDetailResponse } from '@/services';
 import { Col, Row, Spin, Table, Tabs, Tag } from 'antd';
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { bodyColumns, headersColumns } from './columns';
 import InterfaceEdit from './edit';
@@ -11,10 +11,6 @@ import ItemList from './itemList';
 import MockExpected from './mockExpected';
 import Run from './run';
 
-interface BaseData {
-  name: string;
-  data: string | ReactNode;
-}
 const { TabPane } = Tabs;
 
 const Main = () => {
@@ -22,7 +18,6 @@ const Main = () => {
   const [infoData, setInfoData] = useState<InterfaceDetailResponse>();
   const [headersData, setHeadersData] = useState<any[]>([]);
   const [requestBody, setRequestBody] = useState<any[]>([]);
-  const [responses, setResponses] = useState<any[]>([]);
 
   const [responsesData, setResponsesData] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(false);
@@ -30,8 +25,6 @@ const Main = () => {
 
   useEffect(() => {
     if (!infoData) return;
-
-    console.log(infoData);
 
     if (infoData?.request_body) {
       let requestBody = infoData && infoData?.request_body && JSON.parse(infoData.request_body);
@@ -59,8 +52,6 @@ const Main = () => {
           return resData.content[i];
         });
 
-        const { schema } = arr[0] || {};
-        setResponses(handleRequestBody(schema.properties));
         setResponsesData(resData);
       } else {
         setResponsesData({});
@@ -118,7 +109,6 @@ const Main = () => {
           }
         }}
       />
-      {/* <Info node={node} /> */}
       <div className={styles.infoBigBox}>
         <Tabs activeKey={activeKey} onChange={(key) => tabsOnChange(key)} destroyInactiveTabPane>
           <TabPane tab="接口详情" key="1" style={{ fontSize: 20 }}>
@@ -140,20 +130,19 @@ const Main = () => {
 
                   <h2 className={styles.title}>请求参数</h2>
                   <div style={{ paddingLeft: 25 }}>
-                    <div className={styles.reqData} key="headers">
+                    <div className={styles.reqData}>
                       <span className={styles.name}>Headers：</span>
-                      <Table columns={headersColumns} key="params" dataSource={headersData} pagination={false}></Table>
+                      <Table columns={headersColumns} dataSource={headersData} pagination={false}></Table>
                     </div>
-                    <div className={styles.reqData} key="requestBody">
+                    <div className={styles.reqData}>
                       <span className={styles.name}>Body:</span>
-                      <Table columns={bodyColumns} dataSource={requestBody} rowKey="name" pagination={false}></Table>
+                      <Table columns={bodyColumns} dataSource={requestBody} pagination={false} expandable={{ defaultExpandAllRows: true }}></Table>
                     </div>
                   </div>
                   <h2 className={styles.title}>返回数据</h2>
                   <div style={{ paddingLeft: 25 }}>
                     <div className={styles.reqData} key="responseBody">
-                      {/* <span className={styles.name}>Body:</span> */}
-                      <Table columns={bodyColumns} dataSource={responses} rowKey="name"></Table>
+                      {loading ? null : <InterfaceEdit response={responsesData} id={infoData?.id || ''} />}
                     </div>
                   </div>
                 </div>
@@ -164,9 +153,6 @@ const Main = () => {
           </TabPane>
           <TabPane tab="运行" key="2" disabled={node ? false : true}>
             <Run node={node} infoData={infoData} />
-          </TabPane>
-          <TabPane tab="编辑" key="4" disabled={node ? false : true}>
-            <InterfaceEdit response={responsesData} id={infoData?.id || ''} />
           </TabPane>
           <TabPane tab="mock期望 " key="3" disabled={node ? false : true}>
             <MockExpected node={node} />

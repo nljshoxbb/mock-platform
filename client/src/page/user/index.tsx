@@ -93,6 +93,7 @@ const User = () => {
                 onClick={() => {
                   editModal.setTypeWithVisible('add');
                 }}
+                type="primary"
               >
                 新增
               </Button>

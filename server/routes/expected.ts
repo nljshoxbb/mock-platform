@@ -29,6 +29,9 @@ export default function interfaceRouter(router: KoaRouter) {
    *         update_at:
    *           type: number
    *           description: 编辑时间
+   *         status:
+   *           type: boolean
+   *           description: 开启状态
    *     InterfaceExpectedListRequest:
    *       type: object
    *       properties:

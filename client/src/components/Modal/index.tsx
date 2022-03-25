@@ -1,11 +1,11 @@
-import * as ReactDOM from "react-dom";
+import { Modal as AntdModal } from 'antd';
+import type { ModalProps } from 'antd';
+import { noop } from 'lodash';
+import React from 'react';
+import * as ReactDOM from 'react-dom';
 
-import { Modal as AntdModal } from "antd";
-import Button from "../Button";
-import type { ModalProps } from "antd";
-import React from "react";
-import { noop } from "lodash";
-import styles from "./index.less";
+import Button from '../Button';
+import styles from './index.less';
 
 export type Props = ModalProps;
 interface ConfirmProps extends Props {
@@ -25,16 +25,10 @@ const Modal: React.FC<Props> & StaticComponents = (props) => {
   if (props.footer === undefined) {
     defaultFooter = (
       <div className="flex just-between">
-        <Button
-          type="primary"
-          btnType="ok"
-          onClick={props.onOk}
-          loading={props.confirmLoading}
-          disabled={props.okButtonProps?.disabled}
-        >
+        <Button type="primary" btnType="ok" onClick={props.onOk} loading={props.confirmLoading} disabled={props.okButtonProps?.disabled}>
           确定
         </Button>
-        <Button btnType="cancel" onClick={props.onCancel}>
+        <Button btnType="cancel" type="primary" onClick={props.onCancel}>
           取消
         </Button>
       </div>
@@ -47,9 +41,7 @@ const Modal: React.FC<Props> & StaticComponents = (props) => {
       {...rest}
       footer={defaultFooter}
       title={<div className={`tc ${styles.title}`}>{title}</div>}
-      wrapClassName={`${styles.wrap} ${title === null && styles.notitle} ${
-        rest.wrapClassName
-      }`}
+      wrapClassName={`${styles.wrap} ${title === null && styles.notitle} ${rest.wrapClassName}`}
     >
       {props.children}
     </AntdModal>
@@ -58,15 +50,7 @@ const Modal: React.FC<Props> & StaticComponents = (props) => {
 
 const confirm = (props: ConfirmProps = {}) => {
   const container = document.createDocumentFragment();
-  const {
-    onCancel = noop,
-    onOk = noop,
-    content,
-    title,
-    footer,
-    closeIcon,
-    wrapClassName,
-  } = props;
+  const { onCancel = noop, onOk = noop, content, title, footer, closeIcon, wrapClassName } = props;
   const currentConfig: ConfirmProps = {
     visible: true,
     onCancel,
@@ -75,7 +59,7 @@ const confirm = (props: ConfirmProps = {}) => {
     title,
     footer,
     closeIcon,
-    wrapClassName,
+    wrapClassName
   };
 
   function destroy(...args: any[]) {
@@ -113,11 +97,7 @@ const confirm = (props: ConfirmProps = {}) => {
           closeIcon={config.closeIcon}
           // confirmLoading={isOkPromise}
         >
-          {React.isValidElement(config.content) ? (
-            config.content
-          ) : (
-            <div className="tc mt30 mb30 fb fs16">{config.content}</div>
-          )}
+          {React.isValidElement(config.content) ? config.content : <div className="tc mt30 mb30 fb fs16">{config.content}</div>}
         </Modal>,
         container
       );

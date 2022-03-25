@@ -59,21 +59,22 @@ class ExpectedModel extends BaseModel<ExpectedModelI> {
     return this.model.countDocuments({ interface_id: id });
   }
 
-  public update(id: number, item: Omit<ExpectedItem, 'interface_id'>) {
+  public update(id: string, item: Omit<ExpectedItem, 'interface_id'>) {
     return this.model.findByIdAndUpdate(id, item, {
       omitUndefined: true
     });
   }
 
-  /**
-   * name
-   */
   public updateAllStatus(id, status = false) {
     return this.model.updateMany({ interface_id: id }, { status });
   }
 
-  public remove(id: number) {
+  public remove(id: string) {
     return this.model.findByIdAndUpdate(id, { soft_del: 1 });
+  }
+
+  public findByInterfaceId(id: string) {
+    return this.model.find({ interface_id: id });
   }
 }
 

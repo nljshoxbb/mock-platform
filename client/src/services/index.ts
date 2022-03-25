@@ -642,6 +642,8 @@ export interface InterfaceExpectedItemItemTypes {
             name: string;
             /** 编辑时间 */
             update_at: number;
+            /** 开启状态 */
+            status: boolean;
 }
 export interface InterfaceListApiItemTypes {
             /** 接口id */

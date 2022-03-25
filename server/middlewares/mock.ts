@@ -4,7 +4,8 @@ import { isEmpty } from 'lodash';
 import Mock from 'mockjs';
 import { RequestBody, Response } from 'swagger-jsdoc';
 
-import { getModelInstance, responseBody } from './../utils/utils';
+import { getModelInstance, objectIdToString, responseBody } from './../utils/utils';
+import ExpectedModel from '../models/expected';
 import ProjectModel from '../models/project';
 import Log from '../utils/Log';
 
@@ -51,12 +52,13 @@ const generateMockField = (schema: any, mockObject = {}) => {
         /** schema value中 count,default 为编辑时输入的自定义属性 */
         if (value) {
           if (value.type === 'array') {
+            const num = value.mock ? value.mock.num : 5;
             if (value.items && value.items.type === 'object') {
-              mockObject[`${key}|${value?.count || 5}`] = [generateMockField(value.items)];
+              mockObject[`${key}|${num}`] = [generateMockField(value.items)];
             }
 
             if (value.items && value.items.type === 'number') {
-              mockObject[`${key}|${value?.count || 5}`] = [1];
+              mockObject[`${key}|${num}`] = [1];
             }
           } else if (value.type === 'object') {
             mockObject[key] = generateMockField(value);
@@ -105,6 +107,8 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
 
   const projectModel = getModelInstance<ProjectModel>(ProjectModel);
 
+  const expectedModel = getModelInstance<ExpectedModel>(ExpectedModel);
+
   const isProjectExit = projectModel.isExist(projectId);
 
   if (!isProjectExit) {
@@ -119,7 +123,15 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
   }
 
   const res = await interfaceModel.getDataByPath(projectId, method.toLocaleLowerCase(), path);
+
   if (res[0]) {
+    let expectedResult;
+    const expectedRes = await expectedModel.findByInterfaceId(objectIdToString(res[0]._id));
+    if (expectedRes?.[0]?.status) {
+      // console.log(expectedRes);
+      expectedResult = expectedRes[0].response_body;
+    }
+
     const { request_body, responses } = res[0];
 
     const response = JSON.parse(responses || '{}') as Response;
@@ -144,7 +156,7 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
         return (ctx.body = responseBody(
           {
             status: 200,
-            mock_response: Mock.mock(generateMockField(schema))
+            mock_response: expectedResult || Mock.mock(generateMockField(schema))
           },
           200
         ));

@@ -1,12 +1,11 @@
+import useModal from '@/hooks/useModal';
+import { UserChangepwd, UserLoginResponse } from '@/services';
+import { LocalStorage } from '@/utils/LocalStorage';
+import { Button } from 'antd';
 import React, { useEffect, useState } from 'react';
 
-import { Button } from 'antd';
-import Edit from './modal/index';
-import { LocalStorage } from "@/utils/LocalStorage";
-
-import { UserLoginResponse,UserChangepwd } from '@/services';
 import styles from './index.less';
-import useModal from '@/hooks/useModal';
+import Edit from './modal/index';
 
 const SystemAccount = () => {
   const editModal = useModal();
@@ -17,47 +16,46 @@ const SystemAccount = () => {
   const config = [
     {
       label: '用户名：',
-      name: data?.username,
+      name: data?.username
     }
   ];
   return (
-    <div style={{padding:30}}>
-    <div style={{ marginBottom: 50, }}>
-      {config.map((item, i) => {
-        return (
-          <div className="flex " key={i}>
-            <div className={styles.label}>{item.label}</div>
-            <div className={styles.name}>{item.name}</div>
-          </div>
-        );
-      })}
+    <div className={styles.main}>
+      <div style={{ marginBottom: 50 }}>
+        {config.map((item, i) => {
+          return (
+            <div className="flex " key={i}>
+              <div className={styles.label}>{item.label}</div>
+              <div className={styles.name}>{item.name}</div>
+            </div>
+          );
+        })}
+      </div>
+      <Button
+        className="mb16"
+        type="primary"
+        onClick={() => {
+          editModal.setVisible(true);
+        }}
+      >
+        修改密码
+      </Button>
+      <Edit
+        title="修改密码"
+        visible={editModal.visible}
+        onCancel={() => {
+          editModal.setVisible(false);
+        }}
+        // onSuccess={(audioId) => {
+        //   console.log(audioId, 'value');
+        //   setSelAudio(audioId);
+        //   reqViodeData();
+        // }}
+        // currentItem={currentItem}
+        type={editModal.type}
+        width={560}
+      />
     </div>
-    <Button
-      className="mb16"
-      type="primary"
-      onClick={() => {
-        editModal.setVisible(true);
-      }}
-    >
-      修改密码
-    </Button>
-    <Edit
-      title="修改密码"
-      visible={editModal.visible}
-      onCancel={() => {
-        editModal.setVisible(false);
-      }}
-      // onSuccess={(audioId) => {
-      //   console.log(audioId, 'value');
-      //   setSelAudio(audioId);
-      //   reqViodeData();
-      // }}
-      // currentItem={currentItem}
-      type={editModal.type}
-      width={560}
-    />
-  </div>
-    
   );
 };
 

@@ -30,14 +30,12 @@ const Main = (props: any) => {
   const onTabChanged = (key: string) => {
     setActiveKey(key);
     history.push({
-      pathname: '/main/' + key,
-      state: {
-        tabKey: key
-      }
+      pathname: key
     });
   };
 
-  // console.log(userInfo, "userInfo");
+  const { location } = history;
+  const { pathname } = location;
 
   return (
     <div className={styles.mainBigBox}>
@@ -49,13 +47,14 @@ const Main = (props: any) => {
         <Tabs
           defaultActiveKey="mock"
           destroyInactiveTabPane
-          activeKey={props.location.state && props.location.state.tabKey ? props.location.state.tabKey : 'mock'}
+          // activeKey={props.location.state && props.location.state.tabKey ? props.location.state.tabKey : 'mock'}
+          activeKey={pathname}
           onChange={onTabChanged}
           style={{ height: 100 }}
         >
-          <TabPane tab="mock数据" key="mock"></TabPane>
-          <TabPane tab="用户管理" key="user"></TabPane>
-          <TabPane tab="账户管理" key="account"></TabPane>
+          <TabPane tab="mock数据" key="/main/mock"></TabPane>
+          <TabPane tab="用户管理" key="/main/user"></TabPane>
+          <TabPane tab="账户管理" key="/main/account"></TabPane>
         </Tabs>
       </div>
       <Route exact path="/main/mock" component={Interface} />

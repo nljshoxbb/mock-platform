@@ -1,4 +1,6 @@
-import { Button, Spin, message } from "antd";
+import AntdDivideTable from '@/components/AntdDivideTable';
+import Modal from '@/components/Modal';
+import useModal from '@/hooks/useModal';
 import {
   ExpectedEdit,
   ExpectedEditRequest,
@@ -7,16 +9,14 @@ import {
   ExpectedListResponse,
   ExpectedRemove,
   ExpectedStatus,
-  InterfaceExpectedItemItemTypes,
-} from "@/services";
-import React, { useEffect, useState } from "react";
+  InterfaceExpectedItemItemTypes
+} from '@/services';
+import { Button, Spin, message } from 'antd';
+import React, { useEffect, useState } from 'react';
 
-import AddHopeModal from "./modal/index";
-import AntdDivideTable from "@/components/AntdDivideTable";
-import { Columns } from "./columns";
-import Modal from "@/components/Modal";
-import styles from "./index.less";
-import useModal from "@/hooks/useModal";
+import { Columns } from './columns';
+import styles from './index.less';
+import AddHopeModal from './modal/index';
 
 type MockExpected = {
   onSuccess?: () => void;
@@ -24,15 +24,14 @@ type MockExpected = {
 };
 const MockExpected: React.FC<MockExpected> = (props) => {
   const editModal = useModal();
-  const [currentItem, setCurrentItem] =
-    useState<InterfaceExpectedItemItemTypes>();
+  const [currentItem, setCurrentItem] = useState<InterfaceExpectedItemItemTypes>();
 
   const [hopeList, setHopeList] = useState<ExpectedListResponse>();
   const [parms, setParms] = useState<ExpectedListRequest>({
     interface_id: props.node?.id /** 每页数目 */,
     size: 10,
     /** 页数 */
-    page: 1,
+    page: 1
   });
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -59,9 +58,10 @@ const MockExpected: React.FC<MockExpected> = (props) => {
     <div>
       <Button
         onClick={() => {
-          editModal.setTypeWithVisible("add");
+          editModal.setTypeWithVisible('add');
         }}
         style={{ marginBottom: 30 }}
+        type="primary"
       >
         添加期望
       </Button>
@@ -74,22 +74,22 @@ const MockExpected: React.FC<MockExpected> = (props) => {
           columns={Columns({
             onEdit: (record: InterfaceExpectedItemItemTypes) => {
               setCurrentItem(record);
-              editModal.setTypeWithVisible("info");
+              editModal.setTypeWithVisible('info');
             },
             onDelete: (record: { id: string; name: string }) => {
               Modal.confirm({
-                title: "删除角色",
+                title: '删除角色',
                 content: `是否确认删除"${record.name}"`,
                 onOk: () => {
                   setLoading(true);
                   ExpectedRemove({ id: record.id }).then((res) => {
                     if (!res.hasError) {
-                      message.success("删除成功");
+                      message.success('删除成功');
                       reqExpectedList(parms);
                     }
                     setLoading(false);
                   });
-                },
+                }
               });
             },
             onSwitch: (record, checked) => {
@@ -105,25 +105,25 @@ const MockExpected: React.FC<MockExpected> = (props) => {
                   console.log(err);
                   setLoading(false);
                 });
-            },
+            }
           })}
           listSummary={{
             pageCurrent: parms?.page as number,
             pageSize: parms?.size as number,
             totalItems: hopeList?.total as number,
-            totalPages: 0,
+            totalPages: 0
           }}
           onPaginationChange={(page, size) => {
             setParms((x) => ({
               ...x,
               page,
-              size: size || x.size,
+              size: size || x.size
             }));
           }}
         />
       </Spin>
       <AddHopeModal
-        title={editModal.type === "add" ? "添加期望" : "编辑期望"}
+        title={editModal.type === 'add' ? '添加期望' : '编辑期望'}
         onSuccess={() => {
           // reqList();
           reqExpectedList(parms);
