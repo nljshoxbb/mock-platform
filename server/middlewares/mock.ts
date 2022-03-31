@@ -35,6 +35,14 @@ const handleType = (data) => {
   return result;
 };
 
+const delayFn = async (ms) => {
+  return new Promise<void>((resolve, reject) => {
+    setTimeout(() => {
+      resolve();
+    }, ms);
+  });
+};
+
 /**
  * 根据schema生成mock数据
  * @param schema
@@ -127,9 +135,27 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
   if (res[0]) {
     let expectedResult;
     const expectedRes = await expectedModel.findByInterfaceId(objectIdToString(res[0]._id));
-    if (expectedRes?.[0]?.status) {
-      // console.log(expectedRes);
-      expectedResult = expectedRes[0].response_body;
+
+    const [expectedItem] = expectedRes.filter((i) => i.status);
+
+    if (expectedItem) {
+      const { delay, response_body } = expectedItem;
+
+      console.log(expectedItem);
+
+      if (delay) {
+        await delayFn(delay);
+      }
+      if (response_body) {
+        expectedResult = JSON.parse(response_body);
+      }
+      return (ctx.body = responseBody(
+        {
+          status: 200,
+          mock_response: expectedResult
+        },
+        200
+      ));
     }
 
     const { request_body, responses } = res[0];

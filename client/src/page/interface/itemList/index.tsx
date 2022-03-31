@@ -5,7 +5,7 @@ import { listToTreeWithOption } from '@/hooks/useTree';
 import { InterfaceList, ProjectRemove } from '@/services';
 import { DownOutlined } from '@ant-design/icons';
 import { PlusCircleOutlined } from '@ant-design/icons';
-import { Button, Input, Spin, Tag, Tree, message } from 'antd';
+import { Button, Input, Spin, Tag, Tooltip, Tree, message } from 'antd';
 import type { TreeProps } from 'antd';
 import Item from 'antd/lib/list/Item';
 import { isEmpty } from 'lodash';
@@ -186,16 +186,12 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
             新增
           </div>
         </div>
-        <div className="mb10">
-          <span className={styles.desc}>项目描述:{itemName.desc}</span>
-        </div>
+        <div className={styles.desc}>项目描述:{itemName.desc}</div>
         <Search allowClear placeholder="输入项目名称或者接口地址" onSearch={(value) => onSearch(value)} enterButton />
       </header>
       <main>
         <Spin spinning={loading}>
           <DirectoryTree
-            // multiple
-            // defaultExpandAll
             expandedKeys={expandedKeys}
             autoExpandParent={autoExpandParent}
             switcherIcon={<DownOutlined />}
@@ -220,7 +216,9 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
                         {method}
                       </Tag>
                     )}
-                    <div>{node.title}</div>
+                    <div className="ellipsis" style={{ display: 'inline-block', width: 250 }}>
+                      <Tooltip title={node.title}>{node.title}</Tooltip>
+                    </div>
                   </div>
                   {node?.isEdit ? (
                     <div>
@@ -266,6 +264,7 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
                 </div>
               );
             }}
+            blockNode
           />
         </Spin>
       </main>

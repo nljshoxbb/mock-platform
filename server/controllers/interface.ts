@@ -215,7 +215,8 @@ export default class InterfaceController extends BaseController {
           desc: projectItem.desc,
           auto_sync: projectItem.auto_sync,
           auto_sync_time: projectItem.auto_sync_time,
-          category_list: catResult
+          category_list: catResult,
+          type: projectItem.type
         });
       }
 
@@ -273,10 +274,7 @@ export default class InterfaceController extends BaseController {
 
       const data = await axios({
         method,
-        url: `${api}?name=222`,
-        data: {
-          name: 2222
-        }
+        url: api
       });
       this.ctx.body = data.data;
     } catch (error) {

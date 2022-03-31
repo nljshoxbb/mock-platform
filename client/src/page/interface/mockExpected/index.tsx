@@ -18,11 +18,11 @@ import { Columns } from './columns';
 import styles from './index.less';
 import AddHopeModal from './modal/index';
 
-type MockExpected = {
+type MockExpectedInterface = {
   onSuccess?: () => void;
   node?: any;
 };
-const MockExpected: React.FC<MockExpected> = (props) => {
+const MockExpected: React.FC<MockExpectedInterface> = (props) => {
   const editModal = useModal();
   const [currentItem, setCurrentItem] = useState<InterfaceExpectedItemItemTypes>();
 
@@ -38,11 +38,11 @@ const MockExpected: React.FC<MockExpected> = (props) => {
   useEffect(() => {
     reqExpectedList(parms);
   }, [parms]);
+
   const reqExpectedList = (parms: ExpectedListRequest) => {
+    setLoading(true);
     ExpectedList({ ...parms })
       .then((res) => {
-        // console.log(res, "res");
-        setLoading(true);
         if (!res.hasError) {
           setHopeList(res.data);
 
@@ -67,7 +67,6 @@ const MockExpected: React.FC<MockExpected> = (props) => {
       </Button>
       <Spin spinning={loading}>
         <AntdDivideTable
-          // scroll={{ y: 50 }}
           key="id"
           dataSource={hopeList?.list}
           rowKey="create_time"
@@ -93,17 +92,14 @@ const MockExpected: React.FC<MockExpected> = (props) => {
               });
             },
             onSwitch: (record, checked) => {
-              setLoading(true);
-
               ExpectedStatus({ id: record.id, status: checked as boolean })
                 .then((res) => {
                   if (!res.hasError) {
-                    setLoading(false);
+                    reqExpectedList(parms);
                   }
                 })
                 .catch((err) => {
                   console.log(err);
-                  setLoading(false);
                 });
             }
           })}
@@ -125,7 +121,6 @@ const MockExpected: React.FC<MockExpected> = (props) => {
       <AddHopeModal
         title={editModal.type === 'add' ? '添加期望' : '编辑期望'}
         onSuccess={() => {
-          // reqList();
           reqExpectedList(parms);
         }}
         visible={editModal.visible}

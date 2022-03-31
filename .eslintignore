@@ -4,3 +4,4 @@ dist
 public
 *.prettierrc.*
 typings
+init-mongo.js

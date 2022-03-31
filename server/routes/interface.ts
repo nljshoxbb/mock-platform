@@ -114,6 +114,9 @@ export default function interfaceRouter(router: KoaRouter) {
    *         auto_sync_time:
    *           type: number
    *           description: 同步间隔
+   *         type:
+   *           type: string
+   *           description: 同步文件类型
    *         category_list:
    *            type: array
    *            items:

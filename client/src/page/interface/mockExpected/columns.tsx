@@ -54,13 +54,7 @@ export const Columns = ({ onEdit = noop, onDelete = noop, onSwitch = noop }: Col
             <Button type="primary" danger onClick={() => onDelete(record)}>
               删除
             </Button>
-            <Switch
-              checkedChildren="开启"
-              unCheckedChildren="关闭"
-              // defaultChecked
-              defaultChecked={record.status}
-              onClick={(checked) => onSwitch(record, checked)}
-            />
+            <Switch checkedChildren="开启" unCheckedChildren="关闭" checked={record.status} onClick={(checked) => onSwitch(record, checked)} />
           </div>
         );
       }

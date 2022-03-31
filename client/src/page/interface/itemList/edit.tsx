@@ -16,11 +16,22 @@ const layout = {
 const Eidt: React.FC<EditProps> = ({ onSuccess, type, selNode, ...modalProps }) => {
   const [form] = Form.useForm();
   const [disabled, setDisabled] = useState(false);
+
   useEffect(() => {
     if (modalProps.visible) {
+      if (type === 'info') {
+        form.setFieldsValue({
+          name: selNode.project_name,
+          auto_sync: selNode.auto_sync,
+          auto_sync_time: selNode.auto_sync_time / 60,
+          desc: selNode.desc
+        });
+      }
+    } else {
       form.resetFields();
     }
-  }, [modalProps.visible]);
+  }, [modalProps.visible, type]);
+
   const onSubmit = () => {
     let autoTime: number;
     if (type === 'add') {
@@ -48,9 +59,7 @@ const Eidt: React.FC<EditProps> = ({ onSuccess, type, selNode, ...modalProps }) 
       });
     }
   };
-  const SwitchOnChange = (checked: boolean) => {
-    setDisabled(checked);
-  };
+
   return (
     <>
       <Modal
@@ -83,21 +92,23 @@ const Eidt: React.FC<EditProps> = ({ onSuccess, type, selNode, ...modalProps }) 
           </Form.Item>
 
           <Form.Item label="是否自动同步">
-            <Switch
-              checkedChildren="开启"
-              unCheckedChildren="关闭"
-              // defaultChecked
-              onChange={(e) => {
-                SwitchOnChange(e);
-              }}
-              className="mr10"
-            />
+            <Form.Item noStyle valuePropName="checked" name="auto_sync">
+              <Switch
+                checkedChildren="开启"
+                unCheckedChildren="关闭"
+                className="mr10"
+                onChange={(e) => {
+                  setDisabled(e);
+                }}
+              />
+            </Form.Item>
+
             <Form.Item name="auto_sync_time" noStyle>
               <InputNumber disabled={!disabled} />
             </Form.Item>
             <span className="ant-form-text ">分钟同步一次</span>
           </Form.Item>
-          <Form.Item name="desc" label="备注">
+          <Form.Item name="desc" label="描述">
             <Input.TextArea />
           </Form.Item>
         </Form>

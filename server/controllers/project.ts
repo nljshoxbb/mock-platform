@@ -46,9 +46,13 @@ export default class ProjectController extends BaseController {
         cb();
       }, autoSyncTime * 1000);
 
-      if (!timerMap.get(id)) {
-        timerMap.set(id, timer);
+      if (timerMap.get(id)) {
+        const timer = timerMap.get(id) as any;
+        clearInterval(timer);
       }
+
+      timerMap.set(id, timer);
+      console.log(`handle ${autoSync}`);
     } else {
       const timer = timerMap.get(id) as any;
       clearInterval(timer);
@@ -69,7 +73,7 @@ export default class ProjectController extends BaseController {
         return (this.ctx.body = responseBody(null, 400, '项目名重复'));
       }
 
-      if (auto_sync && auto_sync_time < 60) {
+      if (auto_sync && (auto_sync_time === null || auto_sync_time < 60)) {
         return (this.ctx.body = responseBody(null, 400, '同步时间不能小于1分钟'));
       }
 
@@ -147,6 +151,10 @@ export default class ProjectController extends BaseController {
         return (this.ctx.body = responseBody(null, 400, '地址错误,解析失败'));
       }
 
+      if (auto_sync && (auto_sync_time === null || auto_sync_time < 60)) {
+        return (this.ctx.body = responseBody(null, 400, '同步时间不能小于1分钟'));
+      }
+      console.log(`--------- ${auto_sync}`);
       /** 更新同时 同步新的接口文档地址；重新开启定时同步任务 */
       this.handleTimer(id, auto_sync, auto_sync_time, async () => {
         await this.interfaceController.syncByPorjectId(id, apiDoc, type);

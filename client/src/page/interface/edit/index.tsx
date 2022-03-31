@@ -56,95 +56,97 @@ const InterfaceEditComponent: React.FC<InterfaceEditI> = ({ response, id = '' })
           const item = schema.properties[i];
           const path = namePath ? `${namePath}.${i}` : i;
 
-          if (item.type === 'object') {
-            result.push({
-              name: i,
-              key: path,
-              dataIndex: path,
-              type: item.type,
-              children: handleResponse(item, path, [], collection),
-              description: item.description
-            });
-          } else if (item.type === 'array') {
-            const itemsPath = namePath ? `${namePath}.${i}.items` : `items.${i}`;
-            return result.push({
-              name: i,
-              key: path,
-              dataIndex: path,
-              type: item.type,
-              description: item.description,
-              children: [
-                {
-                  name: 'items',
-                  key: itemsPath,
-                  dataIndex: itemsPath,
-                  type: item.type,
-                  children: handleResponse(item.items, `${path}.items`, [], collection)
-                }
-              ],
-              setting: (
-                <SettingOutlined
-                  className="cursor ml10"
-                  onClick={() => {
-                    // 找出schema
-                    const obj = findSchemaByPath(innerSchema.current, path);
-                    setEditSchema(obj);
-                    if (obj.mock) {
-                      arrayConfigForm.setFieldsValue({ num: obj.mock.num });
-                    }
+          if (item) {
+            if (item.type === 'object') {
+              result.push({
+                name: i,
+                key: path,
+                dataIndex: path,
+                type: item.type,
+                children: handleResponse(item, path, [], collection),
+                description: item.description
+              });
+            } else if (item.type === 'array') {
+              const itemsPath = namePath ? `${namePath}.${i}.items` : `items.${i}`;
+              return result.push({
+                name: i,
+                key: path,
+                dataIndex: path,
+                type: item.type,
+                description: item.description,
+                children: [
+                  {
+                    name: 'items',
+                    key: itemsPath,
+                    dataIndex: itemsPath,
+                    type: item.type,
+                    children: handleResponse(item.items, `${path}.items`, [], collection)
+                  }
+                ],
+                setting: (
+                  <SettingOutlined
+                    className="cursor ml10"
+                    onClick={() => {
+                      // 找出schema
+                      const obj = findSchemaByPath(innerSchema.current, path);
+                      setEditSchema(obj);
+                      if (obj.mock) {
+                        arrayConfigForm.setFieldsValue({ num: obj.mock.num });
+                      }
 
-                    setCurrentFieldPath(path);
-                    schemaModal.setVisible(true);
-                  }}
-                />
-              )
-            });
-          } else {
-            if (item.mock) {
-              collection[path] = item.mock.value;
-            }
-
-            return result.push({
-              name: i,
-              key: path,
-              dataIndex: path,
-              type: item.type,
-              description: item.description,
-              default: item.default,
-              mock: (
-                <Form.Item noStyle name={path}>
-                  <Input
-                    placeholder={'mock数据'}
-                    onChange={(e) => {
-                      handleFieldChange(e.target.value, path);
+                      setCurrentFieldPath(path);
+                      schemaModal.setVisible(true);
                     }}
-                    addonAfter={
-                      <EditOutlined
-                        className="cursor"
-                        onClick={() => {
-                          fieldMockModal.setVisible(true);
-                          mockForm.setFieldsValue({ mock: form.getFieldValue(path) });
-                          setCurrentFieldPath(path);
-                        }}
-                      />
-                    }
-                    className="ml10"
                   />
-                </Form.Item>
-              ),
-              setting: (
-                <SettingOutlined
-                  className="cursor ml10"
-                  onClick={() => {
-                    // 找出schema
-                    const obj = findSchemaByPath(innerSchema.current, path);
-                    setEditSchema(obj);
-                    setCurrentFieldPath(path);
-                    schemaModal.setVisible(true);
-                  }}
-                />
-              )
-            });
+                )
+              });
+            } else {
+              if (item.mock) {
+                collection[path] = item.mock.value;
+              }
+
+              return result.push({
+                name: i,
+                key: path,
+                dataIndex: path,
+                type: item.type,
+                description: item.description,
+                default: item.default,
+                mock: (
+                  <Form.Item noStyle name={path}>
+                    <Input
+                      placeholder={'mock数据'}
+                      onChange={(e) => {
+                        handleFieldChange(e.target.value, path);
+                      }}
+                      addonAfter={
+                        <EditOutlined
+                          className="cursor"
+                          onClick={() => {
+                            fieldMockModal.setVisible(true);
+                            mockForm.setFieldsValue({ mock: form.getFieldValue(path) });
+                            setCurrentFieldPath(path);
+                          }}
+                        />
+                      }
+                      className="ml10"
+                    />
+                  </Form.Item>
+                ),
+                setting: (
+                  <SettingOutlined
+                    className="cursor ml10"
+                    onClick={() => {
+                      // 找出schema
+                      const obj = findSchemaByPath(innerSchema.current, path);
+                      setEditSchema(obj);
+                      setCurrentFieldPath(path);
+                      schemaModal.setVisible(true);
+                    }}
+                  />
+                )
+              });
+            }
           }
         });
       }

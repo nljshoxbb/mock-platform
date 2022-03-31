@@ -46,13 +46,15 @@ class ExpectedModel extends BaseModel<ExpectedModelI> {
   public async listWithPaging(id: string, page: number = 1, limit: number = 10) {
     // page = parseInt(page);
     // limit = parseInt(limit);
-    return this.model
-      .find({ interface_id: id })
-      .sort({ soft_del: 1 })
-      .skip((page - 1) * limit)
-      .limit(limit)
-      .select('id name desc response_body interface_id delay created_at update_at status')
-      .exec();
+    return (
+      this.model
+        .find({ interface_id: id, soft_del: { $lte: 0 } })
+        // .sort({ soft_del: 1 })
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .select('id name desc response_body interface_id delay created_at update_at status')
+        .exec()
+    );
   }
 
   public listCount(id) {
@@ -66,7 +68,7 @@ class ExpectedModel extends BaseModel<ExpectedModelI> {
   }
 
   public updateAllStatus(id, status = false) {
-    return this.model.updateMany({ interface_id: id }, { status });
+    return this.model.updateMany({ interface_id: id, soft_del: { $lte: 0 } }, { status });
   }
 
   public remove(id: string) {
@@ -74,7 +76,7 @@ class ExpectedModel extends BaseModel<ExpectedModelI> {
   }
 
   public findByInterfaceId(id: string) {
-    return this.model.find({ interface_id: id });
+    return this.model.find({ interface_id: id, status: true });
   }
 }
 

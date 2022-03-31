@@ -1,12 +1,9 @@
-// import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
+import 'monaco-editor/esm/vs/basic-languages/html/html.contribution';
 
 import Modal from '@/components/Modal';
-import { color } from '@/hooks/useMonacoColor';
 import { ExpectedCreate, ExpectedEdit, InterfaceExpectedItemItemTypes } from '@/services';
 import { Col, Form, Input, InputNumber, Row, Tabs, message } from 'antd';
 import type { ModalProps } from 'antd';
-import * as monaco from 'monaco-editor';
-import * as monacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
 import React, { useEffect, useState } from 'react';
 import Monaco from 'react-monaco-editor';
 
@@ -19,10 +16,9 @@ interface EditProps extends ModalProps {
   currentItem?: InterfaceExpectedItemItemTypes;
 }
 const layout = {
-  labelCol: { span: 6 },
-  wrapperCol: { span: 16 }
+  labelCol: { span: 4 },
+  wrapperCol: { span: 18 }
 };
-const { TabPane } = Tabs;
 const AddHopeModal: React.FC<EditProps> = ({ onSuccess, node, type, currentItem, ...modalProps }) => {
   const [form] = Form.useForm();
   useEffect(() => {
@@ -33,6 +29,7 @@ const AddHopeModal: React.FC<EditProps> = ({ onSuccess, node, type, currentItem,
       }
     }
   }, [modalProps.visible]);
+
   const onSubmit = () => {
     form.validateFields().then(async (values) => {
       console.log(values, 'values');
@@ -61,13 +58,6 @@ const AddHopeModal: React.FC<EditProps> = ({ onSuccess, node, type, currentItem,
   const onChange = (value: any, e: any) => {
     form.setFieldsValue({ response_body: value });
   };
-  monaco.editor.defineTheme('vs-moonlight', {
-    base: 'vs-dark',
-    inherit: false,
-    rules: [],
-    colors: color
-  });
-  monaco.editor.setTheme('vs-moonlight');
 
   return (
     <div>
