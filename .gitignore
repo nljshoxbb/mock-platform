@@ -18,3 +18,5 @@ jspm_packages
 
 # Optional npm cache directory
 .npm
+
+mongo-volume

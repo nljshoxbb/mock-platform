@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  db:
+    image: mongo:5.0.6 # 镜像：版本
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin # 默认开启授权，并创建超管用户 mongo -u godis -p godis@admin --authenticationDatabase admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin # 超管密码，敏感数据也可以使用 `secrets`，不赘述。
+      - MONGO_INITDB_DATABASE=mock-platform # *.js 中默认的数据库
+      - MONGO_INITDB_USERNAME=databaseroot
+      - MONGO_INITDB_PASSWORD=databaseroot
+    volumes:
+      - ./init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh:ro
+      - ./mongo-volume:/data/db
+    ports:
+      - "27017:27017"
+    restart: always
+  server:
+    # image: node:12.16.3-alpine
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    environment:
+      - NODE_ENV=production
+      - docker_db=db
+    command: /bin/sh -C "npm i && npm i pm2 typescript tsc-alias -g && npm run docker-deploy"
+    ports:
+      - "3888:3888"

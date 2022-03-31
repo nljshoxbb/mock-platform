@@ -18,7 +18,8 @@ function install() {
 }
 
 async function initDatabse() {
-  await connectDatabase(Config.db.url);
+  console.log(Config.db.url);
+  await connectDatabase(Config.db.url, Config.db.user, Config.db.pwd);
 
   const projectCollection = mongoose.connection.db.collection('project');
   projectCollection.createIndex({ uid: 1 });

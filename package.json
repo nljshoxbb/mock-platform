@@ -5,9 +5,11 @@
   "main": "index.js",
   "scripts": {
     "dev-server": "cross-env nodemon -e ts -w server --exec 'yarn start'",
-    "init-server": "tsc && tsc-alias && node --inspect dist/server/install.js",
+    "init-db": "tsc && tsc-alias && node --inspect dist/server/install.js",
     "start": "tsc && tsc-alias && node --inspect dist/server/app.js",
-    "stateless": "cross-env tsc && tsc-alias && node --inspect dist/server/app.js"
+    "stateless": "cross-env tsc && tsc-alias && node --inspect dist/server/app.js",
+    "docker-deploy": "tsc && tsc-alias && pm2-runtime start dist/server/app.js",
+    "pm2": "pm2 start dist/server/app.js"
   },
   "author": "",
   "license": "ISC",
@@ -34,6 +36,7 @@
     "lodash": "^4.17.21",
     "mockjs": "^1.1.0",
     "mongoose": "^6.2.3",
+    "pm2": "^5.2.0",
     "swagger-jsdoc": "^6.1.0",
     "yamljs": "^0.3.0"
   },
