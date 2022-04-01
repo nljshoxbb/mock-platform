@@ -1,8 +1,8 @@
 import path from 'path';
 
-import Config from '@/server/config';
 import mongoose from 'mongoose';
 
+import Config from './config';
 import connectDatabase from './database';
 import UserModel from './models/user';
 import Log from './utils/Log';
@@ -18,7 +18,6 @@ function install() {
 }
 
 async function initDatabse() {
-  console.log(Config.db.url);
   await connectDatabase(Config.db.url, Config.db.user, Config.db.pwd);
 
   const projectCollection = mongoose.connection.db.collection('project');
@@ -26,6 +25,13 @@ async function initDatabse() {
   projectCollection.createIndex({ name: 1 });
 
   const userModel = getModelInstance<UserModel>(UserModel);
+
+  const list = await userModel.get();
+  if (list.length > 0) {
+    Log.info(`已初始化,账号：${Config.admin},密码：${Config.adminPwd}`);
+    process.exit(0);
+  }
+
   userModel
     .create({
       username: Config.admin,
