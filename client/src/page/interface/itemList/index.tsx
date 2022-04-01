@@ -206,7 +206,7 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
                   className="flex just-between align-center pr10"
                   style={{
                     position: 'relative',
-                    minWidth: 250,
+                    minWidth: 220,
                     justifyContent: 'space-between'
                   }}
                 >

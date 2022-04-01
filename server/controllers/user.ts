@@ -1,5 +1,5 @@
 import BaseController from '@/server/controllers/base';
-import UserModel from '@/server/models/User';
+import UserModel from '@/server/models/user';
 import { Context } from 'koa';
 import { isEmpty } from 'lodash';
 import { Types } from 'mongoose';

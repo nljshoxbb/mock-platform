@@ -1,9 +1,9 @@
-node_modules
+/server/node_modules
 .vscode
-node_modules
-package-lock.json
-yarn.lock
+/server/package-lock.json
+/server/yarn.lock
 
 /client/node_modules
 /client/package-lock.json
 /client/yarn.lock
+# /server/dist

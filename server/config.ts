@@ -7,7 +7,7 @@ const APP_LOG = path.join(APP_RUNTIME, 'log');
 const prefix = '/api';
 
 const isPro = process.env.NODE_ENV === 'production';
-console.log(isPro);
+console.log(`process.env.NODE_ENV=${process.env.NODE_ENV}`);
 export default {
   APP_ROOT,
   APP_SERVER,
@@ -18,7 +18,9 @@ export default {
   port: 3888,
   db: {
     name: 'mock-platform',
-    url: `mongodb://${isPro ? process.env.docker_db : 'localhost:27017'}/mock-platform`,
+    // url: `mongodb://${isPro ? process.env.docker_db : 'localhost:27017'}/mock-platform`,
+    url: `mongodb://databaseroot:databaseroot@${process.env.docker_db}/mock-platform`,
+    // url: 'mongodb://databaseroot:databaseroot@localhost:27018/mock-platform',
     user: 'databaseroot',
     pwd: 'databaseroot'
   },
