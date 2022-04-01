@@ -1,15 +1,3 @@
-# db.getSiblingDB('user').createUser({
-#   user: 'user',
-#   pwd: 'xx',
-#   roles: ['readWrite', 'dbAdmin']
-# });
-
-# db.getSiblingDB('staff').createUser({
-#   user: 'staff',
-#   pwd: 'yy',
-#   roles: ['readWrite', 'dbAdmin']
-# });
-
 
 mongo -- "$MONGO_INITDB_DATABASE" <<EOF
     var rootUser = '$MONGO_INITDB_ROOT_USERNAME';

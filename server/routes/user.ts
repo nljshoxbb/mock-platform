@@ -284,7 +284,7 @@ export default function userRouter(router: Router) {
    *                $ref: '#/components/schemas/UserLoginResponse'
    */
   router.post('/v1/user/logout', async (ctx: Context) => {
-    await initController(ctx).login();
+    await initController(ctx).logout();
   });
   /**
    * @openapi

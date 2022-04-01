@@ -1,0 +1,5500 @@
+
+
+openapi: 3.0.0
+servers:
+  - url: /
+    description: "default url"
+  
+  - description: 'server'
+    url: http://127.0.0.1:5000
+  
+info:
+  description: |
+    api document
+  version: /v1
+  title: api-gateway
+  contact:
+    email: xiachengjia@speakin.mobi
+  license:
+    name: Mit
+    url: 'https://opensource.org/licenses/MIT'
+tags:
+  - name: alarmTask
+  - name: audio
+  - name: audioAnalyze
+  - name: callRecord
+  - name: file
+  - name: home
+  - name: offlineTransport
+  - name: organization
+  - name: remark
+  - name: role
+  - name: user
+  - name: voice
+paths:
+  '/v1/alarmTask/cancelTask':
+    post:
+      tags:
+        - alarmTask
+      description: '撤销任务'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlarmCancelTaskRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/v1/alarmTask/addAlarmRemark':
+    post:
+      tags:
+        - alarmTask
+      description: '创建告警记录的备注'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlarmAddAlarmRemarkRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/v1/alarmTask/addTask':
+    post:
+      tags:
+        - alarmTask
+      description: '创建任务'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlarmAddTaskRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlarmAddTaskResponse'
+  '/v1/alarmTask/deleteTask':
+    post:
+      tags:
+        - alarmTask
+      description: '删除任务'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlarmDeleteTaskRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/v1/alarmTask/detailAlarm':
+    post:
+      tags:
+        - alarmTask
+      description: '告警记录的详情'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlarmDetailAlarmRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlarmDetailAlarmResponse'
+  '/v1/alarmTask/listAlarm':
+    post:
+      tags:
+        - alarmTask
+      description: '告警记录列表'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlarmListAlarmRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlarmListAlarmResponse'
+  '/v1/alarmTask/listTask':
+    post:
+      tags:
+        - alarmTask
+      description: '任务列表'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlarmListTaskRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlarmListTaskResponse'
+  '/v1/alarmTask/listTaskRecordOptions':
+    post:
+      tags:
+        - alarmTask
+      description: '告警任务列表选项'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlarmListTaskRecordOptionsRsp'
+  '/v1/alarmTask/listAlarmRecordOptions':
+    post:
+      tags:
+        - alarmTask
+      description: '告警任务记录列表选项'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlarmListAlarmRecordOptionsReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlarmListAlarmRecordOptionsRsp'
+  '/v1/alarmTask/detailAlarmStatus':
+    post:
+      tags:
+        - alarmTask
+      description: '告警记录的详情的状态'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlarmDetailAlarmStatusRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlarmDetailAlarmStatusResponse'
+  '/v1/audio/addAudio':
+    post:
+      tags:
+        - audio
+      description: '创建语音库音频'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AudioAddAudioRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudioAddAudioResponse'
+  '/v1/audio/deleteAudio':
+    post:
+      tags:
+        - audio
+      description: '删除音频'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AudioDeleteAudioRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/v1/audio/editAudio':
+    post:
+      tags:
+        - audio
+      description: '编辑音频'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AudioEditAudioRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudioEditAudioResponse'
+  '/v1/audio/listAudio':
+    post:
+      tags:
+        - audio
+      description: '音频列表'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AudioListAudioRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudioListAudioResponse'
+  '/v1/audio/listAudioRecordOptions':
+    post:
+      tags:
+        - audio
+      description: '语音库记录列表选项'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudioListAudioRecordOptionsRsp'
+  '/v1/audio/detailAudio':
+    post:
+      tags:
+        - audio
+      description: '语音库记录的详情'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AudioDetailAudioRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudioDetailAudioResponse'
+  '/v1/audioAnalyze/addAudioAnalyze':
+    post:
+      tags:
+        - audioAnalyze
+      description: '创建以音搜音'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AudioAnalyzeAddAudioAnalyzeReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudioAnalyzeAddAudioAnalyzeRsp'
+  '/v1/audioAnalyze/detailAudioAnalyze':
+    post:
+      tags:
+        - audioAnalyze
+      description: '以音搜音结果详情'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AudioAnalyzeDetailAudioAnalyzeReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudioAnalyzeDetailAudioAnalyzeRsp'
+  '/v1/audioAnalyze/listLanguageOptions':
+    post:
+      tags:
+        - audioAnalyze
+      description: '工具中心的语种方言选项'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AudioAnalyzeListLanguageOptionsRsp'
+  '/v1/callRecord/detailCallRecord':
+    post:
+      tags:
+        - callRecord
+      description: '辩听'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CallRecordDetailCallRecordReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallRecordDetailCallRecordRsp'
+  '/v1/callRecord/listCallRecord':
+    post:
+      tags:
+        - callRecord
+      description: '通话记录列表'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CallRecordListCallRecordReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallRecordListCallRecordRsp'
+  '/v1/callRecord/listCallRecordOptions':
+    post:
+      tags:
+        - callRecord
+      description: '通话记录列表选项'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallRecordListCallRecordOptionsRsp'
+  '/v1/file/save_slice':
+    post:
+      tags:
+        - file
+      description: '保存切片'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FileSaveSliceRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileSaveSliceResponse'
+  '/v1/file/GetWaveForm':
+    post:
+      tags:
+        - file
+      description: '获取波形图'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FileGetWaveFormRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileGetWaveFormResponse'
+  '/v1/home/storeInfo':
+    post:
+      tags:
+        - home
+      description: '存储信息'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HomeStoreInfoRsp'
+  '/v1/home/dataAccessTrend':
+    post:
+      tags:
+        - home
+      description: '接入数据趋势'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HomeDataAccessTrendReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HomeDataAccessTrendRsp'
+  '/v1/home/langProportion':
+    post:
+      tags:
+        - home
+      description: '语种占比'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HomeLangProportionRsp'
+  '/v1/home/provCityCount':
+    post:
+      tags:
+        - home
+      description: '省市统计'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HomeProvCityCountRsp'
+  '/v1/offlineTransport/addOfflineTransport':
+    post:
+      tags:
+        - offlineTransport
+      description: '创建离线转写任务'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OfflineTransAddOfflineTransReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfflineTransAddOfflineTransRsp'
+  '/v1/offlineTransport/detailOfflineTransport':
+    post:
+      tags:
+        - offlineTransport
+      description: '离线转写结果详情'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OfflineTransDetailOfflineTransReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfflineTransDetailOfflineTransRsp'
+  '/v1/organization/addOrganization':
+    post:
+      tags:
+        - organization
+      description: '新增组织'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationAddOrganizationReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/v1/organization/deleteOrganization':
+    post:
+      tags:
+        - organization
+      description: '删除组织'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationDeleteOrganizationReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/v1/organization/editOrganization':
+    post:
+      tags:
+        - organization
+      description: '编辑组织'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationEditOrganizationReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/v1/organization/listOrganization':
+    post:
+      tags:
+        - organization
+      description: '组织列表'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationListOrganizationRsp'
+  '/v1/remark/addRemark':
+    post:
+      tags:
+        - remark
+      description: '添加备注'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RemarkAddRemarkReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/v1/remark/listRemark':
+    post:
+      tags:
+        - remark
+      description: '备注列表'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RemarkListRemarkReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RemarkListRemarkRsp'
+  '/v1/remark/deleteRemark':
+    post:
+      tags:
+        - remark
+      description: '删除备注'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RemarkDeleteRemarkReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/v1/role/addRole':
+    post:
+      tags:
+        - role
+      description: '新增角色'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleAddRoleReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/v1/role/deleteRole':
+    post:
+      tags:
+        - role
+      description: '删除角色'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleDeleteRoleReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/v1/role/editRole':
+    post:
+      tags:
+        - role
+      description: '编辑角色'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleEditRoleReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/v1/role/listPermission':
+    post:
+      tags:
+        - role
+      description: '权限列表'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleListPermissionReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleListPermissionRsp'
+  '/v1/role/listRole':
+    post:
+      tags:
+        - role
+      description: '角色列表'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleListRoleReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleListRoleRsp'
+  '/v1/user/addUser':
+    post:
+      tags:
+        - user
+      description: '新增用户'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserAddUserReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/v1/user/changePassword':
+    post:
+      tags:
+        - user
+      description: '修改密码'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserChangePasswordReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/v1/user/deleteUser':
+    post:
+      tags:
+        - user
+      description: '删除用户'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserDeleteUserReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/v1/user/editUser':
+    post:
+      tags:
+        - user
+      description: '编辑用户'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserEditUserReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/v1/user/getUser':
+    post:
+      tags:
+        - user
+      description: '获取用户信息'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserGetUserReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserGetUserRsp'
+  '/v1/user/listUser':
+    post:
+      tags:
+        - user
+      description: '用户列表'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserListUserReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserListUserRsp'
+  '/v1/user/login':
+    post:
+      tags:
+        - user
+      description: '登录'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLoginReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserLoginRsp'
+  '/v1/user/logout':
+    post:
+      tags:
+        - user
+      description: '退出登录'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLogoutReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/v1/voice/listVoice':
+    post:
+      tags:
+        - voice
+      description: '语音列表'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoiceListVoiceReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoiceListVoiceRsp'
+  '/v1/voice/listVoiceOptions':
+    post:
+      tags:
+        - voice
+      description: '语音列表选项'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoiceListVoiceOptionsRsp'
+  '/v1/voice/detailVoice':
+    post:
+      tags:
+        - voice
+      description: '音频详情'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoiceDetailVoiceReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoiceDetailVoiceRsp'
+  '/v1/voice/detailVoiceInfo':
+    post:
+      tags:
+        - voice
+      description: '音频详情信息，内部服务'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoiceDetailVoiceInfoReq'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoiceDetailVoiceInfoRsp'
+  '/v1/file/upload':
+    post:
+      tags:
+        - file
+      description: '上传'
+      parameters:
+        - name: file_type
+          in: query
+          required: true
+          description: '文件类型'
+          schema:
+            type: string
+            example: ''
+    
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: |
+            响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileUploadResponse'
+      requestBody:
+        description: '上传文件'
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                file2:
+                  type: string
+                  format: binary
+  
+  
+  '/v1/file/downloadWav':
+    get:
+      tags:
+        - file
+      description: '下载'
+      parameters:
+        - name: start
+          in: query
+          description: '开始时间'
+          schema:
+            type: integer
+            example: 0
+            format: int64
+        - name: end
+          in: query
+          description: '结束时间'
+          schema:
+            type: integer
+            example: 0
+            format: int64
+        - name: file_id
+          in: query
+          description: '文件id'
+          schema:
+            type: string
+            example: ''
+    
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: '二进制文件'
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+
+  
+  '/v1/file/exportDoc':
+    get:
+      tags:
+        - file
+      description: '导出报告'
+      parameters:
+        - name: record_id
+          in: query
+          description: '记录id'
+          schema:
+            type: string
+            example: ''
+        - name: type
+          in: query
+          description: '报告类型'
+          schema:
+            type: string
+            example: ''
+            enum: [OFFLINE_TRANS,AUDIO_ANALYZE]
+    
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: '二进制文件'
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+
+  
+  
+components:
+  schemas:
+    AlarmAddAlarmRemarkRequest:
+      type: object
+      properties:
+        alarm_id:
+          type: string
+          example: ''
+          description: "告警记录id"
+          
+      
+        remark:
+          type: string
+          example: ''
+          description: "备注信息"
+          
+      
+        user_id:
+          type: string
+          example: ''
+          description: "用户id"
+          
+      
+      xml: 
+        name: AlarmAddAlarmRemarkRequest
+    
+    AlarmAddTaskRequest:
+      type: object
+      properties:
+        task_name:
+          type: string
+          example: ''
+          description: "告警任务名"
+          
+      
+        user_id:
+          type: string
+          example: ''
+          description: "用户id"
+          
+      
+        task_type:
+          type: string
+          example: ''
+          description: "布控类型"
+          
+      
+        task_content:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/MongoDetailMonitorContent'
+          description: "布控内容"
+          
+      
+        start_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "布控开始时间"
+          
+      
+        end_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "布控结束时间"
+          
+      
+        call_type:
+          type: string
+          example: ''
+          description: "布控主叫或被叫"
+          
+      
+        phone_list:
+          type: array
+          example: null
+          items: 
+            type: string
+            example: ''
+          description: "布控号码"
+          
+      
+        case_list:
+          type: array
+          example: null
+          items: 
+            type: string
+            example: ''
+          description: "布控案件"
+          
+      
+        area_list:
+          type: array
+          example: null
+          items: 
+            type: string
+            example: ''
+          description: "布控归属地"
+          
+      
+      xml: 
+        name: AlarmAddTaskRequest
+    
+    AlarmAddTaskResponse:
+      type: object
+      properties:
+        task_id:
+          type: string
+          example: ''
+          description: "告警任务id"
+          
+      
+      xml: 
+        name: AlarmAddTaskResponse
+    
+    AlarmAlarmStatus:
+      type: object
+      properties:
+        user_id:
+          type: string
+          example: ''
+          description: "用户id"
+          
+      
+        task_id:
+          type: string
+          example: ''
+          description: "告警任务id"
+          
+      
+        alarm_id:
+          type: string
+          example: ''
+          description: "告警记录id"
+          
+      
+        create_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "创建时间"
+          
+      
+      xml: 
+        name: AlarmAlarmStatus
+    
+    AlarmCancelTaskRequest:
+      type: object
+      properties:
+        task_id:
+          type: string
+          example: ''
+          description: "告警任务id"
+          
+      
+        user_id:
+          type: string
+          example: ''
+          description: "用户id"
+          
+      
+      xml: 
+        name: AlarmCancelTaskRequest
+    
+    AlarmDeleteTaskRequest:
+      type: object
+      properties:
+        task_id:
+          type: string
+          example: ''
+          description: "告警任务id"
+          
+      
+        user_id:
+          type: string
+          example: ''
+          description: "用户id"
+          
+      
+      xml: 
+        name: AlarmDeleteTaskRequest
+    
+    AlarmDetailAlarmRequest:
+      type: object
+      properties:
+        alarm_id:
+          type: string
+          example: ''
+          description: "告警记录id"
+          
+      
+        user_id:
+          type: string
+          example: ''
+          description: "用户id"
+          
+      
+      xml: 
+        name: AlarmDetailAlarmRequest
+    
+    AlarmDetailAlarmResponse:
+      type: object
+      properties:
+        task_id:
+          type: string
+          example: ''
+          description: "告警任务id"
+          
+      
+        task_type:
+          type: string
+          example: ''
+          description: "布控类型"
+          
+      
+        alarm_remark:
+          type: string
+          example: ''
+          description: "告警记录备注"
+          
+      
+        file_id:
+          type: string
+          example: ''
+          description: "命中的告警文件id"
+          
+      
+        sex:
+          type: string
+          example: ''
+          description: "性别"
+          
+      
+        case_remark:
+          type: string
+          example: ''
+          description: "案件备注"
+          
+      
+        detail:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/MongoAlarmRecordDetail'
+          description: "命中的告警详情"
+          
+      
+      xml: 
+        name: AlarmDetailAlarmResponse
+    
+    AlarmDetailAlarmStatusRequest:
+      type: object
+      properties:
+        alarm_id_list:
+          type: array
+          example: null
+          items: 
+            type: string
+            example: ''
+          description: "告警记录id"
+          
+      
+      xml: 
+        name: AlarmDetailAlarmStatusRequest
+    
+    AlarmDetailAlarmStatusResponse:
+      type: object
+      properties:
+        detail:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/AlarmAlarmStatus'
+          description: "查看告警记录详情的状态"
+          
+      
+      xml: 
+        name: AlarmDetailAlarmStatusResponse
+    
+    AlarmListAlarmRecordOptionsReq:
+      type: object
+      properties:
+        task_id:
+          type: string
+          example: ''
+          description: "告警任务id"
+          
+      
+      xml: 
+        name: AlarmListAlarmRecordOptionsReq
+    
+    AlarmListAlarmRecordOptionsRsp:
+      type: object
+      properties:
+        keyword_option:
+          type: object
+          additionalProperties: {}
+          description: "告警任务的关键词选项"
+          
+      
+      xml: 
+        name: AlarmListAlarmRecordOptionsRsp
+    
+    AlarmListAlarmRequest:
+      type: object
+      properties:
+        task_id:
+          type: string
+          example: ''
+          description: "告警任务id"
+          
+      
+        phone_no:
+          type: string
+          example: ''
+          description: "告警号码"
+          
+      
+        case_no:
+          type: string
+          example: ''
+          description: "案件编号"
+          
+      
+        case_name:
+          type: string
+          example: ''
+          description: "案件名称"
+          
+      
+        start_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "布控开始时间"
+          
+      
+        end_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "布控结束时间"
+          
+      
+        keyword:
+          type: string
+          example: ''
+          description: "布控内容"
+          
+      
+        offset:
+          type: integer
+          example: 0
+          format: int64
+          description: "偏移量"
+          
+      
+        size:
+          type: integer
+          example: 0
+          format: int64
+          description: "分页个数"
+          
+      
+        order_fields:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/DefineOrderField'
+          description: "排序"
+          
+      
+      xml: 
+        name: AlarmListAlarmRequest
+    
+    AlarmListAlarmResponse:
+      type: object
+      properties:
+        alarm_list:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/EsElasticSearchAlarmRecord'
+          description: "告警记录列表"
+          
+      
+        total:
+          type: integer
+          example: 0
+          format: int64
+          description: "总数"
+          
+      
+      xml: 
+        name: AlarmListAlarmResponse
+    
+    AlarmListTaskRecordOptionsRsp:
+      type: object
+      properties:
+        task_status_option:
+          type: object
+          additionalProperties: {}
+          description: "告警任务状态选项"
+          
+      
+        task_type_option:
+          type: object
+          additionalProperties: {}
+          description: "布控类型选项"
+          
+      
+        keyword_option:
+          type: object
+          additionalProperties: {}
+          description: "告警任务的所有关键词选项"
+          
+      
+        voice_option:
+          type: object
+          additionalProperties: {}
+          description: "告警任务的短音频类型"
+          
+      
+      xml: 
+        name: AlarmListTaskRecordOptionsRsp
+    
+    AlarmListTaskRequest:
+      type: object
+      properties:
+        task_name:
+          type: string
+          example: ''
+          description: "任务名称"
+          
+      
+        task_type:
+          type: string
+          example: ''
+          description: "布控类型"
+          
+      
+        task_status:
+          type: string
+          example: ''
+          description: "任务状态"
+          
+      
+        start_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "布控开始时间"
+          
+      
+        end_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "布控结束时间"
+          
+      
+        keyword:
+          type: string
+          example: ''
+          description: "布控内容"
+          
+      
+        offset:
+          type: integer
+          example: 0
+          format: int64
+          description: "偏移量"
+          
+      
+        size:
+          type: integer
+          example: 0
+          format: int64
+          description: "分页个数"
+          
+      
+      xml: 
+        name: AlarmListTaskRequest
+    
+    AlarmListTaskResponse:
+      type: object
+      properties:
+        task_list:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/AlarmTaskItem'
+          description: "任务列表"
+          
+      
+        total:
+          type: integer
+          example: 0
+          format: int64
+          description: "总数"
+          
+      
+      xml: 
+        name: AlarmListTaskResponse
+    
+    AlarmTaskItem:
+      type: object
+      properties:
+        task_id:
+          type: string
+          example: ''
+          description: "告警任务id"
+          
+      
+        task_name:
+          type: string
+          example: ''
+          description: "告警任务名"
+          
+      
+        user_id:
+          type: string
+          example: ''
+          description: "用户id"
+          
+      
+        task_type:
+          type: string
+          example: ''
+          description: "布控类型"
+          
+      
+        task_content:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/MongoDetailMonitorContent'
+          description: "布控内容"
+          
+      
+        start_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "布控开始时间"
+          
+      
+        end_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "布控结束时间"
+          
+      
+        call_type:
+          type: string
+          example: ''
+          description: "布控主叫或被叫"
+          
+      
+        phone_list:
+          type: array
+          example: null
+          items: 
+            type: string
+            example: ''
+          description: "布控号码"
+          
+      
+        case_list:
+          type: array
+          example: null
+          items: 
+            type: string
+            example: ''
+          description: "布控案件"
+          
+      
+        area_list:
+          type: array
+          example: null
+          items: 
+            type: string
+            example: ''
+          description: "布控归属地"
+          
+      
+        cancel:
+          type: boolean
+          example: false
+          description: "是否撤销"
+          
+      
+        task_status:
+          type: string
+          example: ''
+          description: "任务状态"
+          
+      
+        alarm_count:
+          type: integer
+          example: 0
+          format: int64
+          description: "告警总数"
+          
+      
+        recent_alarm_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "最近告警时间"
+          
+      
+      xml: 
+        name: AlarmTaskItem
+    
+    AudioAddAudioRequest:
+      type: object
+      properties:
+        user_id:
+          type: string
+          example: ''
+          description: "用户id"
+          
+      
+        language:
+          type: string
+          example: ''
+          description: "语种"
+          
+      
+        file_id:
+          type: string
+          example: ''
+          description: "文件id"
+          
+      
+        file_name:
+          type: string
+          example: ''
+          description: "文件名称"
+          
+      
+        keyword:
+          type: string
+          example: ''
+          description: "音频关键词"
+          
+      
+        case_no:
+          type: string
+          example: ''
+          description: "案件编号，可以为空"
+          
+      
+        case_name:
+          type: string
+          example: ''
+          description: "案件名称，可以为空"
+          
+      
+        sex:
+          type: string
+          example: ''
+          description: "性别，可以为空"
+          
+      
+        phone_city:
+          type: string
+          example: ''
+          description: "号码归属地，可以为空"
+          
+      
+        phone_no:
+          type: string
+          example: ''
+          description: "号码，可以为空"
+          
+      
+        case_remark:
+          type: string
+          example: ''
+          description: "备注，可以为空"
+          
+      
+      xml: 
+        name: AudioAddAudioRequest
+    
+    AudioAddAudioResponse:
+      type: object
+      properties:
+        audio_id:
+          type: string
+          example: ''
+          description: "语音库音频id"
+          
+      
+      xml: 
+        name: AudioAddAudioResponse
+    
+    AudioAnalyzeAddAudioAnalyzeReq:
+      type: object
+      properties:
+        user_id:
+          type: string
+          example: ''
+          description: "用户id"
+          
+      
+        language:
+          type: string
+          example: ''
+          description: "语种方言,指定目标音频的语种"
+          
+      
+        type:
+          type: string
+          example: ''
+          description: "音频类型，本地上传或者从语音库选择"
+          
+      
+        file:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/AudioAnalyzeFileInfo'
+          description: "短音频和目标音频的信息"
+          
+      
+      xml: 
+        name: AudioAnalyzeAddAudioAnalyzeReq
+    
+    AudioAnalyzeAddAudioAnalyzeRsp:
+      type: object
+      properties:
+        record_id:
+          type: string
+          example: ''
+          description: "工具中心创建的记录id"
+          
+      
+        user_id:
+          type: string
+          example: ''
+          description: "用户id"
+          
+      
+        language:
+          type: string
+          example: ''
+          description: "语种方言,指定目标音频的语种"
+          
+      
+        detail:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/MongoVoiceRecordDetail'
+          description: "搜索结果的详情"
+          
+      
+      xml: 
+        name: AudioAnalyzeAddAudioAnalyzeRsp
+    
+    AudioAnalyzeAudioTupple:
+      type: object
+      properties:
+        audio_id:
+          type: string
+          example: ''
+          description: "短音频的file_id"
+          
+      
+        keyword:
+          type: string
+          example: ''
+          description: "短音频的关键词"
+          
+      
+        file_name:
+          type: string
+          example: ''
+          description: "结果音频名称"
+          
+      
+      xml: 
+        name: AudioAnalyzeAudioTupple
+    
+    AudioAnalyzeDetailAudioAnalyzeReq:
+      type: object
+      properties:
+        record_id:
+          type: string
+          example: ''
+          description: "工具中心创建的记录id"
+          
+      
+      xml: 
+        name: AudioAnalyzeDetailAudioAnalyzeReq
+    
+    AudioAnalyzeDetailAudioAnalyzeRsp:
+      type: object
+      properties:
+        detail:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/MongoVoiceRecordDetail'
+          description: "搜索结果的详情"
+          
+      
+        create_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "上传时间"
+          
+      
+      xml: 
+        name: AudioAnalyzeDetailAudioAnalyzeRsp
+    
+    AudioAnalyzeFileInfo:
+      type: object
+      properties:
+        file_name:
+          type: string
+          example: ''
+          description: "结果音频名称"
+          
+      
+        file_id:
+          type: string
+          example: ''
+          description: "以音搜音的结果音频"
+          
+      
+        audio:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/AudioAnalyzeAudioTupple'
+          description: "短音频的信息"
+          
+      
+      xml: 
+        name: AudioAnalyzeFileInfo
+    
+    AudioAnalyzeListLanguageOptionsRsp:
+      type: object
+      properties:
+        language_option:
+          type: object
+          additionalProperties: {}
+          description: "语种方言选项"
+          
+      
+        voice_option:
+          type: object
+          additionalProperties: {}
+          description: "告警任务的短音频类型"
+          
+      
+      xml: 
+        name: AudioAnalyzeListLanguageOptionsRsp
+    
+    AudioAudioItem:
+      type: object
+      properties:
+        audio_id:
+          type: string
+          example: ''
+          description: "语音库音频id"
+          
+      
+        user_id:
+          type: string
+          example: ''
+          description: "用户id"
+          
+      
+        language:
+          type: string
+          example: ''
+          description: "语种"
+          
+      
+        file_id:
+          type: string
+          example: ''
+          description: "文件id"
+          
+      
+        file_name:
+          type: string
+          example: ''
+          description: "文件名称"
+          
+      
+        keyword:
+          type: string
+          example: ''
+          description: "音频关键词"
+          
+      
+        case_no:
+          type: string
+          example: ''
+          description: "案件编号"
+          
+      
+        case_name:
+          type: string
+          example: ''
+          description: "案件名称"
+          
+      
+        sex:
+          type: string
+          example: ''
+          description: "性别"
+          
+      
+        phone_city:
+          type: string
+          example: ''
+          description: "号码归属地"
+          
+      
+        phone_no:
+          type: string
+          example: ''
+          description: "号码"
+          
+      
+        case_remark:
+          type: string
+          example: ''
+          description: "备注"
+          
+      
+        update_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "更新时间"
+          
+      
+      xml: 
+        name: AudioAudioItem
+    
+    AudioDeleteAudioRequest:
+      type: object
+      properties:
+        user_id:
+          type: string
+          example: ''
+          description: "用户id"
+          
+      
+        audio_id:
+          type: string
+          example: ''
+          description: "语音库记录id"
+          
+      
+      xml: 
+        name: AudioDeleteAudioRequest
+    
+    AudioDetailAudioRequest:
+      type: object
+      properties:
+        audio_id:
+          type: string
+          example: ''
+          description: "语音库记录id"
+          
+      
+      xml: 
+        name: AudioDetailAudioRequest
+    
+    AudioDetailAudioResponse:
+      type: object
+      properties:
+        item:
+          $ref: '#/components/schemas/AudioAudioItem'
+          description: "语音库记录的详情"
+          
+      
+      xml: 
+        name: AudioDetailAudioResponse
+    
+    AudioEditAudioRequest:
+      type: object
+      properties:
+        audio_id:
+          type: string
+          example: ''
+          description: "告警关键词音频id"
+          
+      
+        user_id:
+          type: string
+          example: ''
+          description: "用户id"
+          
+      
+        language:
+          type: string
+          example: ''
+          description: "语种"
+          
+      
+        file_id:
+          type: string
+          example: ''
+          description: "文件id"
+          
+      
+        file_name:
+          type: string
+          example: ''
+          description: "文件名称"
+          
+      
+        keyword:
+          type: string
+          example: ''
+          description: "音频关键词"
+          
+      
+        case_no:
+          type: string
+          example: ''
+          description: "案件编号"
+          
+      
+        case_name:
+          type: string
+          example: ''
+          description: "案件名称"
+          
+      
+        sex:
+          type: string
+          example: ''
+          description: "性别"
+          
+      
+        phone_city:
+          type: string
+          example: ''
+          description: "号码归属地"
+          
+      
+        phone_no:
+          type: string
+          example: ''
+          description: "号码"
+          
+      
+        case_remark:
+          type: string
+          example: ''
+          description: "备注"
+          
+      
+      xml: 
+        name: AudioEditAudioRequest
+    
+    AudioEditAudioResponse:
+      type: object
+      properties:
+        audio_id:
+          type: string
+          example: ''
+          description: "音频id"
+          
+      
+      xml: 
+        name: AudioEditAudioResponse
+    
+    AudioListAudioRecordOptionsRsp:
+      type: object
+      properties:
+        number_option:
+          type: object
+          additionalProperties: {}
+          description: "主被叫选项"
+          
+      
+        gender_option:
+          type: object
+          additionalProperties: {}
+          description: "性别选项"
+          
+      
+        language_option:
+          type: object
+          additionalProperties: {}
+          description: "语种方言选项"
+          
+      
+      xml: 
+        name: AudioListAudioRecordOptionsRsp
+    
+    AudioListAudioRequest:
+      type: object
+      properties:
+        audio_id_list:
+          type: array
+          example: null
+          items: 
+            type: string
+            example: ''
+          description: "_id列表"
+          
+      
+        language:
+          type: string
+          example: ''
+          description: "语种"
+          
+      
+        keyword:
+          type: string
+          example: ''
+          description: "音频关键词"
+          
+      
+        case_no:
+          type: string
+          example: ''
+          description: "案件编号"
+          
+      
+        case_name:
+          type: string
+          example: ''
+          description: "案件名称"
+          
+      
+        sex:
+          type: string
+          example: ''
+          description: "性别"
+          
+      
+        phone_city:
+          type: string
+          example: ''
+          description: "号码归属地"
+          
+      
+        phone_no:
+          type: string
+          example: ''
+          description: "号码"
+          
+      
+        start_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "开始时间"
+          
+      
+        end_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "结束时间"
+          
+      
+        offset:
+          type: integer
+          example: 0
+          format: int64
+          description: "偏移量"
+          
+      
+        size:
+          type: integer
+          example: 0
+          format: int64
+          description: "分页个数"
+          
+      
+      xml: 
+        name: AudioListAudioRequest
+    
+    AudioListAudioResponse:
+      type: object
+      properties:
+        audio_list:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/AudioAudioItem'
+          description: "任务列表"
+          
+      
+        total:
+          type: integer
+          example: 0
+          format: int64
+          description: "总数"
+          
+      
+      xml: 
+        name: AudioListAudioResponse
+    
+    CallRecordCallRecord:
+      type: object
+      properties:
+        call_serial:
+          type: string
+          example: ''
+          description: "通话序列号"
+          
+      
+        call_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "通话时间"
+          
+      
+        origin_info:
+          $ref: '#/components/schemas/CallRecordVoiceBaseInfo'
+          description: "主叫信息"
+          
+      
+        relate_info:
+          $ref: '#/components/schemas/CallRecordVoiceBaseInfo'
+          description: "被叫信息"
+          
+      
+        case_info:
+          $ref: '#/components/schemas/CallRecordCaseInfo'
+          description: "案件信息"
+          
+      
+        status:
+          type: boolean
+          example: false
+          description: "辩听状态"
+          
+      
+      xml: 
+        name: CallRecordCallRecord
+    
+    CallRecordCaseInfo:
+      type: object
+      properties:
+        case_no:
+          type: string
+          example: ''
+          description: "案件编号"
+          
+      
+        case_name:
+          type: string
+          example: ''
+          description: "案件名称"
+          
+      
+        case_remark:
+          type: string
+          example: ''
+          description: "案件备注"
+          
+      
+      xml: 
+        name: CallRecordCaseInfo
+    
+    CallRecordDetailCallRecordReq:
+      type: object
+      required:
+        - call_serial
+      
+      properties:
+        user_id:
+          type: string
+          example: ''
+          description: "用户ID"
+          
+      
+        call_serial:
+          type: string
+          example: ''
+          description: "通话序列号"
+          
+      
+      xml: 
+        name: CallRecordDetailCallRecordReq
+    
+    CallRecordDetailCallRecordRsp:
+      type: object
+      properties:
+        call_serial:
+          type: string
+          example: ''
+          description: "通话序列号"
+          
+      
+        call_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "通话时间"
+          
+      
+        origin_info:
+          $ref: '#/components/schemas/CallRecordVoiceInfo'
+          description: "主叫信息"
+          
+      
+        relate_info:
+          $ref: '#/components/schemas/CallRecordVoiceInfo'
+          description: "被叫信息"
+          
+      
+        case_info:
+          $ref: '#/components/schemas/CallRecordCaseInfo'
+          description: "案件信息"
+          
+      
+      xml: 
+        name: CallRecordDetailCallRecordRsp
+    
+    CallRecordDialogueAsrInfo:
+      type: object
+      properties:
+        text:
+          type: string
+          example: ''
+          description: "文本"
+          
+      
+        begin_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "开始时间"
+          
+      
+        end_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "结束时间"
+          
+      
+      xml: 
+        name: CallRecordDialogueAsrInfo
+    
+    CallRecordDialogueTranslationInfo:
+      type: object
+      properties:
+        text:
+          type: string
+          example: ''
+          description: "文本"
+          
+      
+        begin_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "开始时间"
+          
+      
+        end_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "结束时间"
+          
+      
+      xml: 
+        name: CallRecordDialogueTranslationInfo
+    
+    CallRecordEntityInfo:
+      type: object
+      properties:
+        entity_id:
+          type: integer
+          example: 0
+          format: int64
+          description: "实体id"
+          
+      
+        entity:
+          type: string
+          example: ''
+          description: "实体"
+          
+      
+        text:
+          type: string
+          example: ''
+          description: "文本"
+          
+      
+      xml: 
+        name: CallRecordEntityInfo
+    
+    CallRecordListCallRecordOptionsRsp:
+      type: object
+      properties:
+        number_option:
+          type: object
+          additionalProperties: {}
+          description: "主被叫选项"
+          
+      
+        gender_option:
+          type: object
+          additionalProperties: {}
+          description: "性别选项"
+          
+      
+        language_option:
+          type: object
+          additionalProperties: {}
+          description: "语种方言选项"
+          
+      
+        transfer_status_option:
+          type: object
+          additionalProperties: {}
+          description: "转写状态选项"
+          
+      
+      xml: 
+        name: CallRecordListCallRecordOptionsRsp
+    
+    CallRecordListCallRecordReq:
+      type: object
+      properties:
+        user_id:
+          type: string
+          example: ''
+          description: "用户ID"
+          
+      
+        number_option:
+          type: string
+          example: ''
+          enum: [ORIGIN,RELATE]
+          description: "号码选项"
+          
+      
+        number:
+          type: string
+          example: ''
+          description: "号码"
+          
+      
+        attribution_option:
+          type: string
+          example: ''
+          enum: [ORIGIN,RELATE]
+          description: "归属地选项"
+          
+      
+        attribution:
+          type: string
+          example: ''
+          description: "归属地"
+          
+      
+        case_no:
+          type: string
+          example: ''
+          description: "案件编号"
+          
+      
+        case_name:
+          type: string
+          example: ''
+          description: "案件名称"
+          
+      
+        gender_option:
+          type: string
+          example: ''
+          enum: [ORIGIN,RELATE]
+          description: "性别选项"
+          
+      
+        gender:
+          type: string
+          example: ''
+          enum: [MALE,FEMALE,UNKNOWN]
+          description: "性别"
+          
+      
+        language_option:
+          type: string
+          example: ''
+          enum: [ORIGIN,RELATE]
+          description: "语种选项"
+          
+      
+        language:
+          type: string
+          example: ''
+          description: "语种"
+          
+      
+        transfer_status_option:
+          type: string
+          example: ''
+          enum: [ORIGIN,RELATE]
+          description: "转写状态选项"
+          
+      
+        transfer_status:
+          type: string
+          example: ''
+          description: "转写状态"
+          
+      
+        call_time_begin:
+          type: integer
+          example: 0
+          format: int64
+          description: "通话时间-开始"
+          
+      
+        call_time_end:
+          type: integer
+          example: 0
+          format: int64
+          description: "通话时间-结束"
+          
+      
+        offset:
+          type: integer
+          example: 0
+          format: int64
+          description: "偏移量"
+          
+      
+        size:
+          type: integer
+          example: 0
+          format: int64
+          description: "个数"
+          
+      
+        order_fields:
+          type: array
+          example: [{"key":"call_time","direction":"DESC"}]
+          items: 
+            $ref: '#/components/schemas/DefineOrderField'
+          description: "排序"
+          
+      
+      xml: 
+        name: CallRecordListCallRecordReq
+    
+    CallRecordListCallRecordRsp:
+      type: object
+      properties:
+        call_record_list:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/CallRecordCallRecord'
+          description: "通话记录列表"
+          
+      
+        total:
+          type: integer
+          example: 0
+          format: int64
+          description: "总数"
+          
+      
+        actual_total:
+          type: integer
+          example: 0
+          format: int64
+          description: "实际总数"
+          
+      
+      xml: 
+        name: CallRecordListCallRecordRsp
+    
+    CallRecordVoiceBaseInfo:
+      type: object
+      properties:
+        number:
+          type: string
+          example: ''
+          description: "号码"
+          
+      
+        attribution:
+          type: string
+          example: ''
+          description: "归属地"
+          
+      
+        gender:
+          type: string
+          example: ''
+          description: "性别"
+          
+      
+        language:
+          type: string
+          example: ''
+          description: "语种"
+          
+      
+        transfer_status:
+          type: string
+          example: ''
+          description: "转写状态"
+          
+      
+        transfer_error:
+          type: string
+          example: ''
+          description: "转写错误信息"
+          
+      
+      xml: 
+        name: CallRecordVoiceBaseInfo
+    
+    CallRecordVoiceInfo:
+      type: object
+      properties:
+        number:
+          type: string
+          example: ''
+          description: "号码"
+          
+      
+        attribution:
+          type: string
+          example: ''
+          description: "归属地"
+          
+      
+        gender:
+          type: string
+          example: ''
+          description: "性别"
+          
+      
+        language:
+          type: string
+          example: ''
+          description: "语种"
+          
+      
+        transfer_status:
+          type: string
+          example: ''
+          description: "转写状态"
+          
+      
+        transfer_error:
+          type: string
+          example: ''
+          description: "转写错误信息"
+          
+      
+        file_id:
+          type: string
+          example: ''
+          description: "文件ID"
+          
+      
+        file_name:
+          type: string
+          example: ''
+          description: "文件名"
+          
+      
+        dialogue_asr_list:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/CallRecordDialogueAsrInfo'
+          description: "对话列表"
+          
+      
+        translation_language:
+          type: string
+          example: ''
+          description: "翻译语种"
+          
+      
+        dialogue_translation_list:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/CallRecordDialogueTranslationInfo'
+          description: "译文列表"
+          
+      
+        entity_list:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/CallRecordEntityInfo'
+          description: "实体列表"
+          
+      
+        keyword_list:
+          type: array
+          example: null
+          items: 
+            type: string
+            example: ''
+          description: "关键词列表"
+          
+      
+      xml: 
+        name: CallRecordVoiceInfo
+    
+    DefineOrderField:
+      type: object
+      properties:
+        key:
+          type: string
+          example: ''
+          description: "字段"
+          
+      
+        direction:
+          type: string
+          example: ''
+          enum: [ASC,DESC]
+          description: "排序方向"
+          
+      
+      xml: 
+        name: DefineOrderField
+    
+    EsElasticSearchAlarmRecord:
+      type: object
+      properties:
+        task_id:
+          type: string
+          example: ''
+      
+        alarm_id:
+          type: string
+          example: ''
+      
+        file_id:
+          type: string
+          example: ''
+      
+        phone_no:
+          type: string
+          example: ''
+      
+        call_type:
+          type: string
+          example: ''
+      
+        task_type:
+          type: string
+          example: ''
+      
+        keyword:
+          type: array
+          example: null
+          items: 
+            type: string
+            example: ''
+      
+        case_no:
+          type: string
+          example: ''
+      
+        case_name:
+          type: string
+          example: ''
+      
+        phone_city:
+          type: string
+          example: ''
+      
+        alarm_time:
+          type: integer
+          example: 0
+          format: int64
+      
+        call_time:
+          type: integer
+          example: 0
+          format: int64
+      
+      xml: 
+        name: EsElasticSearchAlarmRecord
+    
+    FileGetWaveFormRequest:
+      type: object
+      properties:
+        file_id:
+          type: string
+          example: ''
+          description: "文件id"
+          
+      
+      xml: 
+        name: FileGetWaveFormRequest
+    
+    FileGetWaveFormResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          example: null
+          items: 
+            type: number
+            example: 0
+            format: double
+          description: "波形图"
+          
+      
+      xml: 
+        name: FileGetWaveFormResponse
+    
+    FileSaveSliceRequest:
+      type: object
+      required:
+        - file_id
+        - end
+      
+      properties:
+        file_id:
+          type: string
+          example: ''
+          description: "文件id"
+          
+      
+        start:
+          type: integer
+          example: 0
+          format: int64
+          description: "开始时间"
+          
+      
+        end:
+          type: integer
+          example: 0
+          format: int64
+          description: "结束时间"
+          
+      
+      xml: 
+        name: FileSaveSliceRequest
+    
+    FileSaveSliceResponse:
+      type: object
+      properties:
+        file_id:
+          type: string
+          example: ''
+          description: "文件id"
+          
+      
+        waveform_id:
+          type: string
+          example: ''
+          description: "波形图id"
+          
+      
+        duration:
+          type: integer
+          example: 0
+          format: int64
+          description: "文件时长"
+          
+      
+      xml: 
+        name: FileSaveSliceResponse
+    
+    FileUploadResponse:
+      type: object
+      properties:
+        file_id:
+          type: string
+          example: ''
+          description: "文件id"
+          
+      
+        duration:
+          type: integer
+          example: 0
+          format: int64
+          description: "文件时长"
+          
+      
+      xml: 
+        name: FileUploadResponse
+    
+    HomeCityCount:
+      type: object
+      properties:
+        city_code:
+          type: string
+          example: ''
+          description: "城市编号"
+          
+      
+        city_name:
+          type: string
+          example: ''
+          description: "城市名称"
+          
+      
+        voice_count:
+          type: integer
+          example: 0
+          format: int64
+          description: "语音总数"
+          
+      
+        number_count:
+          type: integer
+          example: 0
+          format: int64
+          description: "号码总数"
+          
+      
+      xml: 
+        name: HomeCityCount
+    
+    HomeDataAccessInfo:
+      type: object
+      properties:
+        data_name:
+          type: string
+          example: ''
+          description: "数据名称"
+          
+      
+        num_list:
+          type: array
+          example: null
+          items: 
+            type: integer
+            example: 0
+            format: int64
+          description: "数量列表"
+          
+      
+      xml: 
+        name: HomeDataAccessInfo
+    
+    HomeDataAccessTrendReq:
+      type: object
+      properties:
+        start_time:
+          type: string
+          example: '0001-01-01T00:00:00Z'
+          format: 'date-time'
+          description: "开始时间"
+          
+      
+        end_time:
+          type: string
+          example: '0001-01-01T00:00:00Z'
+          format: 'date-time'
+          description: "结束时间"
+          
+      
+      xml: 
+        name: HomeDataAccessTrendReq
+    
+    HomeDataAccessTrendRsp:
+      type: object
+      properties:
+        axis:
+          type: array
+          example: null
+          items: 
+            type: string
+            example: '0001-01-01T00:00:00Z'
+            format: 'date-time'
+          description: "轴"
+          
+      
+        data_list:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/HomeDataAccessInfo'
+          description: "数据列表"
+          
+      
+      xml: 
+        name: HomeDataAccessTrendRsp
+    
+    HomeLangCountItem:
+      type: object
+      properties:
+        lang:
+          type: string
+          example: ''
+          description: "语种"
+          
+      
+        count:
+          type: integer
+          example: 0
+          format: int64
+          description: "总数"
+          
+      
+      xml: 
+        name: HomeLangCountItem
+    
+    HomeLangProportionRsp:
+      type: object
+      properties:
+        lang_list:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/HomeLangCountItem'
+          description: "语种列表"
+          
+      
+      xml: 
+        name: HomeLangProportionRsp
+    
+    HomeProvCityCountRsp:
+      type: object
+      properties:
+        prov_city_count_list:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/HomeProvCount'
+          description: "省市统计列表"
+          
+      
+      xml: 
+        name: HomeProvCityCountRsp
+    
+    HomeProvCount:
+      type: object
+      properties:
+        prov_code:
+          type: string
+          example: ''
+          description: "省编号"
+          
+      
+        prov_name:
+          type: string
+          example: ''
+          description: "省名称"
+          
+      
+        voice_count:
+          type: integer
+          example: 0
+          format: int64
+          description: "语音总数"
+          
+      
+        number_count:
+          type: integer
+          example: 0
+          format: int64
+          description: "号码总数"
+          
+      
+        city_count_list:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/HomeCityCount'
+          description: "城市统计列表"
+          
+      
+      xml: 
+        name: HomeProvCount
+    
+    HomeStoreInfoRsp:
+      type: object
+      properties:
+        voice_num:
+          type: integer
+          example: 0
+          format: int64
+          description: "语音条数"
+          
+      
+        number_num:
+          type: integer
+          example: 0
+          format: int64
+          description: "号码个数"
+          
+      
+        access_num:
+          type: integer
+          example: 0
+          format: int64
+          description: "接入数据"
+          
+      
+        transferred_num:
+          type: integer
+          example: 0
+          format: int64
+          description: "已转写条数"
+          
+      
+        not_transfer_num:
+          type: integer
+          example: 0
+          format: int64
+          description: "未转写条数"
+          
+      
+        add_num:
+          type: integer
+          example: 0
+          format: int64
+          description: "新增条数"
+          
+      
+      xml: 
+        name: HomeStoreInfoRsp
+    
+    MongoAlarmRecordDetail:
+      type: object
+      properties:
+        audio_type:
+          type: string
+          example: ''
+          description: "本地或语音库"
+          
+      
+        audio_id:
+          type: string
+          example: ''
+          description: "告警关键词音频在语音库的记录id或者是本地音频的文件服务器的fileid"
+          
+      
+        keyword:
+          type: string
+          example: ''
+          description: "语音库关键词音频的关键词"
+          
+      
+        count:
+          type: integer
+          example: 0
+          format: int64
+          description: "关键词音频命中的次数"
+          
+      
+        time_duration:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/MongoPeriod'
+          description: "时间片"
+          
+      
+        language:
+          type: string
+          example: ''
+          description: "语音库音频语种方言"
+          
+      
+        case_no:
+          type: string
+          example: ''
+          description: "语音库音频案件编号"
+          
+      
+        sex:
+          type: string
+          example: ''
+          description: "语音库音频案件性别"
+          
+      
+        phone_city:
+          type: string
+          example: ''
+          description: "语音库的音频地区"
+          
+      
+        phone_no:
+          type: string
+          example: ''
+          description: "语音库的音频号码"
+          
+      
+        update_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "语音库的音频更新时间"
+          
+      
+      xml: 
+        name: MongoAlarmRecordDetail
+    
+    MongoAlgoRecord:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 0
+          format: int64
+      
+        modelid:
+          type: string
+          example: ''
+      
+        start:
+          type: integer
+          example: 0
+          format: int64
+      
+        end:
+          type: integer
+          example: 0
+          format: int64
+      
+        poss:
+          type: number
+          example: 0
+          format: float
+      
+        audio_id:
+          type: string
+          example: ''
+          description: "本地或者语音库的时候都是file_id"
+          
+      
+        keyword:
+          type: string
+          example: ''
+          description: "本地语音的时候关键词为空"
+          
+      
+        language:
+          type: string
+          example: ''
+          description: "语种"
+          
+      
+        file_type:
+          type: string
+          example: ''
+          description: "音频类型，本地或语音库"
+          
+      
+        file_name:
+          type: string
+          example: ''
+          description: "短音频的名称"
+          
+      
+      xml: 
+        name: MongoAlgoRecord
+    
+    MongoAsrDetail:
+      type: object
+      properties:
+        sentence:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/MongoAsrInfoDetail'
+          description: "翻译后的文本"
+          
+      
+      xml: 
+        name: MongoAsrDetail
+    
+    MongoAsrInfoDetail:
+      type: object
+      properties:
+        begin:
+          type: integer
+          example: 0
+          format: int64
+          description: "时间开始结点"
+          
+      
+        end:
+          type: integer
+          example: 0
+          format: int64
+          description: "时间结束结点"
+          
+      
+        text:
+          type: string
+          example: ''
+          description: "文本内容"
+          
+      
+      xml: 
+        name: MongoAsrInfoDetail
+    
+    MongoDetailMonitorContent:
+      type: object
+      properties:
+        audio_type:
+          type: string
+          example: ''
+          description: "音频来源,本地或语音库音频"
+          
+      
+        keyword:
+          type: string
+          example: ''
+          description: "布控关键词,布控类型为关键词音频"
+          
+      
+        audio_id:
+          type: string
+          example: ''
+          description: "布控的音频文件类型为本地时：为文件服务器的file_id,短音频文件类型为语音库时：为语音库的的audio_id"
+          
+      
+        language:
+          type: string
+          example: ''
+          description: "音频的语种类型"
+          
+      
+      xml: 
+        name: MongoDetailMonitorContent
+    
+    MongoEntityDetail:
+      type: object
+      properties:
+        text:
+          type: string
+          example: ''
+          description: "文本内容"
+          
+      
+        entity:
+          type: string
+          example: ''
+      
+        entity_id:
+          type: integer
+          example: 0
+          format: int64
+      
+        unicode_idx:
+          type: integer
+          example: 0
+          format: int64
+      
+      xml: 
+        name: MongoEntityDetail
+    
+    MongoNlpDetail:
+      type: object
+      properties:
+        entity:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/MongoEntityDetail'
+      
+        keyword:
+          type: array
+          example: null
+          items: 
+            type: string
+            example: ''
+          description: "关键词"
+          
+      
+      xml: 
+        name: MongoNlpDetail
+    
+    MongoOfflineTransResult:
+      type: object
+      properties:
+        file_id:
+          type: string
+          example: ''
+          description: "文件的file_id"
+          
+      
+        file_name:
+          type: string
+          example: ''
+          description: "离线转写的音频名称"
+          
+      
+        language:
+          type: string
+          example: ''
+          description: "语种"
+          
+      
+        gender:
+          type: string
+          example: ''
+          description: "性别"
+          
+      
+        asr:
+          $ref: '#/components/schemas/MongoAsrDetail'
+          description: "asr结果，按分句展示"
+          
+      
+        trans:
+          $ref: '#/components/schemas/MongoTransDetail'
+          description: "翻译的结果，和asr结果相对应，如果语种时普通话时则没有翻译"
+          
+      
+        nlp:
+          $ref: '#/components/schemas/MongoNlpDetail'
+          description: "nlp识别的结果"
+          
+      
+      xml: 
+        name: MongoOfflineTransResult
+    
+    MongoPeriod:
+      type: object
+      properties:
+        Score:
+          type: number
+          example: 0
+          format: double
+          description: "相似度得分"
+          
+      
+        Start:
+          type: integer
+          example: 0
+          format: int64
+          description: "时间段开始节点"
+          
+      
+        End:
+          type: integer
+          example: 0
+          format: int64
+          description: "时间段结束节点"
+          
+      
+      xml: 
+        name: MongoPeriod
+    
+    MongoTransDetail:
+      type: object
+      properties:
+        language:
+          type: string
+          example: ''
+          description: "语种"
+          
+      
+        sentence:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/MongoTransInfoDetail'
+          description: "翻译后的文本信息"
+          
+      
+      xml: 
+        name: MongoTransDetail
+    
+    MongoTransInfoDetail:
+      type: object
+      properties:
+        begin:
+          type: integer
+          example: 0
+          format: int64
+          description: "时间开始结点"
+          
+      
+        end:
+          type: integer
+          example: 0
+          format: int64
+          description: "时间结束结点"
+          
+      
+        text:
+          type: string
+          example: ''
+          description: "文本内容"
+          
+      
+      xml: 
+        name: MongoTransInfoDetail
+    
+    MongoVoiceRecordDetail:
+      type: object
+      properties:
+        file_id:
+          type: string
+          example: ''
+          description: "目标音频的file_id"
+          
+      
+        file_name:
+          type: string
+          example: ''
+          description: "目标音频的名称"
+          
+      
+        language:
+          type: string
+          example: ''
+          description: "语种"
+          
+      
+        algo_detail:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/MongoAlgoRecord'
+          description: "算法返回的具体结果"
+          
+      
+      xml: 
+        name: MongoVoiceRecordDetail
+    
+    OfflineTransAddOfflineTransReq:
+      type: object
+      properties:
+        user_id:
+          type: string
+          example: ''
+          description: "用户id"
+          
+      
+        language:
+          type: string
+          example: ''
+          description: "语种方言"
+          
+      
+        file:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/OfflineTransFileInfo'
+          description: "离线转写的音频列表"
+          
+      
+      xml: 
+        name: OfflineTransAddOfflineTransReq
+    
+    OfflineTransAddOfflineTransRsp:
+      type: object
+      properties:
+        record_id:
+          type: string
+          example: ''
+          description: "创建的记录id"
+          
+      
+        user_id:
+          type: string
+          example: ''
+          description: "用户id"
+          
+      
+        detail:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/MongoOfflineTransResult'
+          description: "详细信息"
+          
+      
+      xml: 
+        name: OfflineTransAddOfflineTransRsp
+    
+    OfflineTransDetailOfflineTransReq:
+      type: object
+      properties:
+        record_id:
+          type: string
+          example: ''
+          description: "离线转写的记录id"
+          
+      
+      xml: 
+        name: OfflineTransDetailOfflineTransReq
+    
+    OfflineTransDetailOfflineTransRsp:
+      type: object
+      properties:
+        user_id:
+          type: string
+          example: ''
+          description: "用户id"
+          
+      
+        detail:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/MongoOfflineTransResult'
+          description: "详细信息"
+          
+      
+        create_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "上传时间"
+          
+      
+      xml: 
+        name: OfflineTransDetailOfflineTransRsp
+    
+    OfflineTransFileInfo:
+      type: object
+      properties:
+        file_id:
+          type: string
+          example: ''
+          description: "离线转写的音频id"
+          
+      
+        file_name:
+          type: string
+          example: ''
+          description: "离线转写的音频名称"
+          
+      
+      xml: 
+        name: OfflineTransFileInfo
+    
+    OrganizationAddOrganizationReq:
+      type: object
+      required:
+        - name
+      
+      properties:
+        parent_id:
+          type: string
+          example: ''
+          description: "上级ID"
+          
+      
+        name:
+          type: string
+          example: ''
+          description: "名称"
+          
+      
+      xml: 
+        name: OrganizationAddOrganizationReq
+    
+    OrganizationDeleteOrganizationReq:
+      type: object
+      properties:
+        organization_id:
+          type: string
+          example: ''
+          description: "组织ID"
+          
+      
+      xml: 
+        name: OrganizationDeleteOrganizationReq
+    
+    OrganizationEditOrganizationReq:
+      type: object
+      required:
+        - name
+      
+      properties:
+        organization_id:
+          type: string
+          example: ''
+          description: "组织ID"
+          
+      
+        name:
+          type: string
+          example: ''
+          description: "名称"
+          
+      
+      xml: 
+        name: OrganizationEditOrganizationReq
+    
+    OrganizationListOrganizationRsp:
+      type: object
+      properties:
+        organization_list:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/OrganizationOrganizationInfo'
+          description: "组织列表"
+          
+      
+      xml: 
+        name: OrganizationListOrganizationRsp
+    
+    OrganizationOrganizationInfo:
+      type: object
+      properties:
+        organization_id:
+          type: string
+          example: ''
+          description: "组织ID"
+          
+      
+        parent_id:
+          type: string
+          example: ''
+          description: "父级ID"
+          
+      
+        org_path:
+          type: string
+          example: ''
+          description: "父级ID"
+          
+      
+        name:
+          type: string
+          example: ''
+          description: "名称"
+          
+      
+      xml: 
+        name: OrganizationOrganizationInfo
+    
+    RemarkAddRemarkReq:
+      type: object
+      required:
+        - call_serial
+        - content
+      
+      properties:
+        user_id:
+          type: string
+          example: ''
+          description: "用户ID"
+          
+      
+        call_serial:
+          type: string
+          example: ''
+          description: "通话序列号"
+          
+      
+        content:
+          type: string
+          example: ''
+          description: "内容"
+          
+      
+      xml: 
+        name: RemarkAddRemarkReq
+    
+    RemarkDeleteRemarkReq:
+      type: object
+      properties:
+        remark_id:
+          type: string
+          example: ''
+          description: "备注ID"
+          
+      
+      xml: 
+        name: RemarkDeleteRemarkReq
+    
+    RemarkListRemarkReq:
+      type: object
+      required:
+        - call_serial
+      
+      properties:
+        call_serial:
+          type: string
+          example: ''
+          description: "通话序列号"
+          
+      
+        user_id:
+          type: string
+          example: ''
+          description: "用户ID"
+          
+      
+        offset:
+          type: integer
+          example: 0
+          format: int64
+          description: "偏移量"
+          
+      
+        size:
+          type: integer
+          example: 0
+          format: int64
+          description: "个数"
+          
+      
+      xml: 
+        name: RemarkListRemarkReq
+    
+    RemarkListRemarkRsp:
+      type: object
+      properties:
+        remark_list:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/RemarkremarkInfo'
+          description: "备注信息列表"
+          
+      
+        total:
+          type: integer
+          example: 0
+          format: int64
+          description: "总数"
+          
+      
+      xml: 
+        name: RemarkListRemarkRsp
+    
+    RemarkremarkInfo:
+      type: object
+      properties:
+        remark_id:
+          type: string
+          example: ''
+          description: "id"
+          
+      
+        user_name:
+          type: string
+          example: ''
+          description: "用户名"
+          
+      
+        content:
+          type: string
+          example: ''
+          description: "内容"
+          
+      
+        create_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "创建时间"
+          
+      
+      xml: 
+        name: RemarkremarkInfo
+    
+    RoleAddRoleReq:
+      type: object
+      required:
+        - role_name
+      
+      properties:
+        role_name:
+          type: string
+          example: ''
+          description: "角色名"
+          
+      
+        permission_list:
+          type: array
+          example: null
+          items: 
+            type: string
+            example: ''
+          description: "权限列表"
+          
+      
+      xml: 
+        name: RoleAddRoleReq
+    
+    RoleDeleteRoleReq:
+      type: object
+      properties:
+        role_id:
+          type: string
+          example: ''
+          description: "角色ID"
+          
+      
+      xml: 
+        name: RoleDeleteRoleReq
+    
+    RoleEditRoleReq:
+      type: object
+      required:
+        - role_name
+      
+      properties:
+        role_id:
+          type: string
+          example: ''
+          description: "角色ID"
+          
+      
+        role_name:
+          type: string
+          example: ''
+          description: "角色名"
+          
+      
+        permission_list:
+          type: array
+          example: null
+          items: 
+            type: string
+            example: ''
+          description: "权限ID列表"
+          
+      
+      xml: 
+        name: RoleEditRoleReq
+    
+    RoleListPermissionReq:
+      type: object
+      properties:
+        role_id:
+          type: string
+          example: ''
+          description: "角色ID"
+          
+      
+      xml: 
+        name: RoleListPermissionReq
+    
+    RoleListPermissionRsp:
+      type: object
+      properties:
+        permission_list:
+          type: array
+          example: null
+          items: 
+            type: string
+            example: ''
+          description: "权限列表"
+          
+      
+      xml: 
+        name: RoleListPermissionRsp
+    
+    RoleListRoleReq:
+      type: object
+      properties:
+        role_name:
+          type: string
+          example: ''
+          description: "角色名"
+          
+      
+        begin:
+          type: integer
+          example: 0
+          format: int64
+          description: "开始时间"
+          
+      
+        end:
+          type: integer
+          example: 0
+          format: int64
+          description: "结束时间"
+          
+      
+        offset:
+          type: integer
+          example: 0
+          format: int64
+          description: "偏移量"
+          
+      
+        size:
+          type: integer
+          example: 0
+          format: int64
+          description: "个数"
+          
+      
+      xml: 
+        name: RoleListRoleReq
+    
+    RoleListRoleRsp:
+      type: object
+      properties:
+        role_list:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/RoleRoleInfo'
+          description: "角色列表"
+          
+      
+        total:
+          type: integer
+          example: 0
+          format: int64
+          description: "总数"
+          
+      
+      xml: 
+        name: RoleListRoleRsp
+    
+    RoleRoleInfo:
+      type: object
+      properties:
+        role_id:
+          type: string
+          example: ''
+          description: "角色ID"
+          
+      
+        role_name:
+          type: string
+          example: ''
+          description: "角色名"
+          
+      
+        super:
+          type: boolean
+          example: false
+          description: "超理管理员"
+          
+      
+        permission_list:
+          type: array
+          example: null
+          items: 
+            type: string
+            example: ''
+          description: "权限列表"
+          
+      
+        create_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "创建时间"
+          
+      
+        update_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "更新时间"
+          
+      
+      xml: 
+        name: RoleRoleInfo
+    
+    UserAddUserReq:
+      type: object
+      properties:
+        username:
+          type: string
+          example: ''
+          description: "用户名"
+          
+      
+        password:
+          type: string
+          example: ''
+          description: "密码"
+          
+      
+        organization_id:
+          type: string
+          example: ''
+          description: "组织ID"
+          
+      
+        role_id:
+          type: string
+          example: ''
+          description: "角色ID"
+          
+      
+        remark:
+          type: string
+          example: ''
+          description: "备注"
+          
+      
+      xml: 
+        name: UserAddUserReq
+    
+    UserChangePasswordReq:
+      type: object
+      properties:
+        user_id:
+          type: string
+          example: ''
+          description: "用户ID"
+          
+      
+        new_password:
+          type: string
+          example: ''
+          description: "新密码"
+          
+      
+      xml: 
+        name: UserChangePasswordReq
+    
+    UserDeleteUserReq:
+      type: object
+      properties:
+        user_id:
+          type: string
+          example: ''
+          description: "用户ID"
+          
+      
+      xml: 
+        name: UserDeleteUserReq
+    
+    UserEditUserReq:
+      type: object
+      properties:
+        user_id:
+          type: string
+          example: ''
+          description: "用户ID"
+          
+      
+        username:
+          type: string
+          example: ''
+          description: "用户名"
+          
+      
+        organization_id:
+          type: string
+          example: ''
+          description: "组织ID"
+          
+      
+        role_id:
+          type: string
+          example: ''
+          description: "角色ID"
+          
+      
+        remark:
+          type: string
+          example: ''
+          description: "备注"
+          
+      
+      xml: 
+        name: UserEditUserReq
+    
+    UserGetUserReq:
+      type: object
+      properties:
+        user_id:
+          type: string
+          example: ''
+          description: "用户ID"
+          
+      
+      xml: 
+        name: UserGetUserReq
+    
+    UserGetUserRsp:
+      type: object
+      properties:
+        user_id:
+          type: string
+          example: ''
+          description: "用户ID"
+          
+      
+        username:
+          type: string
+          example: ''
+          description: "用户名"
+          
+      
+        remark:
+          type: string
+          example: ''
+          description: "备注"
+          
+      
+        organization_info:
+          $ref: '#/components/schemas/OrganizationOrganizationInfo'
+          description: "组织信息"
+          
+      
+        role_info:
+          $ref: '#/components/schemas/RoleRoleInfo'
+          description: "角色信息"
+          
+      
+      xml: 
+        name: UserGetUserRsp
+    
+    UserListUserReq:
+      type: object
+      properties:
+        organization_id:
+          type: string
+          example: ''
+          description: "组织ID"
+          
+      
+        user_name:
+          type: string
+          example: ''
+          description: "用户名"
+          
+      
+        begin:
+          type: integer
+          example: 0
+          format: int64
+          description: "开始时间"
+          
+      
+        end:
+          type: integer
+          example: 0
+          format: int64
+          description: "结束时间"
+          
+      
+        offset:
+          type: integer
+          example: 0
+          format: int64
+          description: "偏移量"
+          
+      
+        size:
+          type: integer
+          example: 0
+          format: int64
+          description: "个数"
+          
+      
+      xml: 
+        name: UserListUserReq
+    
+    UserListUserRsp:
+      type: object
+      properties:
+        user_list:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/UserUserInfo'
+          description: "用户列表"
+          
+      
+        total:
+          type: integer
+          example: 0
+          format: int64
+          description: "总数"
+          
+      
+      xml: 
+        name: UserListUserRsp
+    
+    UserLoginReq:
+      type: object
+      properties:
+        user_name:
+          type: string
+          example: ''
+          description: "用户名"
+          
+      
+        password:
+          type: string
+          example: ''
+          description: "密码，MD5加密传输"
+          
+      
+      xml: 
+        name: UserLoginReq
+    
+    UserLoginRsp:
+      type: object
+      properties:
+        user_id:
+          type: string
+          example: ''
+          description: "用户ID"
+          
+      
+        session_id:
+          type: string
+          example: ''
+          description: "凭据"
+          
+      
+        username:
+          type: string
+          example: ''
+          description: "用户名"
+          
+      
+        remark:
+          type: string
+          example: ''
+          description: "备注"
+          
+      
+        organization_info:
+          $ref: '#/components/schemas/OrganizationOrganizationInfo'
+          description: "组织信息"
+          
+      
+        role_info:
+          $ref: '#/components/schemas/RoleRoleInfo'
+          description: "角色信息"
+          
+      
+      xml: 
+        name: UserLoginRsp
+    
+    UserLogoutReq:
+      type: object
+      properties:
+        user_id:
+          type: integer
+          example: 0
+          format: int64
+          description: "用户ID"
+          
+      
+      xml: 
+        name: UserLogoutReq
+    
+    UserUserInfo:
+      type: object
+      properties:
+        user_id:
+          type: string
+          example: ''
+          description: "用户ID"
+          
+      
+        user_name:
+          type: string
+          example: ''
+          description: "用户名"
+          
+      
+        organization_info:
+          $ref: '#/components/schemas/OrganizationOrganizationInfo'
+          description: "组织信息"
+          
+      
+        role_info:
+          $ref: '#/components/schemas/RoleRoleInfo'
+          description: "角色信息"
+          
+      
+        remark:
+          type: string
+          example: ''
+          description: "备注"
+          
+      
+        create_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "创建时间"
+          
+      
+        update_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "更新时间"
+          
+      
+      xml: 
+        name: UserUserInfo
+    
+    VoiceDetailVoiceInfoReq:
+      type: object
+      required:
+        - file_id
+      
+      properties:
+        file_id:
+          type: string
+          example: ''
+          description: "文件ID"
+          
+      
+      xml: 
+        name: VoiceDetailVoiceInfoReq
+    
+    VoiceDetailVoiceInfoRsp:
+      type: object
+      properties:
+        call_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "通话时间"
+          
+      
+        call_type:
+          type: string
+          example: ''
+          description: "类型，主叫或被叫"
+          
+      
+        case_info:
+          $ref: '#/components/schemas/CallRecordCaseInfo'
+          description: "案件信息"
+          
+      
+        voice_info:
+          $ref: '#/components/schemas/CallRecordVoiceBaseInfo'
+          description: "语音信息"
+          
+      
+      xml: 
+        name: VoiceDetailVoiceInfoRsp
+    
+    VoiceDetailVoiceReq:
+      type: object
+      required:
+        - file_id
+      
+      properties:
+        file_id:
+          type: string
+          example: ''
+          description: "文件ID"
+          
+      
+      xml: 
+        name: VoiceDetailVoiceReq
+    
+    VoiceDetailVoiceRsp:
+      type: object
+      properties:
+        call_serial:
+          type: string
+          example: ''
+          description: "通话序列号"
+          
+      
+        call_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "通话时间"
+          
+      
+        origin_info:
+          $ref: '#/components/schemas/CallRecordVoiceInfo'
+          description: "主叫信息"
+          
+      
+        relate_info:
+          $ref: '#/components/schemas/CallRecordVoiceInfo'
+          description: "被叫信息"
+          
+      
+        case_info:
+          $ref: '#/components/schemas/CallRecordCaseInfo'
+          description: "案件信息"
+          
+      
+      xml: 
+        name: VoiceDetailVoiceRsp
+    
+    VoiceListVoiceOptionsRsp:
+      type: object
+      properties:
+        object_option:
+          type: object
+          additionalProperties: {}
+          description: "对象选项"
+          
+      
+        gender_option:
+          type: object
+          additionalProperties: {}
+          description: "性别选项"
+          
+      
+        language_option:
+          type: object
+          additionalProperties: {}
+          description: "语种方言选项"
+          
+      
+      xml: 
+        name: VoiceListVoiceOptionsRsp
+    
+    VoiceListVoiceReq:
+      type: object
+      properties:
+        number:
+          type: string
+          example: ''
+          description: "号码"
+          
+      
+        object:
+          type: string
+          example: ''
+          enum: [ORIGIN,RELATE]
+          description: "对象"
+          
+      
+        attribution:
+          type: string
+          example: ''
+          description: "归属地"
+          
+      
+        gender:
+          type: string
+          example: ''
+          enum: [MALE,FEMALE,UNKNOWN]
+          description: "性别"
+          
+      
+        language:
+          type: string
+          example: ''
+          description: "语种"
+          
+      
+        case_no:
+          type: string
+          example: ''
+          description: "案件编号"
+          
+      
+        case_name:
+          type: string
+          example: ''
+          description: "案件名称"
+          
+      
+        call_time_begin:
+          type: integer
+          example: 0
+          format: int64
+          description: "通话时间-开始"
+          
+      
+        call_time_end:
+          type: integer
+          example: 0
+          format: int64
+          description: "通话时间-结束"
+          
+      
+        offset:
+          type: integer
+          example: 0
+          format: int64
+          description: "偏移量"
+          
+      
+        size:
+          type: integer
+          example: 0
+          format: int64
+          description: "个数"
+          
+      
+        order_fields:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/DefineOrderField'
+          description: "排序"
+          
+      
+      xml: 
+        name: VoiceListVoiceReq
+    
+    VoiceListVoiceRsp:
+      type: object
+      properties:
+        voice_list:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/VoicevoiceInfo'
+          description: "语音列表"
+          
+      
+        total:
+          type: integer
+          example: 0
+          format: int64
+          description: "总数"
+          
+      
+      xml: 
+        name: VoiceListVoiceRsp
+    
+    VoicevoiceInfo:
+      type: object
+      properties:
+        voice_id:
+          type: string
+          example: ''
+          description: "语音ID"
+          
+      
+        file_id:
+          type: string
+          example: ''
+          description: "文件ID"
+          
+      
+        object:
+          type: string
+          example: ''
+          description: "对象"
+          
+      
+        number:
+          type: string
+          example: ''
+          description: "号码"
+          
+      
+        attribution:
+          type: string
+          example: ''
+          description: "归属地"
+          
+      
+        gender:
+          type: string
+          example: ''
+          description: "性别"
+          
+      
+        language:
+          type: string
+          example: ''
+          description: "语种"
+          
+      
+        case_info:
+          $ref: '#/components/schemas/CallRecordCaseInfo'
+          description: "案件信息"
+          
+      
+        call_time:
+          type: integer
+          example: 0
+          format: int64
+          description: "通话时间"
+          
+      
+      xml: 
+        name: VoicevoiceInfo
+    

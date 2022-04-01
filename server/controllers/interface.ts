@@ -50,7 +50,7 @@ export default class InterfaceController extends BaseController {
       }
 
       /** 关联所有ref */
-      const api = await SwaggerParser.dereference(jsonData);
+      const api = (await SwaggerParser.dereference(jsonData)) as any;
       const interfaceBatchUpdate: InterfaceItem[] = [];
 
       const { paths } = api;

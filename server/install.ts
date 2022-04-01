@@ -4,7 +4,7 @@ import Config from '@/server/config';
 import mongoose from 'mongoose';
 
 import connectDatabase from './database';
-import UserModel from './models/User';
+import UserModel from './models/user';
 import Log from './utils/Log';
 import { fileExist, generatePasswod, getModelInstance } from './utils/utils';
 

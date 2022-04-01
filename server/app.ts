@@ -38,7 +38,7 @@ async function main(): Promise<void> {
       Log.info(`服务已启动，请打开下面链接访问: \nhttp://127.0.0.1:${Config.port}/`);
     });
   } catch (error) {
-    Log.error(error + 111);
+    Log.error(error);
   }
 }
 

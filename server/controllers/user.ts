@@ -1,5 +1,5 @@
 import BaseController from '@/server/controllers/base';
-import UserModel from '@/server/models/User';
+import UserModel from '@/server/models/user';
 import { Context } from 'koa';
 import { isEmpty } from 'lodash';
 import { Types } from 'mongoose';
@@ -169,8 +169,16 @@ export default class UserController extends BaseController {
       await this.model.changePwd(uid, generatePasswod(new_pwd));
 
       /** 成功后退出登录 */
-      await this.tokenModel.removeByUid(uid);
+      this.logout();
+    } catch (error) {
+      throw Error(error);
+    }
+  }
 
+  public async logout() {
+    try {
+      const { uid } = this.ctx.request.body;
+      await this.tokenModel.removeByUid(uid);
       this.ctx.body = responseBody({}, 200, '操作成功');
     } catch (error) {
       throw Error(error);

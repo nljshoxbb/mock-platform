@@ -1,0 +1,4117 @@
+
+
+openapi: 3.0.0
+servers:
+  - url: /
+    description: "default url"
+  
+info:
+  description: |
+    api document
+  version: /alpha
+  title: meeting_system_gateway
+  contact:
+    email: xiachengjia@speakin.mobi
+  license:
+    name: Mit
+    url: 'https://opensource.org/licenses/MIT'
+tags:
+  - name: account
+  - name: common
+  - name: file
+  - name: hotWords
+  - name: meeting
+  - name: offlineWriting
+  - name: organization
+  - name: record
+  - name: role
+  - name: sentence
+  - name: voicePrint
+paths:
+  '/alpha/account/authority_list':
+    post:
+      tags:
+        - account
+      description: '权限列表'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountAuthorityListRespond'
+  '/alpha/account/create':
+    post:
+      tags:
+        - account
+      description: '创建账号'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountCreateRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/alpha/account/delete':
+    post:
+      tags:
+        - account
+      description: '删除账号'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountDeleteRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/alpha/account/edit':
+    post:
+      tags:
+        - account
+      description: '编辑账号'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountEditRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/alpha/account/list':
+    post:
+      tags:
+        - account
+      description: '账号列表'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountListRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountListRespond'
+  '/alpha/account/login':
+    post:
+      tags:
+        - account
+      description: '登录账号'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountLoginRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountLoginRespond'
+  '/alpha/account/edit_password':
+    post:
+      tags:
+        - account
+      description: '编辑账号密码'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountEditPasswordRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/alpha/account/setting':
+    post:
+      tags:
+        - account
+      description: '设置'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountSettingRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountSettingRespond'
+  '/alpha/account/set_setting':
+    post:
+      tags:
+        - account
+      description: '设置'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountSetSettingRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountSettingRespond'
+  '/alpha/account/setSegmentParam':
+    post:
+      tags:
+        - account
+      description: '设置分段参数'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccountSetSegmentRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/alpha/common/getStatus':
+    post:
+      tags:
+        - common
+      description: '轮训接口'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommonGetStatusRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonGetStatusResponse'
+  '/alpha/common/getAudioWaveFormData':
+    post:
+      tags:
+        - common
+      description: '获取波形图'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommonGetAudioWaveFormDataRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CommonGetAudioWaveFormDataResponse'
+  '/alpha/file/deleteBackgroundFile':
+    post:
+      tags:
+        - file
+      description: '删除背景图片'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FileDeleteBackgroundFileRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/alpha/hotWords/addHotWords':
+    post:
+      tags:
+        - hotWords
+      description: '增加热词'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HotWordsAddHotWordsRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/alpha/hotWords/deleteHotWords':
+    post:
+      tags:
+        - hotWords
+      description: '删除热词组'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HotWordsDeleteHotWordsRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/alpha/hotWords/listHotWords':
+    post:
+      tags:
+        - hotWords
+      description: '热词列表'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HotWordsListHotWordsRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HotWordsListHotWordsResponse'
+  '/alpha/hotWords/updateHotWords':
+    post:
+      tags:
+        - hotWords
+      description: '更新热词'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HotWordsUpdateHotWordsRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/alpha/meeting/add_member':
+    post:
+      tags:
+        - meeting
+      description: '会议添加成员'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MeetingAddMembersRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/alpha/meeting/change_status':
+    post:
+      tags:
+        - meeting
+      description: '会议状态改变'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MeetingChangeStatusRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/alpha/meeting/create':
+    post:
+      tags:
+        - meeting
+      description: '创建会议'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MeetingCreateRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeetingCreateRespond'
+  '/alpha/meeting/detail':
+    post:
+      tags:
+        - meeting
+      description: '会议详情'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MeetingDetailRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeetingDetailRespond'
+  '/alpha/meeting/edit':
+    post:
+      tags:
+        - meeting
+      description: '编辑会议'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MeetingEditRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/alpha/meeting/edit_member':
+    post:
+      tags:
+        - meeting
+      description: '编辑成员'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MeetingEditMemberRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/alpha/meeting/member_list':
+    post:
+      tags:
+        - meeting
+      description: '成员列表'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MeetingMemberListRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeetingMemberListRespond'
+  '/alpha/meeting/get_pause_meeting':
+    post:
+      tags:
+        - meeting
+      description: '获取暂停会议'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeetingGetPauseMeetingRespond'
+  '/alpha/offlineWriting/createOfflineWritingTask':
+    post:
+      tags:
+        - offlineWriting
+      description: '创建离线转写的任务'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OfflineWritingCreateOfflineWritingTaskRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfflineWritingCreateOfflineWritingTaskResponse'
+  '/alpha/offlineWriting/editOfflineWritingTask':
+    post:
+      tags:
+        - offlineWriting
+      description: '创建离线转写的任务'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OfflineWritingEditOfflineWritingTaskRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/alpha/offlineWriting/getOfflineWritingAudio':
+    post:
+      tags:
+        - offlineWriting
+      description: '获取离线转写任务结果'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OfflineWritingGetOfflineWritingAudioRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OfflineWritingGetOfflineWritingAudioResponse'
+  '/alpha/offlineWriting/rewritingAudio':
+    post:
+      tags:
+        - offlineWriting
+      description: '再次转写'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OfflineWritingRewritingAudioRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/alpha/offlineWriting/cancelWritingAudio':
+    post:
+      tags:
+        - offlineWriting
+      description: '取消转写'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OfflineWritingCancelWritingAudioRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/alpha/organization/create':
+    post:
+      tags:
+        - organization
+      description: '创建部门'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationCreateRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/alpha/organization/delete':
+    post:
+      tags:
+        - organization
+      description: '删除账号'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationDeleteRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/alpha/organization/edit':
+    post:
+      tags:
+        - organization
+      description: '编辑账号'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationEditRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/alpha/organization/list':
+    post:
+      tags:
+        - organization
+      description: '账号列表'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganizationListRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrganizationListRespond'
+  '/alpha/record/list':
+    post:
+      tags:
+        - record
+      description: '记录列表'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordListRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecordListRespond'
+  '/alpha/record/delete':
+    post:
+      tags:
+        - record
+      description: '删除列表'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordDeleteRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/alpha/role/create':
+    post:
+      tags:
+        - role
+      description: '创建角色'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleCreateRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/alpha/role/delete':
+    post:
+      tags:
+        - role
+      description: '删除角色'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleDeleteRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/alpha/role/edit':
+    post:
+      tags:
+        - role
+      description: '编辑角色'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleEditRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/alpha/role/list':
+    post:
+      tags:
+        - role
+      description: '角色列表'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleListRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleListRespond'
+  '/alpha/role/detail':
+    post:
+      tags:
+        - role
+      description: '角色详情'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RoleDetailRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RoleDetailRespond'
+  '/alpha/sentence/edit':
+    post:
+      tags:
+        - sentence
+      description: '编辑文本'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SentenceEditRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/alpha/sentence/setSegmentFlag':
+    post:
+      tags:
+        - sentence
+      description: '设置分段'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SentenceSetSegmentFlagRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/alpha/voicePrint/createVoicePrint':
+    post:
+      tags:
+        - voicePrint
+      description: '创建声纹'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoicePrintCreateVoicePrintRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/alpha/voicePrint/deleteVoicePrint':
+    post:
+      tags:
+        - voicePrint
+      description: '删除声纹'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoicePrintDeleteVoicePrintRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/alpha/voicePrint/editVoicePrint':
+    post:
+      tags:
+        - voicePrint
+      description: '声纹编辑'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoicePrintEditVoicePrintRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+  '/alpha/voicePrint/getVoicePrint':
+    post:
+      tags:
+        - voicePrint
+      description: '获取声纹详情'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoicePrintGetVoicePrintRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoicePrintGetVoicePrintResponse'
+  '/alpha/voicePrint/listVoicePrint':
+    post:
+      tags:
+        - voicePrint
+      description: '声纹列表搜索'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VoicePrintListVoicePrintRequest'
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: 响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VoicePrintListVoicePrintResponse'
+  '/alpha/file/uploadFileConvert':
+    post:
+      tags:
+        - file
+      description: '上传文件转换了wav格式并存储'
+      parameters:
+        - name: fileType
+          in: query
+          description: '文件后缀'
+          schema:
+            type: string
+            example: ''
+    
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: |
+            响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileUploadFileConvertResponse'
+      requestBody:
+        description: '上传文件'
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                file2:
+                  type: string
+                  format: binary
+  
+  '/alpha/file/uploadFileConvertVad':
+    post:
+      tags:
+        - file
+      description: '上传文件转换了wav格式进行vad检测，合格则存储'
+      parameters:
+        - name: VadTimeLength
+          in: query
+          description: '规定的有效音时长'
+          schema:
+            type: integer
+            example: 0
+            format: int32
+        - name: FileName
+          in: query
+          description: '文件名'
+          schema:
+            type: string
+            example: ''
+        - name: FileType
+          in: query
+          description: '文件类型'
+          schema:
+            type: string
+            example: ''
+    
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: |
+            响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileUploadFileConvertVadResponse'
+      requestBody:
+        description: '上传文件'
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                file2:
+                  type: string
+                  format: binary
+  
+  '/alpha/file/uploadBackgroundFile':
+    post:
+      tags:
+        - file
+      description: '上传背景图片'
+      parameters:
+        - name: fileName
+          in: query
+          description: '文件名'
+          schema:
+            type: string
+            example: ''
+        - name: projectionType
+          in: query
+          description: '投屏模式'
+          schema:
+            type: string
+            example: ''
+    
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: |
+            响应参数
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FileUploadBackgroundFileResponse'
+      requestBody:
+        description: '上传文件'
+        content:
+          application/octet-stream:
+            schema:
+              type: string
+              format: binary
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                file2:
+                  type: string
+                  format: binary
+  
+  
+  '/alpha/file/downloadfile':
+    get:
+      tags:
+        - file
+      description: '下载'
+      parameters:
+        - name: audioId
+          in: query
+          description: '开始时间'
+          schema:
+            type: integer
+            example: 0
+            format: int32
+        - name: startTime
+          in: query
+          description: '分片开始时间,下载整个音频的时候为-1'
+          schema:
+            type: integer
+            example: 0
+            format: int64
+        - name: endTime
+          in: query
+          description: '分片结束时间，下载整个音频的时候为-1'
+          schema:
+            type: integer
+            example: 0
+            format: int64
+        - name: isCut
+          in: query
+          description: '开始时间'
+          schema:
+            type: boolean
+            example: false
+    
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: '二进制文件'
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+
+  
+  '/alpha/file/download_pcm_file':
+    get:
+      tags:
+        - file
+      description: '下载pcm文件'
+      parameters:
+        - name: audioId
+          in: query
+          description: '开始时间'
+          schema:
+            type: integer
+            example: 0
+            format: int32
+        - name: startTime
+          in: query
+          description: '分片开始时间,下载整个音频的时候为-1'
+          schema:
+            type: integer
+            example: 0
+            format: int64
+        - name: endTime
+          in: query
+          description: '分片结束时间，下载整个音频的时候为-1'
+          schema:
+            type: integer
+            example: 0
+            format: int64
+    
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: '二进制文件'
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+
+  
+  '/alpha/file/downloadBackgroundFile':
+    get:
+      tags:
+        - file
+      description: '下载背景图片'
+      parameters:
+        - name: fileId
+          in: query
+          description: '文件id'
+          schema:
+            type: string
+            example: ''
+        - name: FileType
+          in: query
+          description: '文件类型'
+          schema:
+            type: string
+            example: ''
+    
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: '二进制文件'
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+
+  
+  '/alpha/file/download_all_meeting_file':
+    get:
+      tags:
+        - file
+      description: '下载多声道会议文件'
+      parameters:
+        - name: meetingId
+          in: query
+          description: '会议ID'
+          schema:
+            type: integer
+            example: 0
+            format: int64
+    
+      responses:
+        '400':
+          description: 错误
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errorId:
+                    type: string
+                    example: 'ErrUniqueExample'
+                
+                  errorDesc:
+                    type: string
+                    example: '错误内容'
+                
+        '200':
+          description: '二进制文件'
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+
+  
+  
+components:
+  schemas:
+    AccountAuthority:
+      type: object
+      properties:
+        authorityId:
+          type: integer
+          example: 0
+          format: int64
+          description: "权限id"
+          
+      
+        authorityName:
+          type: string
+          example: ''
+          description: "权限名"
+          
+      
+        labelName:
+          type: string
+          example: ''
+          description: "标签名"
+          
+      
+      xml: 
+        name: AccountAuthority
+    
+    AccountAuthorityListRespond:
+      type: object
+      properties:
+        authorityList:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/AccountAuthority'
+          description: "权限列表"
+          
+      
+      xml: 
+        name: AccountAuthorityListRespond
+    
+    AccountCreateRequest:
+      type: object
+      properties:
+        nickName:
+          type: string
+          example: ''
+          description: "昵称"
+          
+      
+        password:
+          type: string
+          example: ''
+          description: "密码"
+          
+      
+        roleId:
+          type: integer
+          example: 0
+          format: int64
+          description: "角色ID"
+          
+      
+        organizationId:
+          type: integer
+          example: 0
+          format: int64
+          description: "组织ID"
+          
+      
+        comment:
+          type: string
+          example: ''
+          description: "备注"
+          
+      
+      xml: 
+        name: AccountCreateRequest
+    
+    AccountDeleteRequest:
+      type: object
+      properties:
+        userIds:
+          type: array
+          example: null
+          items: 
+            type: integer
+            example: 0
+            format: int64
+          description: "用户ids"
+          
+      
+      xml: 
+        name: AccountDeleteRequest
+    
+    AccountEditPasswordRequest:
+      type: object
+      properties:
+        oldPassword:
+          type: string
+          example: ''
+          description: "旧密码"
+          
+      
+        password:
+          type: string
+          example: ''
+          description: "密码"
+          
+      
+        confirmPassword:
+          type: string
+          example: ''
+          description: "确认密码"
+          
+      
+      xml: 
+        name: AccountEditPasswordRequest
+    
+    AccountEditRequest:
+      type: object
+      properties:
+        userId:
+          type: integer
+          example: 0
+          format: int64
+          description: "用户id"
+          
+      
+        nickName:
+          type: string
+          example: ''
+          description: "昵称"
+          
+      
+        password:
+          type: string
+          example: ''
+          description: "密码"
+          
+      
+        roleId:
+          type: integer
+          example: 0
+          format: int64
+          description: "角色ID"
+          
+      
+        organizationId:
+          type: integer
+          example: 0
+          format: int64
+          description: "组织ID"
+          
+      
+        comment:
+          type: string
+          example: ''
+          description: "备注"
+          
+      
+      xml: 
+        name: AccountEditRequest
+    
+    AccountImage:
+      type: object
+      properties:
+        fileId:
+          type: string
+          example: ''
+          description: "文件id"
+          
+      
+        fileType:
+          type: string
+          example: ''
+          description: "文件类型"
+          
+      
+      xml: 
+        name: AccountImage
+    
+    AccountListRequest:
+      type: object
+      properties:
+        nickName:
+          type: string
+          example: ''
+          description: "用户名"
+          
+      
+        organizationId:
+          type: integer
+          example: 0
+          format: int64
+          description: "组织ID"
+          
+      
+        startTime:
+          type: integer
+          example: 0
+          format: int64
+          description: "更新开始时间"
+          
+      
+        endTime:
+          type: integer
+          example: 0
+          format: int64
+          description: "更新结束时间按"
+          
+      
+        page:
+          type: integer
+          example: 0
+          format: int64
+      
+        size:
+          type: integer
+          example: 0
+          format: int64
+      
+      xml: 
+        name: AccountListRequest
+    
+    AccountListRespond:
+      type: object
+      properties:
+        total:
+          type: integer
+          example: 0
+          format: int32
+          description: "总数"
+          
+      
+        userList:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/AccountUser'
+          description: "用户列表"
+          
+      
+      xml: 
+        name: AccountListRespond
+    
+    AccountLoginRequest:
+      type: object
+      properties:
+        nickName:
+          type: string
+          example: ''
+          description: "昵称"
+          
+      
+        password:
+          type: string
+          example: ''
+          description: "密码"
+          
+      
+      xml: 
+        name: AccountLoginRequest
+    
+    AccountLoginRespond:
+      type: object
+      properties:
+        sessionId:
+          type: string
+          example: ''
+      
+        userInfo:
+          $ref: '#/components/schemas/AccountUser'
+          description: "用户信息"
+          
+      
+        authorityList:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/AccountAuthority'
+      
+      xml: 
+        name: AccountLoginRespond
+    
+    AccountSetSegmentRequest:
+      type: object
+      properties:
+        timePause:
+          type: number
+          example: 0
+          format: float
+      
+        textLength:
+          type: integer
+          example: 0
+          format: int32
+      
+      xml: 
+        name: AccountSetSegmentRequest
+    
+    AccountSetSettingRequest:
+      type: object
+      properties:
+        projectionType:
+          type: string
+          example: ''
+          description: "投屏模式：浮窗 simpleSuspension 全屏 fullSuspension"
+          
+      
+        fontSize:
+          type: string
+          example: ''
+          description: "字体大小"
+          
+      
+        fontFamily:
+          type: string
+          example: ''
+          description: "字体类型"
+          
+      
+        color:
+          type: string
+          example: ''
+          description: "字体颜色"
+          
+      
+        backgroundImage:
+          type: string
+          example: ''
+          description: "背景图片"
+          
+      
+        backgroundColor:
+          type: string
+          example: ''
+          description: "背景颜色"
+          
+      
+      xml: 
+        name: AccountSetSettingRequest
+    
+    AccountSettingRequest:
+      type: object
+      properties:
+        projectionType:
+          type: string
+          example: ''
+          description: "投屏模式：浮窗 floating 全屏 fullscreen"
+          
+      
+      xml: 
+        name: AccountSettingRequest
+    
+    AccountSettingRespond:
+      type: object
+      properties:
+        projectionType:
+          type: string
+          example: ''
+          description: "投屏模式：浮窗 simpleSuspension 全屏 fullSuspension"
+          
+      
+        fontSize:
+          type: string
+          example: ''
+          description: "字体大小"
+          
+      
+        fontFamily:
+          type: string
+          example: ''
+          description: "字体类型"
+          
+      
+        color:
+          type: string
+          example: ''
+          description: "字体颜色"
+          
+      
+        backgroundImage:
+          type: string
+          example: ''
+          description: "背景图片"
+          
+      
+        backgroundColor:
+          type: string
+          example: ''
+          description: "背景颜色"
+          
+      
+        imageList:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/AccountImage'
+          description: "背景图片列表"
+          
+      
+      xml: 
+        name: AccountSettingRespond
+    
+    AccountUser:
+      type: object
+      properties:
+        userId:
+          type: integer
+          example: 0
+          format: int64
+      
+        userName:
+          type: string
+          example: ''
+          description: "用户名"
+          
+      
+        organizationId:
+          type: integer
+          example: 0
+          format: int64
+          description: "组织id"
+          
+      
+        organizationName:
+          type: string
+          example: ''
+          description: "组织名"
+          
+      
+        roleId:
+          type: integer
+          example: 0
+          format: int64
+          description: "角色id"
+          
+      
+        roleName:
+          type: string
+          example: ''
+          description: "组织名"
+          
+      
+        comment:
+          type: string
+          example: ''
+          description: "备注"
+          
+      
+        updateTime:
+          type: integer
+          example: 0
+          format: int64
+          description: "更新时间"
+          
+      
+      xml: 
+        name: AccountUser
+    
+    CommonAudioWritingResult:
+      type: object
+      properties:
+        audioId:
+          type: integer
+          example: 0
+          format: int32
+      
+        audioName:
+          type: string
+          example: ''
+          description: "音频名字"
+          
+      
+        status:
+          type: string
+          example: ''
+          description: "success: 成功  failed:失败"
+          
+      
+        failedMsg:
+          type: string
+          example: ''
+          description: "失败原因"
+          
+      
+      xml: 
+        name: CommonAudioWritingResult
+    
+    CommonGetAudioWaveFormDataRequest:
+      type: object
+      properties:
+        audioId:
+          type: integer
+          example: 0
+          format: int32
+          description: "音频Id"
+          
+      
+      xml: 
+        name: CommonGetAudioWaveFormDataRequest
+    
+    CommonGetAudioWaveFormDataResponse:
+      type: object
+      properties:
+        Wavform:
+          $ref: '#/components/schemas/CommonWaveFormData'
+      
+      xml: 
+        name: CommonGetAudioWaveFormDataResponse
+    
+    CommonGetStatusRequest:
+      type: object
+      properties:
+        sessionId:
+          type: string
+          example: ''
+      
+      xml: 
+        name: CommonGetStatusRequest
+    
+    CommonGetStatusResponse:
+      type: object
+      properties:
+        sessionId:
+          type: string
+          example: ''
+          description: "sessionId"
+          
+      
+        notifyWritingResults:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/CommonAudioWritingResult'
+      
+      xml: 
+        name: CommonGetStatusResponse
+    
+    CommonWaveFormData:
+      type: object
+      properties:
+        version:
+          type: integer
+          example: 0
+          format: int64
+      
+        channel:
+          type: integer
+          example: 0
+          format: int64
+      
+        sample_rate:
+          type: integer
+          example: 0
+          format: int64
+      
+        samples_per_pixel:
+          type: integer
+          example: 0
+          format: int64
+      
+        bits:
+          type: integer
+          example: 0
+          format: int64
+      
+        length:
+          type: integer
+          example: 0
+          format: int64
+      
+        data:
+          type: array
+          example: null
+          items: 
+            type: number
+            example: 0
+            format: double
+      
+      xml: 
+        name: CommonWaveFormData
+    
+    FileDeleteBackgroundFileRequest:
+      type: object
+      properties:
+        fileId:
+          type: string
+          example: ''
+          description: "文件id"
+          
+      
+      xml: 
+        name: FileDeleteBackgroundFileRequest
+    
+    FileUploadBackgroundFileResponse:
+      type: object
+      properties:
+        fileId:
+          type: string
+          example: ''
+          description: "文件id"
+          
+      
+      xml: 
+        name: FileUploadBackgroundFileResponse
+    
+    FileUploadFileConvertResponse:
+      type: object
+      properties:
+        fileId:
+          type: string
+          example: ''
+          description: "文件id"
+          
+      
+        duration:
+          type: integer
+          example: 0
+          format: int64
+          description: "音频时长"
+          
+      
+      xml: 
+        name: FileUploadFileConvertResponse
+    
+    FileUploadFileConvertVadResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: ''
+          description: "success有效音合格   failed有效音不合格"
+          
+      
+        errorDesc:
+          type: string
+          example: ''
+          description: "错误原因"
+          
+      
+        audioId:
+          type: integer
+          example: 0
+          format: int64
+          description: "只有有效音合格才会返回音频Id"
+          
+      
+        duration:
+          type: integer
+          example: 0
+          format: int64
+          description: "同上，音频时长"
+          
+      
+      xml: 
+        name: FileUploadFileConvertVadResponse
+    
+    HotWordsAddHotWordsRequest:
+      type: object
+      properties:
+        groupName:
+          type: string
+          example: ''
+          description: "热词组名"
+          
+      
+        labelName:
+          type: string
+          example: ''
+          description: "标签名,目前取值：人名:Person/地名:Address"
+          
+      
+        hotWords:
+          type: array
+          example: null
+          items: 
+            type: string
+            example: ''
+          description: "热词"
+          
+      
+      xml: 
+        name: HotWordsAddHotWordsRequest
+    
+    HotWordsDeleteHotWordsRequest:
+      type: object
+      properties:
+        groupId:
+          type: integer
+          example: 0
+          format: int64
+          description: "组id"
+          
+      
+      xml: 
+        name: HotWordsDeleteHotWordsRequest
+    
+    HotWordsHotWordGroup:
+      type: object
+      properties:
+        groupId:
+          type: integer
+          example: 0
+          format: int32
+          description: "热词组id"
+          
+      
+        groupName:
+          type: string
+          example: ''
+          description: "热词组名"
+          
+      
+        labelName:
+          type: string
+          example: ''
+          description: "标签名"
+          
+      
+        hotWords:
+          type: array
+          example: null
+          items: 
+            type: string
+            example: ''
+          description: "热词"
+          
+      
+        updateTime:
+          type: integer
+          example: 0
+          format: int32
+          description: "更新时间"
+          
+      
+      xml: 
+        name: HotWordsHotWordGroup
+    
+    HotWordsListHotWordsRequest:
+      type: object
+      properties:
+        keywords:
+          type: string
+          example: ''
+          description: "搜索的关键字"
+          
+      
+        page:
+          type: integer
+          example: 0
+          format: int64
+      
+        size:
+          type: integer
+          example: 0
+          format: int64
+      
+      xml: 
+        name: HotWordsListHotWordsRequest
+    
+    HotWordsListHotWordsResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+          example: 0
+          format: int64
+      
+        groups:
+          type: array
+          example: [{"groupId":0,"groupName":"","labelName":"","hotWords":null,"updateTime":0}]
+          items: 
+            $ref: '#/components/schemas/HotWordsHotWordGroup'
+      
+      xml: 
+        name: HotWordsListHotWordsResponse
+    
+    HotWordsUpdateHotWordsRequest:
+      type: object
+      properties:
+        groupId:
+          type: integer
+          example: 0
+          format: int64
+          description: "热词组id"
+          
+      
+        words:
+          type: array
+          example: null
+          items: 
+            type: string
+            example: ''
+          description: "热词"
+          
+      
+      xml: 
+        name: HotWordsUpdateHotWordsRequest
+    
+    MeetingAddMembersRequest:
+      type: object
+      properties:
+        meetingId:
+          type: integer
+          example: 0
+          format: int64
+          description: "会议ID"
+          
+      
+        members:
+          type: array
+          example: [{"memberId":0,"soundId":0,"memberName":"","memberType":""}]
+          items: 
+            $ref: '#/components/schemas/MeetingMember'
+          description: "成员列表"
+          
+      
+      xml: 
+        name: MeetingAddMembersRequest
+    
+    MeetingChangeStatusRequest:
+      type: object
+      properties:
+        meetingId:
+          type: integer
+          example: 0
+          format: int64
+          description: "会议ID"
+          
+      
+        status:
+          type: string
+          example: ''
+          description: "会议状态:初始化:init进行中:doing结束:finish:暂停:pause"
+          
+      
+      xml: 
+        name: MeetingChangeStatusRequest
+    
+    MeetingCreateRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          example: ''
+          description: "会议标题"
+          
+      
+        single:
+          type: boolean
+          example: false
+          description: "是否为单机版会议 默认为false"
+          
+      
+      xml: 
+        name: MeetingCreateRequest
+    
+    MeetingCreateRespond:
+      type: object
+      properties:
+        meetingId:
+          type: integer
+          example: 0
+          format: int64
+          description: "会议ID"
+          
+      
+      xml: 
+        name: MeetingCreateRespond
+    
+    MeetingDetailRequest:
+      type: object
+      properties:
+        meetingId:
+          type: integer
+          example: 0
+          format: int64
+          description: "会议ID"
+          
+      
+      xml: 
+        name: MeetingDetailRequest
+    
+    MeetingDetailRespond:
+      type: object
+      properties:
+        meetingInfo:
+          $ref: '#/components/schemas/MeetingMeeting'
+          description: "会议信息"
+          
+      
+        sentences:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/MeetingSentence'
+          description: "话语段信息"
+          
+      
+        result:
+          $ref: '#/components/schemas/MeetingWritingResult'
+      
+      xml: 
+        name: MeetingDetailRespond
+    
+    MeetingEditMemberRequest:
+      type: object
+      properties:
+        meetingId:
+          type: integer
+          example: 0
+          format: int64
+          description: "会议ID"
+          
+      
+        editMember:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/MeetingMember'
+          description: "成员信息"
+          
+      
+      xml: 
+        name: MeetingEditMemberRequest
+    
+    MeetingEditRequest:
+      type: object
+      properties:
+        MeetingInfo:
+          $ref: '#/components/schemas/MeetingMeeting'
+      
+      xml: 
+        name: MeetingEditRequest
+    
+    MeetingGetPauseMeetingRespond:
+      type: object
+      properties:
+        meetingId:
+          type: integer
+          example: 0
+          format: int64
+          description: "会议ID"
+          
+      
+      xml: 
+        name: MeetingGetPauseMeetingRespond
+    
+    MeetingMeeting:
+      type: object
+      properties:
+        meetingId:
+          type: integer
+          example: 0
+          format: int64
+          description: "会议ID"
+          
+      
+        title:
+          type: string
+          example: ''
+          description: "会议标题"
+          
+      
+        startTime:
+          type: integer
+          example: 0
+          format: int64
+          description: "开始时间"
+          
+      
+        endTime:
+          type: integer
+          example: 0
+          format: int64
+          description: "结束时间"
+          
+      
+        position:
+          type: string
+          example: ''
+          description: "会议地点"
+          
+      
+        people:
+          type: string
+          example: ''
+          description: "参会人员"
+          
+      
+        audioId:
+          type: integer
+          example: 0
+          format: int64
+          description: "音频id"
+          
+      
+      xml: 
+        name: MeetingMeeting
+    
+    MeetingMember:
+      type: object
+      properties:
+        memberId:
+          type: integer
+          example: 0
+          format: int64
+          description: "成员id"
+          
+      
+        soundId:
+          type: integer
+          example: 0
+          format: int32
+          description: "声道id"
+          
+      
+        memberName:
+          type: string
+          example: ''
+          description: "成员名"
+          
+      
+        memberType:
+          type: string
+          example: ''
+          description: "成员类型：register 注册成员 tmp 临时成员员"
+          
+      
+      xml: 
+        name: MeetingMember
+    
+    MeetingMemberListRequest:
+      type: object
+      properties:
+        meetingId:
+          type: integer
+          example: 0
+          format: int64
+          description: "会议ID"
+          
+      
+      xml: 
+        name: MeetingMemberListRequest
+    
+    MeetingMemberListRespond:
+      type: object
+      properties:
+        members:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/MeetingMember'
+          description: "成员信息"
+          
+      
+      xml: 
+        name: MeetingMemberListRespond
+    
+    MeetingSentence:
+      type: object
+      properties:
+        sentenceId:
+          type: integer
+          example: 0
+          format: int64
+          description: "话语id"
+          
+      
+        audioId:
+          type: integer
+          example: 0
+          format: int64
+          description: "音频id"
+          
+      
+        soundId:
+          type: integer
+          example: 0
+          format: int32
+          description: "声道"
+          
+      
+        memberId:
+          type: integer
+          example: 0
+          format: int64
+          description: "成员id"
+          
+      
+        memberName:
+          type: string
+          example: ''
+          description: "成员名"
+          
+      
+        startTime:
+          type: integer
+          example: 0
+          format: int32
+          description: "开始时间"
+          
+      
+        endTime:
+          type: integer
+          example: 0
+          format: int32
+          description: "结束时间"
+          
+      
+        sourceWords:
+          type: string
+          example: ''
+          description: "asr原话"
+          
+      
+        editWords:
+          type: string
+          example: ''
+          description: "修改后话，没有修改就是空字符串"
+          
+      
+        segmentFlag:
+          type: boolean
+          example: false
+          description: "分段标志"
+          
+      
+      xml: 
+        name: MeetingSentence
+    
+    MeetingSystemAudioInfo:
+      type: object
+      properties:
+        audioId:
+          type: integer
+          example: 0
+          format: int32
+          description: "音频ID"
+          
+      
+        audioName:
+          type: string
+          example: ''
+          description: "音频名字"
+          
+      
+        status:
+          type: string
+          example: ''
+          description: "转写状态:doing:转写中、success:转写成功、failed:转写失败"
+          
+      
+        errorMsg:
+          type: string
+          example: ''
+          description: "转写失败的原因"
+          
+      
+        editContent:
+          type: string
+          example: ''
+          description: "修改后的内容"
+          
+      
+        audioLength:
+          type: integer
+          example: 0
+          format: int32
+          description: "音频时长"
+          
+      
+        needCut:
+          type: boolean
+          example: false
+          description: "音频时长"
+          
+      
+        cutFileId:
+          type: string
+          example: ''
+          description: "截取的音频片段"
+          
+      
+        sentences:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/MeetingSystemSentence'
+          description: "原始转写结果"
+          
+      
+        errCode:
+          type: integer
+          example: 0
+          format: int64
+      
+      xml: 
+        name: MeetingSystemAudioInfo
+    
+    MeetingSystemSentence:
+      type: object
+      properties:
+        startTime:
+          type: integer
+          example: 0
+          format: int32
+          description: "开始时间戳"
+          
+      
+        endTime:
+          type: integer
+          example: 0
+          format: int32
+          description: "结束时间戳"
+          
+      
+        words:
+          type: string
+          example: ''
+          description: "转写结果"
+          
+      
+        segmentFlag:
+          type: boolean
+          example: false
+          description: "分段标志"
+          
+      
+      xml: 
+        name: MeetingSystemSentence
+    
+    MeetingWritingResult:
+      type: object
+      properties:
+        type:
+          type: string
+          example: ''
+      
+        content:
+          type: string
+          example: ''
+      
+      xml: 
+        name: MeetingWritingResult
+    
+    OfflineWritingCancelWritingAudioRequest:
+      type: object
+      properties:
+        audioId:
+          type: integer
+          example: 0
+          format: int32
+          description: "需要再次转写的audioId"
+          
+      
+        taskId:
+          type: integer
+          example: 0
+          format: int32
+          description: "对应的任务Id"
+          
+      
+      xml: 
+        name: OfflineWritingCancelWritingAudioRequest
+    
+    OfflineWritingCreateOfflineWritingTaskRequest:
+      type: object
+      properties:
+        taskName:
+          type: string
+          example: ''
+          description: "任务名称"
+          
+      
+        voiceLanguage:
+          type: string
+          example: ''
+          description: "音频语言。中文：chinese"
+          
+      
+        voiceInfos:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/OfflineWritingVoiceInfo'
+          description: "上传的音频信息"
+          
+      
+        cutStart:
+          type: integer
+          example: 0
+          format: int32
+          description: "截取特定时长的开始时间，不截取则设置为-1"
+          
+      
+        cutEnd:
+          type: integer
+          example: 0
+          format: int32
+          description: "截取特定时长的结束时间，不截取则设置为-1"
+          
+      
+      xml: 
+        name: OfflineWritingCreateOfflineWritingTaskRequest
+    
+    OfflineWritingCreateOfflineWritingTaskResponse:
+      type: object
+      properties:
+        taskId:
+          type: integer
+          example: 0
+          format: int64
+          description: "任务ID"
+          
+      
+      xml: 
+        name: OfflineWritingCreateOfflineWritingTaskResponse
+    
+    OfflineWritingEditOfflineWritingTaskRequest:
+      type: object
+      properties:
+        taskId:
+          type: integer
+          example: 0
+          format: int32
+          description: "任务id"
+          
+      
+        taskTitle:
+          type: string
+          example: ''
+          description: "如果修改了标题，则该字段不为空"
+          
+      
+        audioId:
+          type: integer
+          example: 0
+          format: int32
+          description: "修改转写结果的音频"
+          
+      
+        editWords:
+          type: string
+          example: ''
+          description: "修改的转写结果"
+          
+      
+      xml: 
+        name: OfflineWritingEditOfflineWritingTaskRequest
+    
+    OfflineWritingGetOfflineWritingAudioRequest:
+      type: object
+      properties:
+        taskId:
+          type: integer
+          example: 0
+          format: int32
+          description: "任务id"
+          
+      
+        status:
+          type: string
+          example: ''
+          description: "doing:转写中   success:转写成功   failed:转写失败"
+          
+      
+      xml: 
+        name: OfflineWritingGetOfflineWritingAudioRequest
+    
+    OfflineWritingGetOfflineWritingAudioResponse:
+      type: object
+      properties:
+        audioInfos:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/MeetingSystemAudioInfo'
+          description: "转写信息"
+          
+      
+      xml: 
+        name: OfflineWritingGetOfflineWritingAudioResponse
+    
+    OfflineWritingRewritingAudioRequest:
+      type: object
+      properties:
+        audioId:
+          type: integer
+          example: 0
+          format: int32
+          description: "需要再次转写的audioId"
+          
+      
+        taskId:
+          type: integer
+          example: 0
+          format: int32
+          description: "对应的taskId"
+          
+      
+      xml: 
+        name: OfflineWritingRewritingAudioRequest
+    
+    OfflineWritingVoiceInfo:
+      type: object
+      properties:
+        fileId:
+          type: string
+          example: ''
+          description: "文件id"
+          
+      
+        fileName:
+          type: string
+          example: ''
+          description: "文件名"
+          
+      
+        duration:
+          type: integer
+          example: 0
+          format: int64
+          description: "音频时长，上传文件的时候拿到的"
+          
+      
+      xml: 
+        name: OfflineWritingVoiceInfo
+    
+    OrganizationCreateRequest:
+      type: object
+      properties:
+        organizationName:
+          type: string
+          example: ''
+          description: "部门名"
+          
+      
+        comment:
+          type: string
+          example: ''
+          description: "备注"
+          
+      
+      xml: 
+        name: OrganizationCreateRequest
+    
+    OrganizationDeleteRequest:
+      type: object
+      properties:
+        organizationIds:
+          type: array
+          example: null
+          items: 
+            type: integer
+            example: 0
+            format: int64
+          description: "用户id"
+          
+      
+      xml: 
+        name: OrganizationDeleteRequest
+    
+    OrganizationEditRequest:
+      type: object
+      properties:
+        organizationId:
+          type: integer
+          example: 0
+          format: int64
+          description: "组织ID"
+          
+      
+        organizationName:
+          type: string
+          example: ''
+          description: "部门名"
+          
+      
+        comment:
+          type: string
+          example: ''
+          description: "备注"
+          
+      
+      xml: 
+        name: OrganizationEditRequest
+    
+    OrganizationListRequest:
+      type: object
+      properties:
+        organizationId:
+          type: integer
+          example: 0
+          format: int64
+          description: "组织ID"
+          
+      
+        startTime:
+          type: integer
+          example: 0
+          format: int64
+          description: "更新开始时间"
+          
+      
+        endTime:
+          type: integer
+          example: 0
+          format: int64
+          description: "更新结束时间按"
+          
+      
+        page:
+          type: integer
+          example: 0
+          format: int64
+      
+        size:
+          type: integer
+          example: 0
+          format: int64
+      
+      xml: 
+        name: OrganizationListRequest
+    
+    OrganizationListRespond:
+      type: object
+      properties:
+        total:
+          type: integer
+          example: 0
+          format: int32
+          description: "总数"
+          
+      
+        data:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/OrganizationOrganization'
+          description: "组织列表"
+          
+      
+      xml: 
+        name: OrganizationListRespond
+    
+    OrganizationOrganization:
+      type: object
+      properties:
+        organizationId:
+          type: integer
+          example: 0
+          format: int64
+          description: "组织ID"
+          
+      
+        organizationName:
+          type: string
+          example: ''
+          description: "部门名"
+          
+      
+        comment:
+          type: string
+          example: ''
+          description: "备注"
+          
+      
+        peopleNumber:
+          type: integer
+          example: 0
+          format: int64
+          description: "人数"
+          
+      
+        updateTime:
+          type: integer
+          example: 0
+          format: int64
+          description: "更新时间"
+          
+      
+      xml: 
+        name: OrganizationOrganization
+    
+    RecordDeleteRequest:
+      type: object
+      properties:
+        recordInfos:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/RecordRecordInfo'
+      
+      xml: 
+        name: RecordDeleteRequest
+    
+    RecordListRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          example: ''
+          description: "记录标题"
+          
+      
+        content:
+          type: string
+          example: ''
+          description: "搜索内容，和title只能指定其中一个"
+          
+      
+        recordType:
+          type: string
+          example: ''
+          description: "记录类型:online 线上 offline线下"
+          
+      
+        page:
+          type: integer
+          example: 0
+          format: int64
+      
+        size:
+          type: integer
+          example: 0
+          format: int64
+      
+      xml: 
+        name: RecordListRequest
+    
+    RecordListRespond:
+      type: object
+      properties:
+        total:
+          type: integer
+          example: 0
+          format: int32
+          description: "总数"
+          
+      
+        recordList:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/RecordRecord'
+          description: "记录列表"
+          
+      
+        onlineNum:
+          type: integer
+          example: 0
+          format: int32
+          description: "在线会议数量"
+          
+      
+        offlineNum:
+          type: integer
+          example: 0
+          format: int32
+          description: "离线转写数量"
+          
+      
+        matchNum:
+          type: integer
+          example: 0
+          format: int64
+          description: "匹配总数"
+          
+      
+      xml: 
+        name: RecordListRespond
+    
+    RecordRecord:
+      type: object
+      properties:
+        relateId:
+          type: integer
+          example: 0
+          format: int64
+          description: "关联id"
+          
+      
+        title:
+          type: string
+          example: ''
+          description: "记录标题"
+          
+      
+        abstract:
+          type: string
+          example: ''
+          description: "梗概"
+          
+      
+        recordType:
+          type: string
+          example: ''
+          description: "记录类型:online 线上 offline线下"
+          
+      
+        updateTime:
+          type: integer
+          example: 0
+          format: int64
+          description: "更新时间"
+          
+      
+      xml: 
+        name: RecordRecord
+    
+    RecordRecordInfo:
+      type: object
+      properties:
+        recordId:
+          type: integer
+          example: 0
+          format: int32
+      
+        recordType:
+          type: string
+          example: ''
+      
+      xml: 
+        name: RecordRecordInfo
+    
+    RoleCreateRequest:
+      type: object
+      properties:
+        roleName:
+          type: string
+          example: ''
+          description: "角色名"
+          
+      
+        authorityIds:
+          type: array
+          example: null
+          items: 
+            type: integer
+            example: 0
+            format: int64
+          description: "权限列表ids"
+          
+      
+      xml: 
+        name: RoleCreateRequest
+    
+    RoleDeleteRequest:
+      type: object
+      properties:
+        roleIds:
+          type: array
+          example: null
+          items: 
+            type: integer
+            example: 0
+            format: int64
+          description: "角色id"
+          
+      
+      xml: 
+        name: RoleDeleteRequest
+    
+    RoleDetailRequest:
+      type: object
+      properties:
+        roleID:
+          type: integer
+          example: 0
+          format: int64
+          description: "角色id"
+          
+      
+      xml: 
+        name: RoleDetailRequest
+    
+    RoleDetailRespond:
+      type: object
+      properties:
+        roleID:
+          type: integer
+          example: 0
+          format: int64
+          description: "角色id"
+          
+      
+        roleName:
+          type: string
+          example: ''
+          description: "角色名"
+          
+      
+        updateTime:
+          type: integer
+          example: 0
+          format: int64
+          description: "更新时间"
+          
+      
+        authorityIds:
+          type: array
+          example: null
+          items: 
+            type: integer
+            example: 0
+            format: int64
+          description: "权限列表ids"
+          
+      
+      xml: 
+        name: RoleDetailRespond
+    
+    RoleEditRequest:
+      type: object
+      properties:
+        roleID:
+          type: integer
+          example: 0
+          format: int64
+          description: "角色id"
+          
+      
+        roleName:
+          type: string
+          example: ''
+          description: "角色名"
+          
+      
+        authorityIds:
+          type: array
+          example: null
+          items: 
+            type: integer
+            example: 0
+            format: int64
+          description: "权限列表ids"
+          
+      
+      xml: 
+        name: RoleEditRequest
+    
+    RoleListRequest:
+      type: object
+      properties:
+        roleName:
+          type: string
+          example: ''
+          description: "角色名"
+          
+      
+        startTime:
+          type: integer
+          example: 0
+          format: int64
+          description: "更新开始时间"
+          
+      
+        endTime:
+          type: integer
+          example: 0
+          format: int64
+          description: "更新结束时间按"
+          
+      
+        page:
+          type: integer
+          example: 0
+          format: int64
+      
+        size:
+          type: integer
+          example: 0
+          format: int64
+      
+      xml: 
+        name: RoleListRequest
+    
+    RoleListRespond:
+      type: object
+      properties:
+        total:
+          type: integer
+          example: 0
+          format: int32
+          description: "总数"
+          
+      
+        roleList:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/RoleRole'
+          description: "角色列表"
+          
+      
+      xml: 
+        name: RoleListRespond
+    
+    RoleRole:
+      type: object
+      properties:
+        roleID:
+          type: integer
+          example: 0
+          format: int64
+          description: "角色id"
+          
+      
+        roleName:
+          type: string
+          example: ''
+          description: "角色名"
+          
+      
+        updateTime:
+          type: integer
+          example: 0
+          format: int64
+          description: "更新时间"
+          
+      
+      xml: 
+        name: RoleRole
+    
+    SentenceEditRequest:
+      type: object
+      properties:
+        audioId:
+          type: integer
+          example: 0
+          format: int64
+          description: "修改转写结果的音频"
+          
+      
+        startTime:
+          type: integer
+          example: 0
+          format: int64
+          description: "开始时间"
+          
+      
+        endTime:
+          type: integer
+          example: 0
+          format: int64
+          description: "j结束时间"
+          
+      
+        editWords:
+          type: string
+          example: ''
+          description: "编辑文本"
+          
+      
+        segmentFlag:
+          type: boolean
+          example: false
+          description: "分段标志"
+          
+      
+      xml: 
+        name: SentenceEditRequest
+    
+    SentenceSetSegmentFlagRequest:
+      type: object
+      properties:
+        sentenceId:
+          type: integer
+          example: 0
+          format: int32
+      
+        segmentFlag:
+          type: boolean
+          example: false
+          description: "分段标志"
+          
+      
+      xml: 
+        name: SentenceSetSegmentFlagRequest
+    
+    VoicePrintCreateVoicePrintRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: ''
+          description: "姓名"
+          
+      
+        gender:
+          type: string
+          example: ''
+          description: "男：male  女：female"
+          
+      
+        organizationId:
+          type: integer
+          example: 0
+          format: int64
+          description: "组织ID"
+          
+      
+        comment:
+          type: string
+          example: ''
+          description: "备注"
+          
+      
+        audioId:
+          type: integer
+          example: 0
+          format: int64
+          description: "音频Id"
+          
+      
+      xml: 
+        name: VoicePrintCreateVoicePrintRequest
+    
+    VoicePrintDeleteVoicePrintRequest:
+      type: object
+      properties:
+        memberIds:
+          type: array
+          example: null
+          items: 
+            type: integer
+            example: 0
+            format: int64
+      
+      xml: 
+        name: VoicePrintDeleteVoicePrintRequest
+    
+    VoicePrintEditVoicePrintRequest:
+      type: object
+      properties:
+        memberId:
+          type: integer
+          example: 0
+          format: int64
+          description: "成员id"
+          
+      
+        name:
+          type: string
+          example: ''
+          description: "姓名"
+          
+      
+        gender:
+          type: string
+          example: ''
+          description: "性别"
+          
+      
+        organizationId:
+          type: integer
+          example: 0
+          format: int64
+          description: "组织节点id"
+          
+      
+        comment:
+          type: string
+          example: ''
+          description: "备注"
+          
+      
+        audioId:
+          type: integer
+          example: 0
+          format: int64
+          description: "音频Id"
+          
+      
+      xml: 
+        name: VoicePrintEditVoicePrintRequest
+    
+    VoicePrintGetVoicePrintRequest:
+      type: object
+      properties:
+        memberId:
+          type: integer
+          example: 0
+          format: int64
+          description: "成员id"
+          
+      
+      xml: 
+        name: VoicePrintGetVoicePrintRequest
+    
+    VoicePrintGetVoicePrintResponse:
+      type: object
+      properties:
+        memberId:
+          type: integer
+          example: 0
+          format: int64
+          description: "成员id"
+          
+      
+        name:
+          type: string
+          example: ''
+          description: "姓名"
+          
+      
+        gender:
+          type: string
+          example: ''
+          description: "male:男    female:女"
+          
+      
+        organizationId:
+          type: integer
+          example: 0
+          format: int64
+          description: "组织ID"
+          
+      
+        organizationName:
+          type: string
+          example: ''
+          description: "组织节点名字"
+          
+      
+        comment:
+          type: string
+          example: ''
+          description: "备注"
+          
+      
+        status:
+          type: string
+          example: ''
+          description: "success:成功   failed：失败"
+          
+      
+        failedMsg:
+          type: string
+          example: ''
+          description: "失败信息"
+          
+      
+        registerTime:
+          type: integer
+          example: 0
+          format: int64
+          description: "注册时间"
+          
+      
+        audioId:
+          type: integer
+          example: 0
+          format: int64
+          description: "音频Id"
+          
+      
+      xml: 
+        name: VoicePrintGetVoicePrintResponse
+    
+    VoicePrintListVoicePrintRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example: ''
+      
+        organizationId:
+          type: integer
+          example: 0
+          format: int64
+          description: "组织节点id"
+          
+      
+        registerStartTime:
+          type: integer
+          example: 0
+          format: int64
+          description: "搜索开始时间"
+          
+      
+        registerEndTime:
+          type: integer
+          example: 0
+          format: int64
+          description: "搜索结束时间"
+          
+      
+        page:
+          type: integer
+          example: 0
+          format: int64
+      
+        size:
+          type: integer
+          example: 0
+          format: int64
+      
+      xml: 
+        name: VoicePrintListVoicePrintRequest
+    
+    VoicePrintListVoicePrintResponse:
+      type: object
+      properties:
+        total:
+          type: integer
+          example: 0
+          format: int32
+          description: "总数"
+          
+      
+        data:
+          type: array
+          example: null
+          items: 
+            $ref: '#/components/schemas/VoicePrintVoicePrintInfo'
+          description: "数据"
+          
+      
+      xml: 
+        name: VoicePrintListVoicePrintResponse
+    
+    VoicePrintVoicePrintInfo:
+      type: object
+      properties:
+        memberId:
+          type: integer
+          example: 0
+          format: int64
+          description: "成员id"
+          
+      
+        name:
+          type: string
+          example: ''
+          description: "姓名"
+          
+      
+        gender:
+          type: string
+          example: ''
+          description: "male:男    female:女"
+          
+      
+        organizationId:
+          type: integer
+          example: 0
+          format: int64
+          description: "组织ID"
+          
+      
+        organizationName:
+          type: string
+          example: ''
+          description: "组织节点名字"
+          
+      
+        comment:
+          type: string
+          example: ''
+          description: "备注"
+          
+      
+        status:
+          type: string
+          example: ''
+          description: "success:成功   failed：失败"
+          
+      
+        failedMsg:
+          type: string
+          example: ''
+          description: "失败信息"
+          
+      
+        registerTime:
+          type: integer
+          example: 0
+          format: int64
+          description: "注册时间"
+          
+      
+        audioId:
+          type: integer
+          example: 0
+          format: int64
+          description: "音频Id"
+          
+      
+      xml: 
+        name: VoicePrintVoicePrintInfo
+    
