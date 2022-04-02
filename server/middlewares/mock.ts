@@ -124,12 +124,6 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
   }
 
   /** 如果有启用的期望值，直接返回期望值 */
-  const projectRes = await interfaceModel.get({ project_id: projectId });
-
-  if (projectRes[0] && projectRes[0].method !== method.toLocaleLowerCase()) {
-    return (ctx.body = responseBody(null, 405, '请求方法不允许'));
-  }
-
   const res = await interfaceModel.getDataByPath(projectId, method.toLocaleLowerCase(), path);
 
   if (res[0]) {

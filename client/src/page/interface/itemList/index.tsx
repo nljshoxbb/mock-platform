@@ -132,6 +132,7 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
   const onSearch = (value: any) => {
     const expandedKeys = dataList
       .map((item) => {
+        console.log(item.title);
         if (item.title.indexOf(value) > -1) {
           return getParentKey(item.key, treeData);
         }
@@ -165,7 +166,8 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
         ...item,
         title,
         key: item.key,
-        isLeaf: true
+        isLeaf: true,
+        icon: null
       };
     });
   };
@@ -196,7 +198,7 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
             autoExpandParent={autoExpandParent}
             switcherIcon={<DownOutlined />}
             onSelect={onSelect}
-            showIcon={false}
+            // showIcon={false}
             onExpand={onExpand}
             treeData={loop(treeData)}
             titleRender={(node: any) => {
@@ -206,7 +208,6 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
                   className="flex just-between align-center pr10"
                   style={{
                     position: 'relative',
-                    minWidth: 220,
                     justifyContent: 'space-between'
                   }}
                 >
@@ -216,7 +217,7 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
                         {method}
                       </Tag>
                     )}
-                    <div className="ellipsis" style={{ display: 'inline-block', width: 250 }}>
+                    <div className="ellipsis" style={{ display: 'inline-block', width: 180 }}>
                       <Tooltip title={node.title}>{node.title}</Tooltip>
                     </div>
                   </div>
@@ -265,6 +266,7 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
               );
             }}
             blockNode
+            virtual
           />
         </Spin>
       </main>

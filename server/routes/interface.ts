@@ -53,7 +53,7 @@ export default function interfaceRouter(router: KoaRouter) {
    *          responses:
    *            type: string
    *            description: 同步的swagger对应的接口返回内容。json 格式字符串
-   *          parameter:
+   *          parameters:
    *            type: string
    *            description: 同步的swagger对应的接口query请求参数。json 格式字符串
 

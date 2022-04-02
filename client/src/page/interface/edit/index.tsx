@@ -1,16 +1,15 @@
 import Modal from '@/components/Modal';
 import useModal from '@/hooks/useModal';
 import { InterfaceEdit } from '@/services';
+import { transformSchemaToArray } from '@/utils/transformSchemaToArray';
 import { formatJSONObject } from '@/utils/utils';
 import { EditOutlined, SettingOutlined } from '@ant-design/icons';
-import { Button, Form, Input, InputNumber, Row, Table, message } from 'antd';
+import { Button, Form, Input, InputNumber, Table, message } from 'antd';
 import { cloneDeep, isEmpty } from 'lodash';
-// import * as monaco from 'monaco-editor';
-// import * as monacoEditor from 'monaco-editor/esm/vs/editor/editor.api';
 import React, { useEffect, useRef, useState } from 'react';
 import Monaco, { MonacoEditorProps } from 'react-monaco-editor';
 
-import { bodyColumns } from '../columns';
+import { generateBodyColumns } from '../columns';
 
 interface InterfaceEditI {
   response: any;
@@ -43,116 +42,71 @@ const InterfaceEditComponent: React.FC<InterfaceEditI> = ({ response, id = '' })
       innerSchema.current = cloneSchema;
     }
 
-    let obj = {};
-    const data = handleResponse(schema, '', [], obj);
-    setResData(data);
-    form.setFieldsValue(obj);
-  }, [response]);
+    // 搜集编辑的 字段:值
+    let collection = {};
 
-  const handleResponse = (schema: any, namePath = '', result: any[] = [], collection: any = {}) => {
-    if (schema) {
-      if (schema.type === 'object' && schema.properties) {
-        Object.keys(schema.properties).map((i: any) => {
-          const item = schema.properties[i];
-          const path = namePath ? `${namePath}.${i}` : i;
-
-          if (item) {
-            if (item.type === 'object') {
-              result.push({
-                name: i,
-                key: path,
-                dataIndex: path,
-                type: item.type,
-                children: handleResponse(item, path, [], collection),
-                description: item.description
-              });
-            } else if (item.type === 'array') {
-              const itemsPath = namePath ? `${namePath}.${i}.items` : `items.${i}`;
-              return result.push({
-                name: i,
-                key: path,
-                dataIndex: path,
-                type: item.type,
-                description: item.description,
-                children: [
-                  {
-                    name: 'items',
-                    key: itemsPath,
-                    dataIndex: itemsPath,
-                    type: item.type,
-                    children: handleResponse(item.items, `${path}.items`, [], collection)
-                  }
-                ],
-                setting: (
-                  <SettingOutlined
-                    className="cursor ml10"
+    const data = transformSchemaToArray(schema, '', [], collection, ({ type, path }) => {
+      if (type === 'obj') {
+      } else if (type === 'array') {
+        return {
+          setting: (
+            <SettingOutlined
+              className="cursor ml10"
+              onClick={() => {
+                // 找出schema
+                const obj = findSchemaByPath(innerSchema.current, path);
+                setEditSchema(obj);
+                if (obj.mock) {
+                  arrayConfigForm.setFieldsValue({ num: obj.mock.num });
+                }
+                setCurrentFieldPath(path);
+                schemaModal.setVisible(true);
+              }}
+            />
+          )
+        };
+      } else {
+        return {
+          mock: (
+            <Form.Item noStyle name={path}>
+              <Input
+                placeholder={'mock数据'}
+                onChange={(e) => {
+                  handleFieldChange(e.target.value, path);
+                }}
+                addonAfter={
+                  <EditOutlined
+                    className="cursor"
                     onClick={() => {
-                      // 找出schema
-                      const obj = findSchemaByPath(innerSchema.current, path);
-                      setEditSchema(obj);
-                      if (obj.mock) {
-                        arrayConfigForm.setFieldsValue({ num: obj.mock.num });
-                      }
-
+                      fieldMockModal.setVisible(true);
+                      mockForm.setFieldsValue({ mock: form.getFieldValue(path) });
                       setCurrentFieldPath(path);
-                      schemaModal.setVisible(true);
                     }}
                   />
-                )
-              });
-            } else {
-              if (item.mock) {
-                collection[path] = item.mock.value;
-              }
-
-              return result.push({
-                name: i,
-                key: path,
-                dataIndex: path,
-                type: item.type,
-                description: item.description,
-                default: item.default,
-                mock: (
-                  <Form.Item noStyle name={path}>
-                    <Input
-                      placeholder={'mock数据'}
-                      onChange={(e) => {
-                        handleFieldChange(e.target.value, path);
-                      }}
-                      addonAfter={
-                        <EditOutlined
-                          className="cursor"
-                          onClick={() => {
-                            fieldMockModal.setVisible(true);
-                            mockForm.setFieldsValue({ mock: form.getFieldValue(path) });
-                            setCurrentFieldPath(path);
-                          }}
-                        />
-                      }
-                      className="ml10"
-                    />
-                  </Form.Item>
-                ),
-                setting: (
-                  <SettingOutlined
-                    className="cursor ml10"
-                    onClick={() => {
-                      // 找出schema
-                      const obj = findSchemaByPath(innerSchema.current, path);
-                      setEditSchema(obj);
-                      setCurrentFieldPath(path);
-                      schemaModal.setVisible(true);
-                    }}
-                  />
-                )
-              });
-            }
-          }
-        });
+                }
+                className="ml10"
+              />
+            </Form.Item>
+          ),
+          setting: (
+            <SettingOutlined
+              className="cursor ml10"
+              onClick={() => {
+                // 找出schema
+                const obj = findSchemaByPath(innerSchema.current, path);
+                setEditSchema(obj);
+                setCurrentFieldPath(path);
+                schemaModal.setVisible(true);
+              }}
+            />
+          )
+        };
       }
-    }
-    return result;
-  };
+    });
+
+    setResData(data);
+    form.setFieldsValue(collection);
+  }, [response]);
 
   const onSubmit = () => {
     /** 保证输入输出格式正确 */
@@ -303,7 +257,9 @@ const InterfaceEditComponent: React.FC<InterfaceEditI> = ({ response, id = '' })
         </div>
       </Modal>
       <Form form={form}>
-        {!isEmpty(resData) && <Table columns={bodyColumns} dataSource={resData} pagination={false} expandable={{ defaultExpandAllRows: true }}></Table>}
+        {!isEmpty(resData) && (
+          <Table columns={generateBodyColumns(true)} dataSource={resData} pagination={false} expandable={{ defaultExpandAllRows: true }}></Table>
+        )}
       </Form>
       <Button onClick={onSubmit} type="primary" className="mt20">
         提交

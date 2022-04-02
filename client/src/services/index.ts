@@ -256,7 +256,7 @@ export interface InterfaceDetailResponse {
       /** 同步的swagger对应的接口返回内容。json 格式字符串 */
       responses: string;
       /** 同步的swagger对应的接口query请求参数。json 格式字符串 */
-      parameter: string;
+      parameters: string;
 }
 /** undefined */
 export const InterfaceDetail = (data: InterfaceDetailRequest,  config?: AxiosRequestConfig):Promise<BaseServeResponse<InterfaceDetailResponse>> => {
@@ -670,6 +670,8 @@ export interface InterfaceListItemTypes {
             auto_sync: boolean;
             /** 同步间隔 */
             auto_sync_time: number;
+            /** 同步文件类型 */
+            type: string;
             /** 分类列表 */
             category_list: InterfaceListCategoryItemTypes[];
 }

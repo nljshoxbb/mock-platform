@@ -1,10 +1,12 @@
 import Empty from '@/components/Empty';
 import { MethodsColorEnum, MethodsColorEnumType } from '@/constant/color';
 import { InterfaceDetail, InterfaceDetailResponse } from '@/services';
+import { transformSchemaToArray } from '@/utils/transformSchemaToArray';
 import { Col, Row, Spin, Table, Tabs, Tag } from 'antd';
+import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 
-import { bodyColumns, headersColumns } from './columns';
+import { generateBodyColumns, headersColumns, parameterColumns } from './columns';
 import InterfaceEdit from './edit';
 import styles from './index.less';
 import ItemList from './itemList';
@@ -18,7 +20,7 @@ const Main = () => {
   const [infoData, setInfoData] = useState<InterfaceDetailResponse>();
   const [headersData, setHeadersData] = useState<any[]>([]);
   const [requestBody, setRequestBody] = useState<any[]>([]);
-
+  const [parameterData, setParameterData] = useState<any[]>([]);
   const [responsesData, setResponsesData] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [activeKey, setActiveKey] = useState<string>('1');
@@ -26,51 +28,53 @@ const Main = () => {
   useEffect(() => {
     if (!infoData) return;
 
-    if (infoData?.request_body) {
-      let requestBody = infoData && infoData?.request_body && JSON.parse(infoData.request_body);
+    const { parameters, request_body, responses } = infoData;
 
+    if (parameters) {
+      const parametersJson = JSON.parse(parameters);
+      console.log(parametersJson);
+      const data = parametersJson.map((i: any) => {
+        return {
+          name: i.name,
+          type: i.schema.type,
+          description: i.description
+        };
+      });
+      setParameterData(data);
+    }
+
+    if (request_body) {
+      let requestBody = JSON.parse(request_body || '{}');
+      const keys = Object.keys(requestBody.content);
       const arr = Object.keys(requestBody.content).map((i) => {
         return requestBody.content[i];
       });
 
-      const { properties } = arr[0] || {};
-
-      let headerData = [
+      const headerData: any[] = [
         {
           name: 'content',
-          params: 'application/json',
-          required: '是'
+          params: keys.join(';'),
+          required: '是',
+          mark: requestBody.description
         }
       ];
+      console.log(headerData, requestBody);
       setHeadersData(headerData);
-      setRequestBody(handleRequestBody(properties));
+      setRequestBody(transformSchemaToArray(arr[0].schema));
+    } else {
+      setHeadersData([]);
+      setRequestBody([]);
     }
-    if (infoData.responses) {
+
+    if (responses) {
       const resData = JSON.parse(infoData.responses);
       if (resData.content) {
-        const arr = Object.keys(resData.content).map((i) => {
-          return resData.content[i];
-        });
-
         setResponsesData(resData);
       } else {
         setResponsesData({});
       }
     }
   }, [infoData]);
-
-  const handleRequestBody = (requestBody: any): any => {
-    let bodyData = [];
-    for (let key in requestBody) {
-      if (requestBody[key].type === 'array') {
-        bodyData.push({ name: key, children: handleRequestBody(requestBody[key].items), ...requestBody[key] });
-      } else {
-        bodyData.push({ name: key, ...requestBody[key] });
-      }
-    }
-
-    return bodyData;
-  };
 
   const method = infoData?.method as MethodsColorEnumType;
 
@@ -130,14 +134,24 @@ const Main = () => {
 
                   <h2 className={styles.title}>请求参数</h2>
                   <div style={{ paddingLeft: 25 }}>
-                    <div className={styles.reqData}>
-                      <span className={styles.name}>Headers：</span>
-                      <Table columns={headersColumns} dataSource={headersData} pagination={false}></Table>
-                    </div>
-                    <div className={styles.reqData}>
-                      <span className={styles.name}>Body:</span>
-                      <Table columns={bodyColumns} dataSource={requestBody} pagination={false} expandable={{ defaultExpandAllRows: true }}></Table>
-                    </div>
+                    {!isEmpty(parameterData) && (
+                      <div className={styles.reqData}>
+                        <span className={styles.name}>Parameter:</span>
+                        <Table columns={parameterColumns} dataSource={parameterData} pagination={false} rowKey="name"></Table>
+                      </div>
+                    )}
+                    {!isEmpty(headersData) && (
+                      <div className={styles.reqData}>
+                        <span className={styles.name}>Headers：</span>
+                        <Table columns={headersColumns} dataSource={headersData} pagination={false} rowKey="name"></Table>
+                      </div>
+                    )}
+                    {!isEmpty(requestBody) && (
+                      <div className={styles.reqData}>
+                        <span className={styles.name}>Body:</span>
+                        <Table columns={generateBodyColumns()} dataSource={requestBody} pagination={false} expandable={{ defaultExpandAllRows: true }}></Table>
+                      </div>
+                    )}
                   </div>
                   <h2 className={styles.title}>返回数据</h2>
                   <div style={{ paddingLeft: 25 }}>
