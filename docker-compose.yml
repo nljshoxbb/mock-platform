@@ -2,7 +2,6 @@ version: '3'
 
 services:
   db:
-    # image: mongo:5.0.6 # 镜像：版本
     build: 
       context: ./mongo
       dockerfile: Dockerfile
@@ -25,10 +24,20 @@ services:
     depends_on:
       - db
     environment:
-      # - NODE_ENV=production
+      - NODE_ENV=production
       - docker_db=db
     command: /bin/sh -c "npm run init-db && npm run docker-deploy"
     ports:
       - "3888:3888"
-
+  nginx:
+    build: 
+      context: ./nginx
+      dockerfile: Dockerfile
+    depends_on:
+      - server
+    ports:
+      - "8888:80"
+    restart: always
+    volumes:
+      - ./client/build/:/opt/html/mock-platform/
     
