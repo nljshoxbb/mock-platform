@@ -178,5 +178,5 @@
       }
     ]
   ],
-  "proxy": "http://localhost:3889"
+  "proxy": "http://localhost:3888"
 }

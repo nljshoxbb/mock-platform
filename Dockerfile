@@ -4,8 +4,10 @@ RUN mkdir -p /usr/src/mock-platform
 
 WORKDIR /usr/src/mock-platform
 
-COPY package.json ./
+COPY package.json  ./
 
 COPY . .
+
+RUN ls -a
 
 RUN npm i && npm i pm2 typescript tsc-alias -g

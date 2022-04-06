@@ -29,6 +29,8 @@ services:
     command: /bin/sh -c "npm run init-db && npm run docker-deploy"
     ports:
       - "3888:3888"
+    # volumes:
+    #   - ./node_modules/:/usr/src/mock-platform/node_modules
   nginx:
     build: 
       context: ./nginx
@@ -36,7 +38,7 @@ services:
     depends_on:
       - server
     ports:
-      - "8888:80"
+      - "6688:80"
     restart: always
     volumes:
       - ./client/build/:/opt/html/mock-platform/

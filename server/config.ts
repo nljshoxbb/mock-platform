@@ -15,7 +15,7 @@ export default {
   prefix,
   APP_RUNTIME,
   expired: 1 * 60 * 60 * 24 * 30,
-  port: 3889,
+  port: 3888,
   db: {
     name: 'mock-platform',
     // url: `mongodb://${isPro ? process.env.docker_db : '192.168.124.130:27017'}/mock-platform`,
