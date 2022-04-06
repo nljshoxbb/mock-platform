@@ -45,7 +45,7 @@ export const Columns = ({ onEdit = noop, onDelete = noop }: ColumnsProps): Colum
             <Button type="primary" onClick={() => onEdit(record)}>
               编辑
             </Button>
-            <Button type="primary" danger onClick={() => onDelete(record)}>
+            <Button type="primary" danger onClick={() => onDelete(record)} disabled={record.role === '0'}>
               删除
             </Button>
           </div>

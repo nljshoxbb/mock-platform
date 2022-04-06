@@ -4,7 +4,7 @@ import { InterfaceEdit } from '@/services';
 import { transformSchemaToArray } from '@/utils/transformSchemaToArray';
 import { formatJSONObject } from '@/utils/utils';
 import { EditOutlined, SettingOutlined } from '@ant-design/icons';
-import { Button, Form, Input, InputNumber, Table, message } from 'antd';
+import { Button, Empty, Form, Input, InputNumber, Table, message } from 'antd';
 import { cloneDeep, isEmpty } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import Monaco, { MonacoEditorProps } from 'react-monaco-editor';
@@ -214,7 +214,7 @@ const InterfaceEditComponent: React.FC<InterfaceEditI> = ({ response, id = '' })
         onCancel={() => {
           schemaModal.toggle();
         }}
-        title="设置"
+        title={`schema设置`}
         width={680}
         onOk={() => {
           handleModifySchema();
@@ -236,7 +236,7 @@ const InterfaceEditComponent: React.FC<InterfaceEditI> = ({ response, id = '' })
                 setEditSchema(cloneDeep(editSchema));
               }}
             >
-              <Form.Item name="num" label="元素数量">
+              <Form.Item name="num" label="数组元素数量">
                 <InputNumber min={1} />
               </Form.Item>
             </Form>
@@ -257,13 +257,19 @@ const InterfaceEditComponent: React.FC<InterfaceEditI> = ({ response, id = '' })
         </div>
       </Modal>
       <Form form={form}>
-        {!isEmpty(resData) && (
+        {isEmpty(resData) ? (
+          <div>
+            <Empty />
+          </div>
+        ) : (
           <Table columns={generateBodyColumns(true)} dataSource={resData} pagination={false} expandable={{ defaultExpandAllRows: true }}></Table>
         )}
       </Form>
-      <Button onClick={onSubmit} type="primary" className="mt20">
-        提交
-      </Button>
+      {!isEmpty(resData) && (
+        <Button onClick={onSubmit} type="primary" className="mt20">
+          提交
+        </Button>
+      )}
     </div>
   );
 };

@@ -20,6 +20,15 @@ export default function userRouter(router: Router) {
    *         page:
    *           type: number
    *           description: 当前页数
+   *         username:
+   *           type: string
+   *           description: 用户名
+   *         begin:
+   *           type: number
+   *           description: 开始时间戳
+   *         end:
+   *           type: number
+   *           description: 结束时间戳
    *     User:
    *       type: object
    *       properties:

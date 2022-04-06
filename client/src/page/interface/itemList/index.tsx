@@ -1,13 +1,10 @@
 import Modal from '@/components/Modal';
 import { MethodsColorEnum } from '@/constant/color';
 import useModal from '@/hooks/useModal';
-import { listToTreeWithOption } from '@/hooks/useTree';
 import { InterfaceList, ProjectRemove } from '@/services';
-import { DownOutlined } from '@ant-design/icons';
-import { PlusCircleOutlined } from '@ant-design/icons';
+import { DownOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Input, Spin, Tag, Tooltip, Tree, message } from 'antd';
 import type { TreeProps } from 'antd';
-import Item from 'antd/lib/list/Item';
 import { isEmpty } from 'lodash';
 import React, { Key, useEffect, useState } from 'react';
 
@@ -48,6 +45,7 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
     reqList();
     treeData && generateList(treeData);
   }, []);
+
   const reqList = (params?: number) => {
     setLoading(true);
     InterfaceList({ project_id: params })
@@ -60,6 +58,7 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
         setLoading(false);
       });
   };
+
   const generateList = (data: string | any[]) => {
     for (let i = 0; i < data.length; i++) {
       const node = data[i];
@@ -132,8 +131,9 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
   const onSearch = (value: any) => {
     const expandedKeys = dataList
       .map((item) => {
-        console.log(item.title);
-        if (item.title.indexOf(value) > -1) {
+        if (item.title.indexOf(value) !== -1) {
+          console.log(item, value);
+
           return getParentKey(item.key, treeData);
         }
         return null;
@@ -184,8 +184,9 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
               editModal.setTypeWithVisible('add');
             }}
           >
-            <PlusCircleOutlined className="mr10" />
-            新增
+            <Button type="primary" icon={<PlusOutlined />}>
+              新增
+            </Button>
           </div>
         </div>
         <div className={styles.desc}>项目描述:{itemName.desc}</div>
@@ -198,7 +199,6 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
             autoExpandParent={autoExpandParent}
             switcherIcon={<DownOutlined />}
             onSelect={onSelect}
-            // showIcon={false}
             onExpand={onExpand}
             treeData={loop(treeData)}
             titleRender={(node: any) => {
@@ -236,9 +236,10 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
                         style={{ marginLeft: 15 }}
                         onClick={(e) => {
                           e.stopPropagation();
+                          console.log(node);
                           Modal.confirm({
                             title: '提示',
-                            content: `是否要删除${node.title}`,
+                            content: `是否要删除"${node.project_name}"`,
                             onOk: () => {
                               console.log(node, 66);
                               setLoading(true);
@@ -267,12 +268,13 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
             }}
             blockNode
             virtual
+            height={560}
           />
         </Spin>
       </main>
 
       <Eidt
-        title={editModal.type === 'add' ? '新增' : '编辑'}
+        title={editModal.type === 'add' ? '新增项目' : '编辑项目'}
         visible={editModal.visible}
         onCancel={() => {
           editModal.setVisible(false);

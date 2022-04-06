@@ -105,8 +105,6 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
   path = '/' + paths.join('/');
   ctx.body = {};
 
-  // ctx.set('Access-Control-Allow-Origin', header.origin ? header.origin?.toString() : '');
-  // ctx.set('Access-Control-Allow-Credentials', 'true');
   if (!projectId) {
     return (ctx.body = responseBody(null, 400, 'project_id为空'));
   }
@@ -134,8 +132,6 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
 
     if (expectedItem) {
       const { delay, response_body } = expectedItem;
-
-      console.log(expectedItem);
 
       if (delay) {
         await delayFn(delay);
@@ -167,12 +163,10 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
       const types = Object.keys(content);
 
       if (types[0] === 'application/octet-stream') {
-        // const { schema } = content[types[0]];
-
         return (ctx.body = 10101);
       } else {
         const { schema } = content[types[0]];
-        Log.info(schema);
+        Log.info(JSON.stringify(schema));
         return (ctx.body = responseBody(
           {
             status: 200,
@@ -180,16 +174,8 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
           },
           200
         ));
-        // }
       }
     }
-
-    // if (responseSchema.format && responseSchema.format === 'binary') {
-    //   // if(responseSchema.)
-    //   // ctx.body =
-    // } else {
-    //   ctx.body = responseBody(Mock.mock(generateMockField(responseSchema)), 200);
-    // }
   } else {
     ctx.body = responseBody(null, 404, '没有mock数据');
   }

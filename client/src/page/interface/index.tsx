@@ -58,7 +58,6 @@ const Main = () => {
           mark: requestBody.description
         }
       ];
-      console.log(headerData, requestBody);
       setHeadersData(headerData);
       setRequestBody(transformSchemaToArray(arr[0].schema));
     } else {
@@ -121,15 +120,15 @@ const Main = () => {
                 <div>
                   <h2 className={styles.title}>基本信息</h2>
                   <Row gutter={[16, 6]} style={{ paddingLeft: 25, marginBottom: 10 }}>
-                    <Col span={6}>{renderItem('接口名称', infoData?.name || '-')}</Col>
+                    {/* <Col span={6}>{renderItem('接口名称', infoData?.name || '-')}</Col> */}
+                    <Col span={6}>{renderItem('请求类型', method ? <Tag color={MethodsColorEnum[method]}>{infoData?.method}</Tag> : '-')}</Col>
                     <Col span={18}>{renderItem('接口信息', infoData?.path || '-')}</Col>
                   </Row>
                   <Row gutter={[16, 6]} style={{ paddingLeft: 25, marginBottom: 10 }}>
-                    <Col span={6}>{renderItem('请求类型', method ? <Tag color={MethodsColorEnum[method]}>{infoData?.method}</Tag> : '-')}</Col>
                     <Col span={18}>{renderItem('Mock地址', infoData?.mock_url || '-')}</Col>
                   </Row>
                   <Row gutter={[16, 6]} style={{ paddingLeft: 25, marginBottom: 10 }}>
-                    <Col span={6}>{renderItem('备注', infoData?.description || '-')}</Col>
+                    <Col span={6}>{renderItem('接口描述', infoData?.description || '-')}</Col>
                   </Row>
 
                   <h2 className={styles.title}>请求参数</h2>

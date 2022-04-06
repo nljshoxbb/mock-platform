@@ -1,6 +1,5 @@
 import { UserLogin } from '@/services';
 import { LocalStorage } from '@/utils/LocalStorage';
-import { formatPassword } from '@/utils/utils';
 import { Button, Checkbox, Form, Input, message } from 'antd';
 import { useHistory } from 'react-router';
 
@@ -52,12 +51,7 @@ const Login = () => {
               </Form.Item>
             </div>
             <div>
-              <Button
-                type="primary"
-                htmlType="submit"
-                className={styles.btn}
-                // loading={loginRequest.loading}
-              >
+              <Button type="primary" htmlType="submit" className={styles.btn}>
                 登录
               </Button>
             </div>

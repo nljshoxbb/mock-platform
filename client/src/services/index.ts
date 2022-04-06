@@ -415,6 +415,12 @@ export interface UserListRequest {
     size: number;
     /** 当前页数 */
     page: number;
+    /** 用户名 */
+    username: string;
+    /** 开始时间戳 */
+    begin: number;
+    /** 结束时间戳 */
+    end: number;
 }
 
 /** undefined 响应参数*/

@@ -14,3 +14,7 @@ localhost:3888/swagger
 ### yaml地址
 
 localhost:3888/doc/swagger
+
+## 部署
+
+docker-compose up -d --build

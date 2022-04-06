@@ -50,11 +50,27 @@ class UserModel extends BaseModel<UserModelI> {
     return this.model.findByIdAndUpdate(id, { soft_del: 1 });
   }
 
-  public async listWithPaging(page, limit) {
+  public async listWithPaging(page, limit, data) {
+    const { username, begin, end } = data;
     page = parseInt(page);
     limit = parseInt(limit);
+
+    const usernameReg = new RegExp(`${username}`, 'i');
+
+    const obj: any = {
+      soft_del: { $lte: 0 },
+      username: { $regex: usernameReg }
+    };
+
+    if (begin && end) {
+      obj.created_at = {
+        $gte: begin,
+        $lt: end
+      };
+    }
+
     return this.model
-      .find({ soft_del: { $lte: 0 } })
+      .find(obj)
       .sort([['_id', -1]])
       .skip((page - 1) * limit)
       .limit(limit)
@@ -65,7 +81,32 @@ class UserModel extends BaseModel<UserModelI> {
   /**
    * listCount
    */
-  public listCount() {
+  public async listCount(data: any) {
+    const { username, begin, end } = data;
+
+    const usernameReg = new RegExp(`${username}`, 'i');
+
+    const obj: any = {
+      soft_del: { $lte: 0 }
+    };
+
+    if (username) {
+      obj.username = {
+        $regex: usernameReg
+      };
+    }
+
+    if (begin && end) {
+      obj.created_at = {
+        $gte: begin,
+        $lt: end
+      };
+    }
+
+    if (username || begin || end) {
+      const res = await this.model.find(obj);
+      return res.length;
+    }
     return this.model.countDocuments();
   }
 }

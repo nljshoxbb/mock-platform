@@ -73,9 +73,9 @@ export default class UserController extends BaseController {
 
   public async getList() {
     try {
-      const { size = 10, page = 1 } = this.ctx.request.body;
+      const { size = 10, page = 1, username, begin, end } = this.ctx.request.body;
 
-      const data = await this.model.listWithPaging(page, size);
+      const data = await this.model.listWithPaging(page, size, { username, begin, end });
       const list = data.map((i) => {
         return {
           id: i._id,
@@ -86,7 +86,7 @@ export default class UserController extends BaseController {
           role: i.role
         };
       });
-      const total = await this.model.listCount();
+      const total = list.length === 0 ? 0 : await this.model.listCount({ username, begin, end });
       return (this.ctx.body = responseBody({ list, page, size, total }, 200));
     } catch (error) {
       throw Error(error);

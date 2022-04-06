@@ -6,6 +6,7 @@ import Modal from '@/components/Modal';
 import useModal from '@/hooks/useModal';
 import { UserItemTypes, UserList, UserListRequest, UserListResponse, UserRemove } from '@/services';
 import { Col, DatePicker, Form, Input, Row, Spin, message } from 'antd';
+import { useForm } from 'antd/es/form/Form';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 
@@ -19,27 +20,32 @@ const User = () => {
   const [loadding, setLoadding] = useState<boolean>(false);
   const [data, setData] = useState<UserListResponse>();
   const editModal = useModal();
+  const [form] = useForm();
   const [parms, setParms] = useState<UserListRequest>({
     /** 每页数目 */
     size: 10,
     /** 页数 */
-    page: 1
+    page: 1,
+    username: '',
+    begin: 0,
+    end: 0
   });
   useEffect(() => {}, []);
 
   const onFinish = (value: { dateRange: moment.MomentInput[]; role_name: string }) => {
-    let newSearchValues = {
-      ...value,
-      end: (value?.dateRange && moment(value?.dateRange[1]).valueOf()) || 0,
-      begin: (value?.dateRange && moment(value?.dateRange[0]).valueOf()) || 0,
-      offset: 1,
-      size: 10
-    };
+    // let newSearchValues = {
+    //   ...value,
+    //   end: (value?.dateRange && moment(value?.dateRange[1]).valueOf()) || 0,
+    //   begin: (value?.dateRange && moment(value?.dateRange[0]).valueOf()) || 0,
+    //   offset: 1,
+    //   size: 10
+    // };
     // setParms(newSearchValues);
   };
   useEffect(() => {
     reqUserList(parms);
   }, [parms]);
+
   const reqUserList = (parms: UserListRequest) => {
     setLoadding(true);
     UserList({ ...parms })
@@ -55,14 +61,26 @@ const User = () => {
       });
   };
 
+  const onSearch = () => {
+    const value = form.getFieldsValue();
+    console.log(value);
+    setParms({
+      ...parms,
+      page: 1,
+      end: (value?.dateRange && moment(value?.dateRange[1]).unix()) || '',
+      begin: (value?.dateRange && moment(value?.dateRange[0]).unix()) || '',
+      username: value.username
+    });
+  };
+
   return (
     <div className={styles.main}>
-      <Form className={styles.commonSearchForm} onFinish={onFinish}>
+      <Form className={styles.commonSearchForm} onFinish={onFinish} form={form}>
         <Row gutter={[32, 8]}>
           <Col sm={6} md={6} lg={6} xl={6}>
             <div className={styles.filterTitle}>用户</div>
 
-            <Form.Item name="role_name">
+            <Form.Item name="username">
               <Input style={{ width: '100%' }} placeholder="请输入角色名称" />
             </Form.Item>
           </Col>
@@ -85,7 +103,7 @@ const User = () => {
           </Col>
           <Col sm={6} md={6} lg={6} xl={6}>
             <div className={styles.formBtn}>
-              <Button type="primary" htmlType="submit" className={styles.submitStyle}>
+              <Button type="primary" htmlType="submit" className={styles.submitStyle} onClick={onSearch}>
                 搜索
               </Button>
               <Button
@@ -107,8 +125,6 @@ const User = () => {
           rowKey="update_at"
           columns={Columns({
             onEdit: (record: UserItemTypes) => {
-              console.log(record, 'record');
-
               setCurrentItem(record);
               editModal.setTypeWithVisible('info');
             },

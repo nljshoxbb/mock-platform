@@ -1,7 +1,7 @@
 import { UserLoginResponse, UserLogout } from '@/services';
 import { LocalStorage } from '@/utils/LocalStorage';
 import { LogoutOutlined } from '@ant-design/icons';
-import { Tabs } from 'antd';
+import { Popconfirm, Tabs } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 import { Link, Redirect, Route } from 'react-router-dom';
@@ -19,7 +19,7 @@ const Main = (props: any) => {
   useEffect(() => {
     setUserInfo(JSON.parse(localStorage.getItem(LocalStorage.MOCK_USER_INFO) || ''));
   }, []);
-  const Onlogout = () => {
+  const onLogout = () => {
     // @ts-ignore
     UserLogout({ uid: userInfo?.uid }).then((res) => {
       history.push({ pathname: '/login' });
@@ -41,7 +41,9 @@ const Main = (props: any) => {
     <div className={styles.mainBigBox}>
       <div className={styles.logout}>
         <span>{userInfo?.username}</span>
-        <LogoutOutlined title="退出登录" className={styles.logoutIcon} onClick={Onlogout} />
+        <Popconfirm title="确定要退出登录吗？" onConfirm={onLogout} placement="leftBottom">
+          <LogoutOutlined title="退出登录" className={styles.logoutIcon} />
+        </Popconfirm>
       </div>
       <div className={styles.tabs}>
         <Tabs

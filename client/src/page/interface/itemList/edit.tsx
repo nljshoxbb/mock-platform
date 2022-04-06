@@ -16,6 +16,7 @@ const layout = {
 const Eidt: React.FC<EditProps> = ({ onSuccess, type, selNode, ...modalProps }) => {
   const [form] = Form.useForm();
   const [disabled, setDisabled] = useState(false);
+  const [submitLoading, setSubmitLoading] = useState(false);
 
   useEffect(() => {
     if (modalProps.visible) {
@@ -34,28 +35,39 @@ const Eidt: React.FC<EditProps> = ({ onSuccess, type, selNode, ...modalProps }) 
 
   const onSubmit = () => {
     let autoTime: number;
+    setSubmitLoading(true);
     if (type === 'add') {
-      form.validateFields().then(async (values) => {
-        autoTime = values.auto_sync_time * 60;
-        message.success('新增成功');
-        ProjectCreate({ ...values, auto_sync: disabled, auto_sync_time: autoTime }).then((res) => {
-          onSuccess && onSuccess();
-          //@ts-ignore
-          modalProps.onCancel && modalProps.onCancel();
+      form
+        .validateFields()
+        .then(async (values) => {
+          autoTime = values.auto_sync_time * 60;
+          ProjectCreate({ ...values, auto_sync: disabled, auto_sync_time: autoTime }).then((res) => {
+            if (!res.hasError) {
+              message.success('新增成功');
+              onSuccess && onSuccess();
+            }
+            //@ts-ignore
+            modalProps.onCancel && modalProps.onCancel();
+          });
+        })
+        .finally(() => {
+          setSubmitLoading(true);
         });
-      });
     } else {
       form.validateFields().then(async (values) => {
         autoTime = values.auto_sync_time * 60;
-
-        ProjectEdit({ ...values, id: selNode.project_id, auto_sync: disabled, auto_sync_time: autoTime }).then((res) => {
-          if (!res.hasError) {
-            message.success('修改成功');
-            onSuccess && onSuccess();
-            //@ts-ignore
-            modalProps.onCancel && modalProps.onCancel();
-          }
-        });
+        ProjectEdit({ ...values, id: selNode.project_id, auto_sync: disabled, auto_sync_time: autoTime })
+          .then((res) => {
+            if (!res.hasError) {
+              message.success('修改成功');
+              onSuccess && onSuccess();
+              //@ts-ignore
+              modalProps.onCancel && modalProps.onCancel();
+            }
+          })
+          .finally(() => {
+            setSubmitLoading(true);
+          });
       });
     }
   };
