@@ -1,9 +1,7 @@
-import type { CSSProperties, Ref } from "react";
-import { Empty, Table } from "antd";
-import React, { forwardRef, useCallback, useRef, useState } from "react";
-import type { TablePaginationConfig, TableProps } from "antd/lib/table";
-
-import styles from "./index.less";
+import { Table } from 'antd';
+import type { TablePaginationConfig, TableProps } from 'antd/lib/table';
+import type { CSSProperties, Ref } from 'react';
+import { forwardRef, useState } from 'react';
 
 export interface BaseListSummary {
   pageCurrent: number;
@@ -17,7 +15,7 @@ interface AntdDivideTableProps<T> extends TableProps<T> {
   listSummary?: BaseListSummary;
   paginationConfig?: TablePaginationConfig;
   onPaginationChange?: (page: number, pageSize?: number) => void;
-  rowSelection?: TableProps<T>["rowSelection"] & {
+  rowSelection?: TableProps<T>['rowSelection'] & {
     selectedRows?: T[];
     onClear?: () => void;
     selectLimit?: number | [number, number];
@@ -25,15 +23,12 @@ interface AntdDivideTableProps<T> extends TableProps<T> {
   wrapStyle?: CSSProperties;
 }
 
-function AntdDivideTable<T>(
-  tableprops: AntdDivideTableProps<T>,
-  ref: Ref<HTMLDivElement>
-) {
+function AntdDivideTable<T>(tableprops: AntdDivideTableProps<T>, ref: Ref<HTMLDivElement>) {
   const defaultListSummary: BaseListSummary = {
     pageCurrent: 1,
     pageSize: 10,
     totalItems: 0,
-    totalPages: 0,
+    totalPages: 0
   };
   const {
     fixed,
@@ -49,27 +44,18 @@ function AntdDivideTable<T>(
   } = tableprops;
   const { pageCurrent, pageSize, totalItems } = listSummary;
 
-  /** 多选行数据 */
-  const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([]);
-  /** 每页多选的数据 */
-  const [, setSelectKeys] = useState<T[][]>([]);
   /** 当前分页 */
   const [pageParams, setPageParams] = useState({
     page: pageCurrent,
-    pageSize: pageSize,
+    pageSize: pageSize
   });
-  const activeRowClassName = useCallback(
-    (record, index: number, indent: number): string => {
-      if (selectedRowKeys.includes(record.id)) return "theme-row-active";
-      return "";
-    },
-    [selectedRowKeys]
-  );
+
   // 每页二维数据转为一维数据
   const mapRows = (arr: string | any[]) => {
     let res: T[] = [];
     for (let i = 0; i < arr.length; i++) {
       if (Array.isArray(arr[i])) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         res = res.concat(mapRows(arr[i]));
       } else {
         res.push(arr[i]);
@@ -78,38 +64,26 @@ function AntdDivideTable<T>(
     return res.filter(Boolean);
   };
 
-  /** 表格单选和多选 */
-  const onSelectChange = (keys: number[], selectedRows: T[]) => {
-    // @ts-ignore
-    setSelectedRowKeys(selectedRows);
-  };
-
   const common = {
     showTotal: (total: number) => `共${total}条`,
     showQuickJumper: true,
-    pageSizeOptions: ["10", "50", "100"],
-    showSizeChanger: false,
+    pageSizeOptions: ['10', '50', '100'],
+    showSizeChanger: false
   };
 
   return (
-    <div
-      ref={ref}
-      className={`${styles.main} ${fixed ? styles["fixed-table"] : ""}`}
-      style={wrapStyle}
-    >
+    <div ref={ref} style={wrapStyle}>
       <Table
         {...rest}
         scroll={scroll}
-        rowClassName={activeRowClassName}
         pagination={
           pagination
             ? {
                 ...pagination,
                 ...common,
-                onShowSizeChange: pagination.onChange,
+                onShowSizeChange: pagination.onChange
               }
             : showPagination && {
-                // className: "m-pagination",
                 ...common,
                 current: pageCurrent,
                 pageSize,
@@ -118,11 +92,11 @@ function AntdDivideTable<T>(
                   setPageParams({
                     ...pageParams,
                     page,
-                    pageSize: pageSizeVal || defaultListSummary.pageSize,
+                    pageSize: pageSizeVal || defaultListSummary.pageSize
                   });
                   onPaginationChange && onPaginationChange(page, pageSizeVal);
                 },
-                ...paginationConfig,
+                ...paginationConfig
               }
         }
         // @ts-ignore
@@ -130,19 +104,10 @@ function AntdDivideTable<T>(
         rowSelection={
           rowSelection
             ? {
-                ...rowSelection,
-                // selectedRowKeys,
-                // onChange: onSelectChange,
+                ...rowSelection
               }
             : undefined
         }
-        // locale={{
-        //   emptyText: (
-        //     <div className="flex flex-center ">
-        //       <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-        //     </div>
-        //   ),
-        // }}
       />
     </div>
   );

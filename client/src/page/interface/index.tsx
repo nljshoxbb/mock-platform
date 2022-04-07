@@ -2,7 +2,7 @@ import Empty from '@/components/Empty';
 import { MethodsColorEnum, MethodsColorEnumType } from '@/constant/color';
 import { InterfaceDetail, InterfaceDetailResponse } from '@/services';
 import { transformSchemaToArray } from '@/utils/transformSchemaToArray';
-import { Col, Row, Spin, Table, Tabs, Tag } from 'antd';
+import { Button, Col, Row, Spin, Table, Tabs, Tag, message } from 'antd';
 import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 
@@ -125,7 +125,19 @@ const Main = () => {
                     <Col span={18}>{renderItem('接口信息', infoData?.path || '-')}</Col>
                   </Row>
                   <Row gutter={[16, 6]} style={{ paddingLeft: 25, marginBottom: 10 }}>
-                    <Col span={18}>{renderItem('Mock地址', infoData?.mock_url || '-')}</Col>
+                    <Col span={18}>
+                      {renderItem('mock地址', infoData?.mock_url || '-')}{' '}
+                      <Button
+                        type="primary"
+                        className="ml10"
+                        onClick={() => {
+                          navigator.clipboard.writeText(JSON.stringify(infoData?.mock_url));
+                          message.success('复制成功', 1);
+                        }}
+                      >
+                        复制
+                      </Button>
+                    </Col>
                   </Row>
                   <Row gutter={[16, 6]} style={{ paddingLeft: 25, marginBottom: 10 }}>
                     <Col span={6}>{renderItem('接口描述', infoData?.description || '-')}</Col>

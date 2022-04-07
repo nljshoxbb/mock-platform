@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 
 export declare type ModalType = 'add' | 'update' | 'info' | 'list';
 
@@ -29,8 +29,8 @@ export default function useModal(config: UseModalConfig = {}) {
         setTypeWithVisible: (val: ModalType) => {
           setType(val);
           setVisible(true);
-        },
+        }
       };
-    }, [type, visible]),
+    }, [])
   };
 }

@@ -2,9 +2,9 @@ import { UserLoginResponse, UserLogout } from '@/services';
 import { LocalStorage } from '@/utils/LocalStorage';
 import { LogoutOutlined } from '@ant-design/icons';
 import { Popconfirm, Tabs } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
-import { Link, Redirect, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
 import Account from '../account';
 import Interface from '../interface';
@@ -25,10 +25,8 @@ const Main = (props: any) => {
       history.push({ pathname: '/login' });
     });
   };
-  const [activeKey, setActiveKey] = useState<string>('mock');
 
   const onTabChanged = (key: string) => {
-    setActiveKey(key);
     history.push({
       pathname: key
     });
@@ -46,14 +44,7 @@ const Main = (props: any) => {
         </Popconfirm>
       </div>
       <div className={styles.tabs}>
-        <Tabs
-          defaultActiveKey="mock"
-          destroyInactiveTabPane
-          // activeKey={props.location.state && props.location.state.tabKey ? props.location.state.tabKey : 'mock'}
-          activeKey={pathname}
-          onChange={onTabChanged}
-          style={{ height: 100 }}
-        >
+        <Tabs defaultActiveKey="mock" destroyInactiveTabPane activeKey={pathname} onChange={onTabChanged} style={{ height: 100 }}>
           <TabPane tab="mock数据" key="/main/mock"></TabPane>
           <TabPane tab="用户管理" key="/main/user"></TabPane>
           <TabPane tab="账户管理" key="/main/account"></TabPane>

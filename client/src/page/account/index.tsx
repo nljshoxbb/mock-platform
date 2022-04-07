@@ -1,8 +1,8 @@
 import useModal from '@/hooks/useModal';
-import { UserChangepwd, UserLoginResponse } from '@/services';
+import { UserLoginResponse } from '@/services';
 import { LocalStorage } from '@/utils/LocalStorage';
 import { Button } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import styles from './index.less';
 import Edit from './modal/index';
@@ -46,12 +46,6 @@ const SystemAccount = () => {
         onCancel={() => {
           editModal.setVisible(false);
         }}
-        // onSuccess={(audioId) => {
-        //   console.log(audioId, 'value');
-        //   setSelAudio(audioId);
-        //   reqViodeData();
-        // }}
-        // currentItem={currentItem}
         type={editModal.type}
         width={560}
       />

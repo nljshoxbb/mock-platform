@@ -241,9 +241,7 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
                             title: '提示',
                             content: `是否要删除"${node.project_name}"`,
                             onOk: () => {
-                              console.log(node, 66);
                               setLoading(true);
-
                               ProjectRemove({ id: node.project_id })
                                 .then((res) => {
                                   if (!res.hasError) {

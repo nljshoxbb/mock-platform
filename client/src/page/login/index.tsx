@@ -10,8 +10,6 @@ const Login = () => {
 
   const onFinish = (values: any) => {
     UserLogin({ ...values }).then((res) => {
-      console.log(66);
-
       if (!res.hasError) {
         localStorage.setItem(LocalStorage.MOCK_TOKEN, res.data.token);
         window.localStorage.setItem(LocalStorage.MOCK_USER_INFO, JSON.stringify(res.data));

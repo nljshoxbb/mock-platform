@@ -5,8 +5,6 @@ import { Button, Form, Input, Radio, message } from 'antd';
 import type { ModalProps } from 'antd';
 import React, { useEffect, useState } from 'react';
 
-import styles from './index.less';
-
 const layout = {
   labelCol: { span: 6 },
   wrapperCol: { span: 16 }
@@ -63,7 +61,7 @@ const Edit: React.FC<EditProps> = ({ onSuccess, type, currentItem, ...modalProps
 
       form.setFieldsValue(values);
     }
-  }, [currentItem, modalProps.visible]);
+  }, [currentItem, modalProps.visible, type, form]);
 
   const onResetPwd = () => {
     UserResetPwd({ uid: currentItem?.id as string }).then((res) => {
@@ -79,7 +77,6 @@ const Edit: React.FC<EditProps> = ({ onSuccess, type, currentItem, ...modalProps
     <>
       <Modal
         {...modalProps}
-        className={styles.eidit}
         onOk={() => {
           onSubmit();
         }}

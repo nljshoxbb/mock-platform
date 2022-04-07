@@ -1,4 +1,4 @@
-import 'antd/dist/antd.css';
+import 'antd/dist/antd.min.css';
 import '@/assets/css/global.css';
 import '@/assets/css/styles.css';
 

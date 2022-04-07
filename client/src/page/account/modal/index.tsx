@@ -1,19 +1,14 @@
-import { Form, Input, message } from 'antd';
-import React, { useEffect, useState } from 'react';
-
-import { LocalStorage } from "@/utils/LocalStorage";
-
 import Modal from '@/components/Modal';
-import type { ModalProps } from 'antd';
 import { UserChangepwd } from '@/services';
-import { formatPassword } from '@/utils/utils';
-// import { history } from 'umi';
-import styles from './index.less';
-import { useHistory } from "react-router";
+import { LocalStorage } from '@/utils/LocalStorage';
+import { Form, Input, message } from 'antd';
+import type { ModalProps } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router';
 
 const layout = {
   labelCol: { span: 6 },
-  wrapperCol: { span: 16 },
+  wrapperCol: { span: 16 }
 };
 interface EditProps extends ModalProps {
   onSuccess?: () => void;
@@ -25,21 +20,19 @@ const Edit: React.FC<EditProps> = ({ onSuccess, type, ...modalProps }) => {
   const history = useHistory();
 
   const onSubmit = () => {
-
     form.validateFields().then(async (values) => {
       const params = {
-        new_pwd:values.role_name,
-        uid: JSON.parse(localStorage.getItem(LocalStorage.MOCK_USER_INFO) || '{}').uid,
+        new_pwd: values.role_name,
+        uid: JSON.parse(localStorage.getItem(LocalStorage.MOCK_USER_INFO) || '{}').uid
       };
       setLoading(true);
       try {
-        UserChangepwd(params).then((res: { hasError: any; }) => {
+        UserChangepwd(params).then((res: { hasError: any }) => {
           if (!res.hasError) {
             message.success('修改成功');
             onSuccess && onSuccess();
             setTimeout(() => {
-              history.push({ pathname: "/login" });
-
+              history.push({ pathname: '/login' });
             }, 300);
             //@ts-ignore
             modalProps.onCancel && modalProps.onCancel();
@@ -53,35 +46,19 @@ const Edit: React.FC<EditProps> = ({ onSuccess, type, ...modalProps }) => {
   };
   useEffect(() => {
     form.resetFields();
-  }, []);
+  }, [form]);
 
   return (
     <>
       <Modal
         {...modalProps}
-        className={styles.eidit}
         onOk={() => {
           onSubmit();
         }}
         confirmLoading={loading}
       >
         <Form {...layout} form={form}>
-          <Form.Item
-            name="role_name"
-            label="设置新密码"
-            rules={[{ required: true }]}
-            // rules={[
-            //   ({ getFieldValue }) => ({
-            //     required: true,
-            //     validator(rule, value) {
-            //       if (!value || getFieldValue('permission_list') === value) {
-            //         return Promise.resolve();
-            //       }
-            //       return Promise.reject('两次密码输入不一致');
-            //     },
-            //   }),
-            // ]}
-          >
+          <Form.Item name="role_name" label="设置新密码" rules={[{ required: true }]}>
             <Input.Password placeholder="请输入新密码" maxLength={10} showCount />
           </Form.Item>
           <Form.Item
@@ -96,8 +73,8 @@ const Edit: React.FC<EditProps> = ({ onSuccess, type, ...modalProps }) => {
                     return Promise.resolve();
                   }
                   return Promise.reject('两次密码输入不一致');
-                },
-              }),
+                }
+              })
             ]}
           >
             <Input.Password placeholder="请再次输入新密码" maxLength={10} showCount />

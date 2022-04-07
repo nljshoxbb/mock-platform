@@ -1,11 +1,11 @@
-import React, { CSSProperties } from "react";
+import { Button as AntdButton } from 'antd';
+import type { ButtonProps } from 'antd';
+import React from 'react';
 
-import { Button as AntdButton } from "antd";
-import type { ButtonProps } from "antd";
-import styles from "./index.less";
+import styles from './index.less';
 
 export interface CustomButtonProps extends ButtonProps {
-  btnType?: "ok" | "cancel";
+  btnType?: 'ok' | 'cancel';
 }
 
 const Button = (props: CustomButtonProps): React.ReactElement => {
@@ -13,24 +13,20 @@ const Button = (props: CustomButtonProps): React.ReactElement => {
 
   let className = styles.main;
 
-  if (type === "default") {
+  if (type === 'default') {
     className += ` ${styles.default}`;
   }
 
-  if (btnType === "ok") {
+  if (btnType === 'ok') {
     className += ` ${styles.ok}`;
   }
 
-  if (btnType === "cancel") {
+  if (btnType === 'cancel') {
     className += ` ${styles.cancel}`;
   }
 
   return (
-    <AntdButton
-      {...rest}
-      type={type}
-      className={`${className} ${props.className}`}
-    >
+    <AntdButton {...rest} type={type} className={`${className} ${props.className}`}>
       {props.children}
     </AntdButton>
   );

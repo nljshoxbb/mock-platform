@@ -1,13 +1,9 @@
-import 'monaco-editor/esm/vs/basic-languages/html/html.contribution';
-
 import Modal from '@/components/Modal';
 import { ExpectedCreate, ExpectedEdit, InterfaceExpectedItemItemTypes } from '@/services';
-import { Col, Form, Input, InputNumber, Row, Tabs, message } from 'antd';
+import { Form, Input, InputNumber, message } from 'antd';
 import type { ModalProps } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Monaco from 'react-monaco-editor';
-
-import styles from './index.less';
 
 interface EditProps extends ModalProps {
   onSuccess?: () => void;
@@ -28,6 +24,7 @@ const AddHopeModal: React.FC<EditProps> = ({ onSuccess, node, type, currentItem,
         form.setFieldsValue({ ...currentItem });
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [modalProps.visible]);
 
   const onSubmit = () => {
@@ -69,14 +66,13 @@ const AddHopeModal: React.FC<EditProps> = ({ onSuccess, node, type, currentItem,
       >
         <Form {...layout} form={form}>
           <Form.Item name="name" label="期望名称" rules={[{ required: true }]}>
-            <Input></Input>
+            <Input style={{ width: 200 }}></Input>
           </Form.Item>
 
           <Form.Item label="延时" rules={[{ required: true }]}>
             <Form.Item name="delay" noStyle rules={[{ required: true }]}>
-              <InputNumber />
+              <InputNumber style={{ width: 200 }} addonAfter="ms" />
             </Form.Item>
-            <span className="ant-form-text">ms</span>
           </Form.Item>
           <Form.Item name="response_body" label="Body" rules={[{ required: true }]}>
             <div ref="container" className="monaco-editor">
