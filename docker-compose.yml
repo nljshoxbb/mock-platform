@@ -24,6 +24,7 @@ services:
     depends_on:
       - db
     environment:
+      - EXTERNAL_IP=${EXTERNAL_IP}
       - NODE_ENV=production
       - docker_db=db
     command: /bin/sh -c "npm run init-db && npm run docker-deploy"

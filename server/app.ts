@@ -13,6 +13,8 @@ import connectDatabase from './database';
 import authMiddleware from './middlewares/auth';
 import mockMiddleware from './middlewares/mock';
 
+console.log(process.env.EXTERNAL_IP);
+
 const app = new Koa();
 
 app.use(bodyParser({ strict: false, jsonLimit: '2mb', formLimit: '2mb', textLimit: '2mb' }));
