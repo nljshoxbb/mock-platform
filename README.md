@@ -1,5 +1,10 @@
 # 接口mock平台
 
+## 前端开发
+
+1. `cd client`
+2. `yarn`
+3. `yarn start`
 
 ## 后端开发
 
@@ -17,4 +22,13 @@ localhost:3888/doc/swagger
 
 ## 部署
 
-docker-compose up -d --build
+### 前端
+
+`cd client`
+
+`yarn`
+
+`yarn build`
+
+### docker
+`docker-compose up -d --build`
