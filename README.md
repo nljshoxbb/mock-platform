@@ -4,7 +4,7 @@
 ## 后端开发
 
 1. `yarn`
-2. `yarn init-server`
+2. `yarn init-db`
 3. `yarn dev-server`
 
 ### 接口文档地址 
