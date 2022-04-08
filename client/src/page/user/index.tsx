@@ -88,17 +88,7 @@ const User = () => {
             <div className={styles.filterTitle}>更新时间</div>
 
             <Form.Item name="dateRange">
-              <RangePicker
-                style={{ width: '100%' }}
-                // value={[
-                //   timeMomentFormart(item.value[0]),
-                //   timeMomentFormart(item.value[1]),
-                // ]}
-                format="YYYY-MM-DD HH:mm:ss"
-                allowClear
-                showTime
-                // onChange={this.changeTime}
-              />
+              <RangePicker style={{ width: '100%' }} format="YYYY-MM-DD HH:mm:ss" allowClear showTime />
             </Form.Item>
           </Col>
           <Col sm={6} md={6} lg={6} xl={6}>
