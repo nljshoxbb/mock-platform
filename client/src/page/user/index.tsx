@@ -1,11 +1,9 @@
-import {} from '@/services';
-
 import AntdDivideTable from '@/components/AntdDivideTable';
 import Button from '@/components/Button';
 import Modal from '@/components/Modal';
 import useModal from '@/hooks/useModal';
 import { UserItemTypes, UserList, UserListRequest, UserListResponse, UserRemove } from '@/services';
-import { Col, DatePicker, Form, Input, Row, Spin, message } from 'antd';
+import { Col, Form, Input, Row, Spin, message } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
@@ -86,9 +84,9 @@ const User = () => {
           <Col sm={6} md={6} lg={6} xl={6}>
             <div className={styles.filterTitle}>更新时间</div>
 
-            <Form.Item name="dateRange">
+            {/* <Form.Item name="dateRange">
               <DatePicker.RangePicker style={{ width: '100%' }} format="YYYY-MM-DD HH:mm:ss" allowClear showTime />
-            </Form.Item>
+            </Form.Item> */}
           </Col>
           <Col sm={6} md={6} lg={6} xl={6}>
             <div className={styles.formBtn}>
