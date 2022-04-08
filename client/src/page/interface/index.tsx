@@ -32,7 +32,6 @@ const Main = () => {
 
     if (parameters) {
       const parametersJson = JSON.parse(parameters);
-      console.log(parametersJson);
       const data = parametersJson.map((i: any) => {
         return {
           name: i.name,

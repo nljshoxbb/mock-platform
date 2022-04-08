@@ -6,8 +6,7 @@ const APP_RUNTIME = path.resolve(__dirname, '../../');
 const APP_LOG = path.join(APP_RUNTIME, 'log');
 const prefix = '/api';
 
-const isPro = process.env.NODE_ENV === 'production';
-console.log(`process.env.NODE_ENV=${process.env.NODE_ENV}`);
+export const isPro = process.env.NODE_ENV === 'production';
 export default {
   APP_ROOT,
   APP_SERVER,

@@ -5,7 +5,7 @@ import fs from 'fs-extra';
 import jwt from 'jsonwebtoken';
 import { Types } from 'mongoose';
 
-import config from '../config';
+import config, { isPro } from '../config';
 
 export const fileExist = (filePath: string) => {
   try {
@@ -56,6 +56,10 @@ export const objectIdToString = (id): string => {
 };
 
 export const getIPAddress = () => {
+  if (isPro) {
+    return process.env.EXTERNAL_IP;
+  }
+
   const interfaces = networkInterfaces();
   for (const devName in interfaces) {
     const iface = interfaces[devName] || [];
