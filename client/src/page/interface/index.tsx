@@ -138,7 +138,7 @@ const Main = () => {
                   <Row gutter={[16, 6]} style={{ paddingLeft: 25, marginBottom: 10 }}>
                     <Col span={18}>
                       {renderItem('mock地址', infoData?.mock_url || '-')}{' '}
-                      <Button type="primary" className="ml10 copy-btn" data-clipboard-text={JSON.stringify(infoData?.mock_url)}>
+                      <Button type="primary" className="ml10 copy-btn" data-clipboard-text={infoData?.mock_url}>
                         复制
                       </Button>
                     </Col>

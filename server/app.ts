@@ -36,8 +36,9 @@ async function main(): Promise<void> {
   try {
     await connectDatabase(Config.db.url);
     app.listen(Config.port, () => {
-      Log.info(`服务已启动，接口地址: \nhttp://${getIPAddress()}:${Config.port}/`);
-      Log.info(`文档地址: \nhttp://${getIPAddress()}:${Config.port}/`);
+      Log.info(`服务已启动，接口地址: \nhttp://${getIPAddress()}:${Config.port}/api`);
+      Log.info(`文档地址: \nhttp://${getIPAddress()}:${Config.port}/html/swagger`);
+      Log.info(`文档yaml地址: \nhttp://${getIPAddress()}:${Config.port}/doc/swagger`);
     });
   } catch (error) {
     Log.error(error);

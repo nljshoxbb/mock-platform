@@ -8,6 +8,4 @@ COPY package.json  ./
 
 COPY . .
 
-RUN ls -a
-
 RUN npm i && npm i pm2 typescript tsc-alias -g
