@@ -1,7 +1,7 @@
 import Modal from '@/components/Modal';
 import { MethodsColorEnum } from '@/constant/color';
 import useModal from '@/hooks/useModal';
-import { InterfaceList, ProjectRemove } from '@/services';
+import { InterfaceFlatlist, InterfaceList, ProjectRemove } from '@/services';
 import { DownOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Input, Spin, Tag, Tooltip, Tree, message } from 'antd';
 import type { TreeProps } from 'antd';
@@ -26,8 +26,6 @@ interface ItemListProps {
   getIinterface?: (node: any) => void;
 }
 
-const dataList: DataList[] = [];
-
 const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
   const [treeData, setTreeData] = useState<TreeData[]>([]);
   const [itemName, setItemName] = useState({
@@ -39,35 +37,36 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
   const [expandedKeys, setExpandedKeys] = useState<Key[]>([]);
   const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true);
   const [searchValue, setSearchValue] = useState<string>('');
+  const [dataList, setDataList] = useState<DataList[]>([]);
 
   const editModal = useModal();
   useEffect(() => {
     reqList();
-    treeData && generateList(treeData);
+    InterfaceFlatlist({}).then((res) => {
+      if (!res.hasError) {
+        const list = res.data.list.map((i) => {
+          return {
+            key: i._id,
+            title: i.path
+          };
+        });
+        setDataList(list);
+      }
+    });
   }, []);
 
   const reqList = (params?: number) => {
     setLoading(true);
     InterfaceList({ project_id: params })
       .then((res) => {
-        setTreeData(treeChagenName(res.data.list, 'project_name', 'project_id', 'category_list', true));
+        const data = treeChagenName(res.data.list, 'project_name', 'project_id', 'category_list', true);
+        setTreeData(data);
         setLoading(false);
       })
       .catch((err) => {
         console.log(err, 'err');
         setLoading(false);
       });
-  };
-
-  const generateList = (data: string | any[]) => {
-    for (let i = 0; i < data.length; i++) {
-      const node = data[i];
-      const { key, title } = node;
-      dataList.push({ key, title: title });
-      if (node.children) {
-        generateList(node.children);
-      }
-    }
   };
 
   const treeChagenName = (data: any[], title: string, key: string, children: string, isEdit?: boolean) => {
@@ -97,7 +96,6 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
     });
   };
   const onSelect = (keys: React.Key[], info: any) => {
-    // console.log(info, "info");
     if (info.node?.isEdit) {
       setItemName({
         name: info.node?.title || '',
@@ -132,8 +130,6 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
     const expandedKeys = dataList
       .map((item) => {
         if (item.title.indexOf(value) !== -1) {
-          console.log(item, value);
-
           return getParentKey(item.key, treeData);
         }
         return null;
@@ -236,7 +232,6 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
                         style={{ marginLeft: 15 }}
                         onClick={(e) => {
                           e.stopPropagation();
-                          console.log(node);
                           Modal.confirm({
                             title: '提示',
                             content: `是否要删除"${node.project_name}"`,

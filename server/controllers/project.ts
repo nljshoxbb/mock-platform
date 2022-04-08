@@ -52,7 +52,6 @@ export default class ProjectController extends BaseController {
       }
 
       timerMap.set(id, timer);
-      console.log(`handle ${autoSync}`);
     } else {
       const timer = timerMap.get(id) as any;
       clearInterval(timer);

@@ -170,7 +170,31 @@ export default function interfaceRouter(router: KoaRouter) {
    *     InterfaceUpdateResponse:
    *       tyoe: object
    *       properties:
-   *
+   *     InterfaceFlatListRequest:
+   *       type: object
+   *     InterfaceFlatListItem:
+   *       type: object
+   *       properties:
+   *         _id:
+   *           type: string
+   *           description: 接口id
+   *         path:
+   *           type: string
+   *           description: 接口地址
+   *         category_id:
+   *           type: string
+   *           description: 分类id
+   *         project_id:
+   *           type: string
+   *           description: 项目id
+   *     InterfaceFlatListResponse:
+   *       type: object
+   *       properties:
+   *         list:
+   *           type: array
+   *           items:
+   *             $ref: '#/components/schemas/InterfaceFlatListItem'
+   *           description: "列表"
    * /api/v1/interface/list:
    *   post:
    *     summary: 接口列表.
@@ -295,5 +319,28 @@ export default function interfaceRouter(router: KoaRouter) {
    */
   router.put('/v1/interface/edit', async (ctx: Context) => {
     await initController(ctx).edit();
+  });
+  /**
+   * @openapi
+   * /api/v1/interface/flatlist:
+   *   post:
+   *     summary: 接口列表.
+   *     tags:
+   *       - interface
+   *     requestBody:
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: '#/components/schemas/InterfaceFlatListRequest'
+   *     responses:
+   *       200:
+   *         description: 返回结果
+   *         content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/InterfaceFlatListResponse'
+   */
+  router.post('/v1/interface/flatlist', async (ctx: Context) => {
+    await initController(ctx).flatlist();
   });
 }

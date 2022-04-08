@@ -306,4 +306,14 @@ export default class InterfaceController extends BaseController {
       throw Error(error);
     }
   }
+
+  public async flatlist() {
+    try {
+      const list = await this.model.getFlatlist();
+
+      return (this.ctx.body = responseBody({ list }, 200, '操作成功'));
+    } catch (error) {
+      throw Error(error);
+    }
+  }
 }

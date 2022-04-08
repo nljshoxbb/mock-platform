@@ -3,8 +3,9 @@ import useModal from '@/hooks/useModal';
 import { InterfaceEdit } from '@/services';
 import { transformSchemaToArray } from '@/utils/transformSchemaToArray';
 import { formatJSONObject } from '@/utils/utils';
-import { EditOutlined, SettingOutlined } from '@ant-design/icons';
-import { Button, Empty, Form, Input, InputNumber, Table, message } from 'antd';
+import { EditOutlined, MinusCircleOutlined, SettingOutlined } from '@ant-design/icons';
+import { Anchor, Button, Empty, Form, Input, InputNumber, Switch, Table, message } from 'antd';
+import { useForm } from 'antd/es/form/Form';
 import { cloneDeep, isEmpty } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import Monaco, { MonacoEditorProps } from 'react-monaco-editor';
@@ -15,6 +16,23 @@ interface InterfaceEditI {
   response: any;
   id: string;
 }
+
+const formItemLayout = {
+  labelCol: {
+    xs: { span: 24 },
+    sm: { span: 4 }
+  },
+  wrapperCol: {
+    xs: { span: 24 },
+    sm: { span: 20 }
+  }
+};
+const formItemLayoutWithOutLabel = {
+  wrapperCol: {
+    xs: { span: 24, offset: 0 },
+    sm: { span: 20, offset: 4 }
+  }
+};
 
 const InterfaceEditComponent: React.FC<InterfaceEditI> = ({ response, id = '' }) => {
   const innerSchema = useRef<any>();
@@ -27,6 +45,7 @@ const InterfaceEditComponent: React.FC<InterfaceEditI> = ({ response, id = '' })
   const [currentFieldPath, setCurrentFieldPath] = useState<string>('');
   const monacoRef = useRef<any>(null);
   const fieldMockModal = useModal();
+  const [editFieldForm] = useForm();
 
   const [resData, setResData] = useState<any[]>([]);
 
@@ -188,11 +207,21 @@ const InterfaceEditComponent: React.FC<InterfaceEditI> = ({ response, id = '' })
   useEffect(() => {
     if (!schemaModal.visible) {
       arrayConfigForm.resetFields();
+      editFieldForm.resetFields();
+    } else {
+      console.log(editSchema);
+      if (editSchema.mock && editSchema.mock.enum) {
+        // 处理枚举
+        editFieldForm.setFieldsValue({
+          names: editSchema.mock.enum,
+          switch: true
+        });
+      }
     }
-  }, [schemaModal.visible]);
+  }, [schemaModal.visible, editSchema]);
 
   return (
-    <div style={{ paddingTop: 20 }}>
+    <div style={{ paddingTop: 20, paddingBottom: 40, position: 'relative' }}>
       <Modal
         title="mock"
         visible={fieldMockModal.visible}
@@ -220,6 +249,100 @@ const InterfaceEditComponent: React.FC<InterfaceEditI> = ({ response, id = '' })
           handleModifySchema();
         }}
       >
+        {editSchema.type === 'string' && (
+          <Form
+            {...formItemLayoutWithOutLabel}
+            onValuesChange={(val, values) => {
+              const obj = findSchemaByPath(innerSchema.current, currentFieldPath);
+
+              if (values.names) {
+                if (obj.mock) {
+                  obj.mock.enum = values.names;
+                } else {
+                  obj.mock = {
+                    enum: values.names
+                  };
+                }
+              }
+
+              if (!values.switch) {
+                if (obj.mock) {
+                  delete obj.mock.enum;
+                }
+              }
+
+              setEditSchema(cloneDeep(obj));
+            }}
+            form={editFieldForm}
+          >
+            <Form.Item label="转为枚举类型" name="switch" valuePropName="checked" {...formItemLayout}>
+              <Switch
+                onChange={(val) => {
+                  if (!val) {
+                    editFieldForm.setFieldsValue({ names: undefined });
+                  }
+                }}
+              ></Switch>
+            </Form.Item>
+            <Form.Item shouldUpdate noStyle>
+              {() => {
+                console.log(editFieldForm.getFieldsValue());
+                const checked = editFieldForm.getFieldValue('switch');
+                if (checked) {
+                  return (
+                    <Form.List
+                      name="names"
+                      rules={[
+                        {
+                          validator: async (_, names) => {
+                            if (!names || names.length < 1) {
+                              return Promise.reject(new Error('至少输入一个枚举值'));
+                            }
+                          }
+                        }
+                      ]}
+                    >
+                      {(fields, { add, remove }, { errors }) => (
+                        <>
+                          {fields.map((field, index) => (
+                            <Form.Item
+                              {...(index === 0 ? formItemLayout : formItemLayoutWithOutLabel)}
+                              label={index === 0 ? '枚举值' : ''}
+                              required={false}
+                              key={field.key}
+                            >
+                              <Form.Item
+                                {...field}
+                                validateTrigger={['onChange', 'onBlur']}
+                                rules={[
+                                  {
+                                    required: true,
+                                    whitespace: true
+                                  }
+                                ]}
+                                noStyle
+                              >
+                                <Input placeholder="请输入" style={{ width: '60%' }} />
+                              </Form.Item>
+                              {fields.length > 1 ? <MinusCircleOutlined className="ml10" onClick={() => remove(field.name)} /> : null}
+                            </Form.Item>
+                          ))}
+                          <Form.Item>
+                            <Button type="dashed" onClick={() => add()} style={{ width: '60%' }}>
+                              添加
+                            </Button>
+                            <Form.ErrorList errors={errors} />
+                          </Form.Item>
+                        </>
+                      )}
+                    </Form.List>
+                  );
+                }
+              }}
+            </Form.Item>
+          </Form>
+        )}
+
         {editSchema.type === 'array' && (
           <>
             <Form
@@ -265,11 +388,13 @@ const InterfaceEditComponent: React.FC<InterfaceEditI> = ({ response, id = '' })
           <Table columns={generateBodyColumns(true)} dataSource={resData} pagination={false} expandable={{ defaultExpandAllRows: true }}></Table>
         )}
       </Form>
-      {!isEmpty(resData) && (
-        <Button onClick={onSubmit} type="primary" className="mt20">
-          提交
-        </Button>
-      )}
+      <div id="111111111" style={{ position: 'fixed', bottom: 40, right: 0, left: 0, textAlign: 'right' }}>
+        {!isEmpty(resData) && (
+          <Button onClick={onSubmit} type="primary" style={{ marginRight: 100 }}>
+            提交
+          </Button>
+        )}
+      </div>
     </div>
   );
 };

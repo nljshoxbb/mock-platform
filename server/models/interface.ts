@@ -57,6 +57,10 @@ class InterfaceModel extends BaseModel<InterfaceModelI> {
   public async updateResponsesById(id, schema) {
     return this.model.findByIdAndUpdate(id, { responses: schema });
   }
+
+  public async getFlatlist() {
+    return this.model.find().select('id path project_id category_id').exec();
+  }
 }
 
 export default InterfaceModel;

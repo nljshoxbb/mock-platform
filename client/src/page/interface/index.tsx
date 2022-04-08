@@ -136,7 +136,7 @@ const Main = () => {
                     <Col span={18}>{renderItem('接口信息', infoData?.path || '-')}</Col>
                   </Row>
                   <Row gutter={[16, 6]} style={{ paddingLeft: 25, marginBottom: 10 }}>
-                    <Col span={18}>
+                    <Col span={24}>
                       {renderItem('mock地址', infoData?.mock_url || '-')}{' '}
                       <Button type="primary" className="ml10 copy-btn" data-clipboard-text={infoData?.mock_url}>
                         复制

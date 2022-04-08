@@ -295,6 +295,29 @@ export const InterfaceEdit = (data: InterfaceEditRequest,  config?: AxiosRequest
   })
 };
 
+/** ========================= **************** InterfaceFlatlist ****************** ========================= */
+
+/** undefined 请求参数 */
+export interface InterfaceFlatlistRequest {
+}
+
+/** undefined 响应参数*/
+export interface InterfaceFlatlistResponse {
+      /** 列表 */
+      list: InterfaceFlatListItemItemTypes[];
+}
+/** undefined */
+export const InterfaceFlatlist = (data: InterfaceFlatlistRequest,  config?: AxiosRequestConfig):Promise<BaseServeResponse<InterfaceFlatlistResponse>> => {
+  return axiosInstance({
+    url:'/api/v1/interface/flatlist',
+    method: 'post',
+    
+    data,
+    headers: { "Content-Type": "application/json" },
+    ...InjectAbort(InterfaceFlatlist, config)
+  })
+};
+
 /** ========================= **************** ProjectList ****************** ========================= */
 
 /** undefined 请求参数 */
@@ -680,6 +703,16 @@ export interface InterfaceListItemTypes {
             type: string;
             /** 分类列表 */
             category_list: InterfaceListCategoryItemTypes[];
+}
+export interface InterfaceFlatListItemItemTypes {
+            /** 接口id */
+            _id: string;
+            /** 接口地址 */
+            path: string;
+            /** 分类id */
+            category_id: string;
+            /** 项目id */
+            project_id: string;
 }
 export interface ProjectListItemItemTypes {
             /** id */

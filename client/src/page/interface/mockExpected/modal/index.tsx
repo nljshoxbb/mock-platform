@@ -69,8 +69,8 @@ const AddHopeModal: React.FC<EditProps> = ({ onSuccess, node, type, currentItem,
             <Input style={{ width: 200 }}></Input>
           </Form.Item>
 
-          <Form.Item label="延时" rules={[{ required: true }]}>
-            <Form.Item name="delay" noStyle rules={[{ required: true }]}>
+          <Form.Item label="延时">
+            <Form.Item name="delay" noStyle>
               <InputNumber style={{ width: 200 }} addonAfter="ms" />
             </Form.Item>
           </Form.Item>

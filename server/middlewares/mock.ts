@@ -12,14 +12,15 @@ import Log from '../utils/Log';
 const handleType = (data) => {
   let result;
 
+  if (data.mock?.enum) {
+    return `@pick(${data.mock?.enum})`;
+  }
+
   if (data.mock?.value) {
     return (result = data.mock.value);
   }
 
   switch (data.type) {
-    // case 'array':
-    //   result = [];
-    //   break;
     case 'string':
       result = `@string("lower", 20)`;
       break;
@@ -89,7 +90,6 @@ const generateMockField = (schema: any, mockObject = {}) => {
 const getRequestBody = () => {};
 
 const mockMiddleware = async (ctx: Context, next: Next) => {
-  //   console.log(ctx.request, ctx.path);
   const { url, method, body, query } = ctx.request;
   const header = ctx.request.header;
 
@@ -160,7 +160,6 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
         return (ctx.body = 10101);
       } else {
         const { schema } = content[types[0]];
-        Log.info(JSON.stringify(schema));
         return (ctx.body = responseBody(
           // {
           //   status: 200,
