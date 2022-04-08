@@ -139,13 +139,7 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
       if (response_body) {
         expectedResult = JSON.parse(response_body);
       }
-      return (ctx.body = responseBody(
-        {
-          status: 200,
-          mock_response: expectedResult
-        },
-        200
-      ));
+      return (ctx.body = responseBody(expectedResult, 200));
     }
 
     const { request_body, responses } = res[0];
@@ -168,10 +162,11 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
         const { schema } = content[types[0]];
         Log.info(JSON.stringify(schema));
         return (ctx.body = responseBody(
-          {
-            status: 200,
-            mock_response: expectedResult || Mock.mock(generateMockField(schema))
-          },
+          // {
+          //   status: 200,
+          //   mock_response: expectedResult || Mock.mock(generateMockField(schema))
+          // },
+          expectedResult || Mock.mock(generateMockField(schema)),
           200
         ));
       }
