@@ -3,6 +3,7 @@ import { MethodsColorEnum, MethodsColorEnumType } from '@/constant/color';
 import { InterfaceDetail, InterfaceDetailResponse } from '@/services';
 import { transformSchemaToArray } from '@/utils/transformSchemaToArray';
 import { Button, Col, Row, Spin, Table, Tabs, Tag, message } from 'antd';
+import ClipboardJS from 'clipboard';
 import { isEmpty } from 'lodash';
 import React, { useEffect, useState } from 'react';
 
@@ -89,6 +90,17 @@ const Main = () => {
     );
   };
 
+  useEffect(() => {
+    const copy = new ClipboardJS('.copy-btn');
+    copy.on('success', (e) => {
+      message.success('已复制到剪切板');
+    });
+    copy.on('error', function (e) {
+      console.error('Action:', e.action);
+      console.error('Trigger:', e.trigger);
+    });
+  }, []);
+
   return (
     <div className={styles.mainBigBox}>
       <ItemList
@@ -126,14 +138,7 @@ const Main = () => {
                   <Row gutter={[16, 6]} style={{ paddingLeft: 25, marginBottom: 10 }}>
                     <Col span={18}>
                       {renderItem('mock地址', infoData?.mock_url || '-')}{' '}
-                      <Button
-                        type="primary"
-                        className="ml10"
-                        onClick={() => {
-                          navigator.clipboard.writeText(JSON.stringify(infoData?.mock_url));
-                          message.success('复制成功', 1);
-                        }}
-                      >
+                      <Button type="primary" className="ml10 copy-btn" data-clipboard-text={JSON.stringify(infoData?.mock_url)}>
                         复制
                       </Button>
                     </Col>
