@@ -277,14 +277,10 @@ export default class InterfaceController extends BaseController {
       }
       /** 查看是否开启优先走代理 */
 
-      // const paths = api.split('/');
-      // const projectId = paths[4];
-      // const projectItem = await this.projectModel.isExist(projectId);
-
       const data = await axios({
         method,
         /** 为opeeration接口 */
-        url: `${api}?mockType=operation`
+        url: api
       });
 
       this.ctx.body = data.data;

@@ -20,10 +20,8 @@ const Run: React.FC<RunProps> = ({ infoData }) => {
     setRunLoading(true);
     InterfaceOperation({ ...val })
       .then((res) => {
-        if (!res.hasError) {
-          setRunData(res);
-          setRunLoading(false);
-        }
+        setRunData(res);
+        setRunLoading(false);
       })
       .catch((err) => {
         console.log(err);

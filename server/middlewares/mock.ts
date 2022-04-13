@@ -92,14 +92,38 @@ const generateMockField = (schema: any, mockObject = {}) => {
   return mockObject;
 };
 
-const getRequestBody = () => {};
+const proxyRequest = async ({ url, method, query, header, body }) => {
+  Log.info(`proxy-> ${url}`);
+  let result;
+  try {
+    const config: any = {
+      method,
+      url,
+      params: query,
+      data: body,
+      headers: header
+    };
+
+    if (header.range) {
+      config.responseType = 'stream';
+    }
+    result = await axios(config);
+  } catch (error) {
+    if (error.response.status === 404) {
+      return result;
+    }
+  }
+  return new Promise((resolve, reject) => {
+    resolve(result);
+  });
+};
 
 const mockMiddleware = async (ctx: Context, next: Next) => {
-  const { url } = ctx.request;
-  const method = ctx.request.method as any;
-  const body = ctx.request.body;
-  const query = ctx.request.query as any;
-  const header = ctx.request.header;
+  const { request } = ctx;
+  const method = request.method as any;
+  const body = request.body;
+  const query = request.query as any;
+  const header = request.header;
 
   let path = ctx.path;
   if (path.indexOf('/mock/') !== 0) {
@@ -131,15 +155,19 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
 
   /** 优先走代理 */
   if (isProjectExit.auto_proxy_url && isProjectExit.auto_proxy) {
-    let resData: any;
-    try {
-      resData = await axios({ method, url: `${isProjectExit.auto_proxy_url}${path}`, params: query, data: body });
-    } catch (error) {
-      if (error.response.status === 404) {
-        return;
-      }
-    }
+    const resData = await proxyRequest({
+      url: `${isProjectExit.auto_proxy_url}${path}`,
+      method,
+      query,
+      header,
+      body
+    });
+    /** 有代理返回数据则返回，没有则走mock数据 */
     if (resData) {
+      Object.keys(resData.headers).forEach((i) => {
+        ctx.set(i, resData.headers[i]);
+      });
+      ctx.response.status = resData.status;
       return (ctx.body = resData.data);
     }
   }
@@ -156,6 +184,7 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
     if (expectedItem) {
       const { delay, response_body } = expectedItem;
 
+      /** mock 延时 */
       if (delay) {
         await delayFn(delay);
       }
@@ -171,6 +200,7 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
     const requestBody = JSON.parse(request_body || '{}') as RequestBody;
     let requestBodySchema;
     if (!isEmpty(requestBody)) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       requestBodySchema = requestBody.content['application/json'];
     }
 
