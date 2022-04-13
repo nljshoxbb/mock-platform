@@ -112,6 +112,8 @@ const InterfaceEditComponent: React.FC<InterfaceEditI> = ({ response, id = '' })
               onClick={() => {
                 // 找出schema
                 const obj = findSchemaByPath(innerSchema.current, path);
+                console.log(obj, innerSchema.current, path);
+
                 setEditSchema(obj);
                 setCurrentFieldPath(path);
                 schemaModal.setVisible(true);
@@ -162,9 +164,12 @@ const InterfaceEditComponent: React.FC<InterfaceEditI> = ({ response, id = '' })
           const arrs = path.split('.');
           const target = arrs.shift();
           const key = keys[i];
-
           if (target === key) {
             const modifySchema = schema.properties[key];
+            if (arrs.length === 0) {
+              return modifySchema;
+            }
+
             return findSchemaByPath(modifySchema, arrs.join('.'));
           }
         }
@@ -208,7 +213,6 @@ const InterfaceEditComponent: React.FC<InterfaceEditI> = ({ response, id = '' })
       arrayConfigForm.resetFields();
       editFieldForm.resetFields();
     } else {
-      console.log(editSchema);
       if (editSchema.mock && editSchema.mock.enum) {
         // 处理枚举
         editFieldForm.setFieldsValue({
@@ -218,7 +222,6 @@ const InterfaceEditComponent: React.FC<InterfaceEditI> = ({ response, id = '' })
       }
     }
   }, [schemaModal.visible, editSchema]);
-
   return (
     <div style={{ paddingTop: 20, paddingBottom: 40, position: 'relative' }}>
       <Modal
@@ -285,7 +288,6 @@ const InterfaceEditComponent: React.FC<InterfaceEditI> = ({ response, id = '' })
             </Form.Item>
             <Form.Item shouldUpdate noStyle>
               {() => {
-                console.log(editFieldForm.getFieldsValue());
                 const checked = editFieldForm.getFieldValue('switch');
                 if (checked) {
                   return (

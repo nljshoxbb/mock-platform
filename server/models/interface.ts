@@ -15,6 +15,7 @@ export interface InterfaceItem extends CommonSchema {
   mark?: string;
   description?: string;
   category_id?: string;
+  api_address: string;
 }
 
 export interface InterfaceModelI extends InterfaceItem, Document {}
@@ -35,7 +36,7 @@ class InterfaceModel extends BaseModel<InterfaceModelI> {
       request_body: { required: false, type: String },
       parameters: { required: false, type: String },
       tags: { required: true, type: String },
-
+      api_address: { required: true, type: String },
       mark: { required: false, type: String },
       description: { required: false, type: String },
       ...this.commonSchema

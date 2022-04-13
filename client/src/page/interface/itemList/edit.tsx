@@ -16,7 +16,9 @@ const layout = {
 const Eidt: React.FC<EditProps> = ({ onSuccess, type, selNode, ...modalProps }) => {
   const [form] = Form.useForm();
   const [disabled, setDisabled] = useState(false);
+  const [proxyDisabled, setProxyDisabled] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
+  const [disabledSwitch, setDisabledSwitch] = useState(false);
 
   useEffect(() => {
     if (modalProps.visible) {
@@ -25,9 +27,15 @@ const Eidt: React.FC<EditProps> = ({ onSuccess, type, selNode, ...modalProps }) 
           name: selNode.project_name,
           auto_sync: selNode.auto_sync,
           auto_sync_time: selNode.auto_sync_time / 60,
-          desc: selNode.desc
+          desc: selNode.desc,
+          auto_proxy_url: selNode.auto_proxy_url,
+          auto_proxy: selNode.auto_proxy,
+          api_address: selNode.api_address
         });
+        setDisabledSwitch(true);
+        setDisabled(false);
       }
+      /** 无法修改接口同步，回覆盖mock设置 */
     } else {
       form.resetFields();
     }
@@ -90,11 +98,9 @@ const Eidt: React.FC<EditProps> = ({ onSuccess, type, selNode, ...modalProps }) 
           <Form.Item name="name" label="项目名称" rules={[{ required: true }]}>
             <Input />
           </Form.Item>
-          {type === 'add' ? (
-            <Form.Item name="api_address" label="同步地址" rules={[{ required: true }]}>
-              <Input />
-            </Form.Item>
-          ) : null}
+          <Form.Item name="api_address" label="同步地址" rules={[{ type: 'url', required: true }]}>
+            <Input disabled={type === 'info'} />
+          </Form.Item>
 
           <Form.Item name="type" label="文档类型" rules={[{ required: true }]}>
             <Radio.Group>
@@ -103,7 +109,7 @@ const Eidt: React.FC<EditProps> = ({ onSuccess, type, selNode, ...modalProps }) 
             </Radio.Group>
           </Form.Item>
 
-          <Form.Item label="是否自动同步">
+          {/* <Form.Item label="是否自动同步">
             <Form.Item noStyle valuePropName="checked" name="auto_sync">
               <Switch
                 checkedChildren="开启"
@@ -112,13 +118,29 @@ const Eidt: React.FC<EditProps> = ({ onSuccess, type, selNode, ...modalProps }) 
                 onChange={(e) => {
                   setDisabled(e);
                 }}
+                disabled={disabledSwitch}
               />
             </Form.Item>
-
             <Form.Item name="auto_sync_time" noStyle>
               <InputNumber disabled={!disabled} />
             </Form.Item>
             <span className="ant-form-text ">分钟同步一次</span>
+          </Form.Item> */}
+
+          <Form.Item label="优先使用代理">
+            <Form.Item noStyle valuePropName="checked" name="auto_proxy">
+              <Switch
+                checkedChildren="开启"
+                unCheckedChildren="关闭"
+                className="mr10"
+                onChange={(e) => {
+                  setProxyDisabled(e);
+                }}
+              />
+            </Form.Item>
+            <Form.Item name="auto_proxy_url" label="代理地址" noStyle rules={[{ type: 'url', required: proxyDisabled }]}>
+              <Input disabled={!proxyDisabled} style={{ width: 248 }} placeholder="请输入代理地址" />
+            </Form.Item>
           </Form.Item>
           <Form.Item name="desc" label="描述">
             <Input.TextArea />

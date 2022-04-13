@@ -102,6 +102,9 @@ export default function interfaceRouter(router: KoaRouter) {
    *     InterfaceList:
    *       type: object
    *       properties:
+   *         api_address:
+   *           type: string
+   *           description: 同步的文档地址
    *         project_id:
    *           type: string
    *           description: 项目id

@@ -85,7 +85,8 @@ export default class InterfaceController extends BaseController {
           description,
           responses: JSON.stringify(responseSchema),
           request_body: JSON.stringify(requestBody),
-          parameters: JSON.stringify(parameters)
+          parameters: JSON.stringify(parameters),
+          api_address: apiAddress
         });
       });
 
@@ -215,8 +216,11 @@ export default class InterfaceController extends BaseController {
           desc: projectItem.desc,
           auto_sync: projectItem.auto_sync,
           auto_sync_time: projectItem.auto_sync_time,
+          auto_proxy_url: projectItem.auto_proxy_url,
+          auto_proxy: projectItem.auto_proxy,
           category_list: catResult,
-          type: projectItem.type
+          type: projectItem.type,
+          api_address: projectItem.api_address
         });
       }
 

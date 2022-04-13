@@ -1,5 +1,8 @@
 import InterfaceModel from '@/server/models/interface';
+import axios from 'axios';
+import { createProxyMiddleware } from 'http-proxy-middleware';
 import { Context, Next } from 'koa';
+import k2c from 'koa2-connect';
 import { isEmpty } from 'lodash';
 import Mock from 'mockjs';
 import { RequestBody, Response } from 'swagger-jsdoc';
@@ -94,7 +97,10 @@ const generateMockField = (schema: any, mockObject = {}) => {
 const getRequestBody = () => {};
 
 const mockMiddleware = async (ctx: Context, next: Next) => {
-  const { url, method, body, query } = ctx.request;
+  const { url } = ctx.request;
+  const method = ctx.request.method as any;
+  const body = ctx.request.body;
+  const query = ctx.request.query as any;
   const header = ctx.request.header;
 
   let path = ctx.path;
@@ -119,10 +125,26 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
 
   const expectedModel = getModelInstance<ExpectedModel>(ExpectedModel);
 
-  const isProjectExit = projectModel.isExist(projectId);
+  const isProjectExit = await projectModel.isExist(projectId);
 
   if (!isProjectExit) {
     return (ctx.body = responseBody(null, 400, 'project不存在'));
+  }
+  console.log(isProjectExit);
+
+  /** 优先走代理 */
+  if (isProjectExit.auto_proxy_url && isProjectExit.auto_proxy) {
+    let resData: any;
+    try {
+      resData = await axios({ method, url: `${isProjectExit.auto_proxy_url}${path}`, params: query, data: body });
+    } catch (error) {
+      if (error.response.status === 404) {
+        return;
+      }
+    }
+    if (resData) {
+      return (ctx.body = responseBody(resData.data, 200));
+    }
   }
 
   /** 如果有启用的期望值，直接返回期望值 */

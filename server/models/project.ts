@@ -10,6 +10,8 @@ export interface ProjectItem extends CommonSchema {
   auto_sync?: boolean;
   auto_sync_time?: number;
   type: string;
+  auto_proxy_url?: string;
+  auto_proxy?: boolean;
 }
 
 export interface ProjectModelI extends ProjectItem, Document {}
@@ -28,6 +30,8 @@ class ProjectModel extends BaseModel<ProjectModelI> {
       auto_sync: { required: false, type: Boolean },
       auto_sync_time: { required: false, type: Number },
       type: { required: true, type: String },
+      auto_proxy: { required: false, type: Boolean },
+      auto_proxy_url: { required: false, type: String },
       ...this.commonSchema
     };
   }
@@ -41,7 +45,9 @@ class ProjectModel extends BaseModel<ProjectModelI> {
   }
 
   public get(data: any = {}) {
-    return this.model.find({ ...data, soft_del: { $lte: 0 } }).select('id name desc created_at update_at auto_sync auto_sync_time api_address type');
+    return this.model
+      .find({ ...data, soft_del: { $lte: 0 } })
+      .select('id name desc created_at update_at auto_sync auto_sync_time api_address type auto_proxy_url auto_proxy');
   }
 
   public update(id: number, item: ProjectItem) {

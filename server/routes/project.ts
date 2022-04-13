@@ -86,6 +86,12 @@ export default function projectRouter(router: Router) {
    *         auto_sync_time:
    *           type: number
    *           description: 自动同步时间。单位秒
+   *         auto_proxy_url:
+   *           type: string
+   *           description: 优先代理地址
+   *         auto_proxy:
+   *           type: boolean
+   *           description: 优先代理地址开启
    *     ProjectCreateResponse:
    *        type: object
    *        properties:
