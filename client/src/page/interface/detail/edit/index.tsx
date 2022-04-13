@@ -196,8 +196,10 @@ const InterfaceEditComponent: React.FC<InterfaceEditI> = ({ response, id = '' })
 
   const handleModifySchema = () => {
     const obj = findSchemaByPath(innerSchema.current, currentFieldPath);
-    form.setFieldsValue({ [currentFieldPath]: editSchema.mock.value });
     obj.mock = editSchema.mock;
+    if (editSchema.mock) {
+      form.setFieldsValue({ [currentFieldPath]: editSchema.mock.value });
+    }
     schemaModal.toggle();
   };
 

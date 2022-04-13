@@ -96,10 +96,10 @@ const Eidt: React.FC<EditProps> = ({ onSuccess, type, selNode, ...modalProps }) 
           }}
         >
           <Form.Item name="name" label="项目名称" rules={[{ required: true }]}>
-            <Input />
+            <Input placeholder="请输入项目名称" />
           </Form.Item>
           <Form.Item name="api_address" label="同步地址" rules={[{ type: 'url', required: true }]}>
-            <Input disabled={type === 'info'} />
+            <Input disabled={type === 'info'} placeholder="请输入同步地址" />
           </Form.Item>
 
           <Form.Item name="type" label="文档类型" rules={[{ required: true }]}>
