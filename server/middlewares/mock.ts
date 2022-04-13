@@ -1,8 +1,6 @@
 import InterfaceModel from '@/server/models/interface';
 import axios from 'axios';
-import { createProxyMiddleware } from 'http-proxy-middleware';
 import { Context, Next } from 'koa';
-import k2c from 'koa2-connect';
 import { isEmpty } from 'lodash';
 import Mock from 'mockjs';
 import { RequestBody, Response } from 'swagger-jsdoc';
@@ -130,7 +128,6 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
   if (!isProjectExit) {
     return (ctx.body = responseBody(null, 400, 'project不存在'));
   }
-  console.log(isProjectExit);
 
   /** 优先走代理 */
   if (isProjectExit.auto_proxy_url && isProjectExit.auto_proxy) {
@@ -143,7 +140,7 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
       }
     }
     if (resData) {
-      return (ctx.body = responseBody(resData.data, 200));
+      return (ctx.body = resData.data);
     }
   }
 

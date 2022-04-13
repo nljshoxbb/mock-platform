@@ -275,11 +275,18 @@ export default class InterfaceController extends BaseController {
       if (api.indexOf('http') === -1) {
         return (this.ctx.body = responseBody(null, 400, 'api地址错误'));
       }
+      /** 查看是否开启优先走代理 */
+
+      // const paths = api.split('/');
+      // const projectId = paths[4];
+      // const projectItem = await this.projectModel.isExist(projectId);
 
       const data = await axios({
         method,
-        url: api
+        /** 为opeeration接口 */
+        url: `${api}?mockType=operation`
       });
+
       this.ctx.body = data.data;
     } catch (error) {
       throw Error(error);
