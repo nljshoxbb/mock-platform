@@ -151,13 +151,6 @@ export default function interfaceRouter(router: KoaRouter) {
    *           description: 请求方法
    *     InterfaceOperationResponse:
    *       type: object
-   *       properties:
-   *           status:
-   *             type: number
-   *             description: http状态码
-   *           mock_response:
-   *             type: string
-   *             description: 响应结果
    *     InterfaceCreateResponse:
    *       type: object
    *       properties:

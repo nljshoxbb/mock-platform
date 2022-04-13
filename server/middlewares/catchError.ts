@@ -6,7 +6,7 @@ const catchError = async (ctx, next) => {
   try {
     await next();
   } catch (error) {
-    Log.error(error + '++++ catchError middleware');
+    Log.error(error + ' from catchError middleware');
     if (error.errorCode) {
       Log.warning('捕获异常');
       return (ctx.body = responseBody(null, 500, '系统错误'));

@@ -24,9 +24,10 @@ type TreeData = {
 };
 interface ItemListProps {
   getIinterface?: (node: any) => void;
+  interfaceId: string;
 }
 
-const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
+const ItemList: React.FC<ItemListProps> = ({ getIinterface, interfaceId }) => {
   const [treeData, setTreeData] = useState<TreeData[]>([]);
   const [itemName, setItemName] = useState({
     name: '',
@@ -54,6 +55,31 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
       }
     });
   }, []);
+
+  const findPath = (key: string, data: any[], path: any = {}) => {
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].key === key) {
+        return path;
+      } else {
+        const item = data[i];
+        // path[data[i].key] = data[i].key;
+        const dataKey = path[item.key];
+        console.log(dataKey);
+        path[item.key] = dataKey ? dataKey.push(data[i].key) : [item.key];
+        findPath(key, data[i].children, path);
+      }
+    }
+  };
+
+  // useEffect(() => {
+  //   console.log(interfaceId, expandedKeys, treeData);
+
+  //   if (!expandedKeys.includes(interfaceId)) {
+  //     // findPath(interfaceId, treeData, {});
+  //     // 展开到指定节点
+  //     // setExpandedKeys([...expandedKeys, interfaceId]);
+  //   }
+  // }, [interfaceId, expandedKeys, treeData]);
 
   const reqList = (params?: number) => {
     setLoading(true);
@@ -234,7 +260,7 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface }) => {
                           e.stopPropagation();
                           Modal.confirm({
                             title: '提示',
-                            content: `是否要删除"${node.project_name}"`,
+                            content: `是否要删除"${node.project_name}"项目`,
                             onOk: () => {
                               setLoading(true);
                               ProjectRemove({ id: node.project_id })

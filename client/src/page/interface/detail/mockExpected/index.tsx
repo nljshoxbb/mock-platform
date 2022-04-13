@@ -1,7 +1,15 @@
 import AntdDivideTable from '@/components/AntdDivideTable';
 import Modal from '@/components/Modal';
 import useModal from '@/hooks/useModal';
-import { ExpectedList, ExpectedListRequest, ExpectedListResponse, ExpectedRemove, ExpectedStatus, InterfaceExpectedItemItemTypes } from '@/services';
+import {
+  ExpectedList,
+  ExpectedListRequest,
+  ExpectedListResponse,
+  ExpectedRemove,
+  ExpectedStatus,
+  InterfaceDetailResponse,
+  InterfaceExpectedItemItemTypes
+} from '@/services';
 import { Button, Spin, message } from 'antd';
 import React, { useEffect, useState } from 'react';
 
@@ -10,7 +18,7 @@ import AddHopeModal from './modal/index';
 
 type MockExpectedInterface = {
   onSuccess?: () => void;
-  node?: any;
+  infoData?: InterfaceDetailResponse;
 };
 const MockExpected: React.FC<MockExpectedInterface> = (props) => {
   const editModal = useModal();
@@ -18,7 +26,7 @@ const MockExpected: React.FC<MockExpectedInterface> = (props) => {
 
   const [hopeList, setHopeList] = useState<ExpectedListResponse>();
   const [parms, setParms] = useState<ExpectedListRequest>({
-    interface_id: props.node?.id /** 每页数目 */,
+    interface_id: props.infoData?.id || '' /** 每页数目 */,
     size: 10,
     /** 页数 */
     page: 1
@@ -119,7 +127,7 @@ const MockExpected: React.FC<MockExpectedInterface> = (props) => {
         }}
         currentItem={currentItem}
         type={editModal.type}
-        node={props.node}
+        node={props.infoData}
         width={800}
       />
     </div>

@@ -54,9 +54,9 @@ const authMiddleware = async (ctx: Context, next: Next) => {
           }
         }
         return notLogin();
-      } else {
-        return notLogin();
       }
+
+      return notLogin();
     }
   } catch (error) {
     if (error instanceof JsonWebTokenError) {

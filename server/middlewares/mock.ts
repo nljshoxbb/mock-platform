@@ -51,6 +51,10 @@ const delayFn = async (ms) => {
  * @returns
  */
 const generateMockField = (schema: any, mockObject = {}) => {
+  if (!schema) {
+    return {};
+  }
+
   const { properties, type } = schema;
 
   if (type === 'object') {
@@ -160,14 +164,7 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
         return (ctx.body = 10101);
       } else {
         const { schema } = content[types[0]];
-        return (ctx.body = responseBody(
-          // {
-          //   status: 200,
-          //   mock_response: expectedResult || Mock.mock(generateMockField(schema))
-          // },
-          expectedResult || Mock.mock(generateMockField(schema)),
-          200
-        ));
+        return (ctx.body = responseBody(expectedResult || Mock.mock(generateMockField(schema)), 200));
       }
     }
   } else {

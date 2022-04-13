@@ -1,16 +1,15 @@
 import Modal from '@/components/Modal';
 import useModal from '@/hooks/useModal';
+import { generateBodyColumns } from '@/page/interface/columns';
 import { InterfaceEdit } from '@/services';
 import { transformSchemaToArray } from '@/utils/transformSchemaToArray';
 import { formatJSONObject } from '@/utils/utils';
 import { EditOutlined, MinusCircleOutlined, SettingOutlined } from '@ant-design/icons';
-import { Anchor, Button, Empty, Form, Input, InputNumber, Switch, Table, message } from 'antd';
+import { Button, Empty, Form, Input, InputNumber, Switch, Table, message } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { cloneDeep, isEmpty } from 'lodash';
 import React, { useEffect, useRef, useState } from 'react';
 import Monaco, { MonacoEditorProps } from 'react-monaco-editor';
-
-import { generateBodyColumns } from '../columns';
 
 interface InterfaceEditI {
   response: any;
@@ -388,7 +387,7 @@ const InterfaceEditComponent: React.FC<InterfaceEditI> = ({ response, id = '' })
           <Table columns={generateBodyColumns(true)} dataSource={resData} pagination={false} expandable={{ defaultExpandAllRows: true }}></Table>
         )}
       </Form>
-      <div id="111111111" style={{ position: 'fixed', bottom: 40, right: 0, left: 0, textAlign: 'right' }}>
+      <div style={{ position: 'fixed', bottom: 40, right: 0, left: 0, textAlign: 'right' }}>
         {!isEmpty(resData) && (
           <Button onClick={onSubmit} type="primary" style={{ marginRight: 100 }}>
             提交

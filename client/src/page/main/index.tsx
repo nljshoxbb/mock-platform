@@ -35,6 +35,8 @@ const Main = (props: any) => {
   const { location } = history;
   const { pathname } = location;
 
+  const activePathname = pathname.indexOf('/main/mock/') !== -1 ? '/main/mock' : pathname;
+
   return (
     <div className={styles.mainBigBox}>
       <div className={styles.logout}>
@@ -44,13 +46,13 @@ const Main = (props: any) => {
         </Popconfirm>
       </div>
       <div className={styles.tabs}>
-        <Tabs defaultActiveKey="mock" destroyInactiveTabPane activeKey={pathname} onChange={onTabChanged} style={{ height: 100 }}>
+        <Tabs destroyInactiveTabPane activeKey={activePathname} onChange={onTabChanged} style={{ height: 100 }}>
           <TabPane tab="mock数据" key="/main/mock"></TabPane>
           <TabPane tab="用户管理" key="/main/user"></TabPane>
           <TabPane tab="账户管理" key="/main/account"></TabPane>
         </Tabs>
       </div>
-      <Route exact path="/main/mock" component={Interface} />
+      <Route path="/main/mock" component={Interface} />
       <Route exact path="/main/user" component={User} />
       <Route exact path="/main/account" component={Account} />
     </div>

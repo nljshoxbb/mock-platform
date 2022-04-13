@@ -9,11 +9,10 @@ import Monaco from 'react-monaco-editor';
 import styles from './index.less';
 
 interface RunProps {
-  node: any;
   infoData?: InterfaceDetailResponse;
 }
 const { Option } = Select;
-const Run: React.FC<RunProps> = ({ node, infoData }) => {
+const Run: React.FC<RunProps> = ({ infoData }) => {
   const [runLoading, setRunLoading] = useState<boolean>(false);
   const [runData, setRunData] = useState<any>();
 
@@ -42,7 +41,7 @@ const Run: React.FC<RunProps> = ({ node, infoData }) => {
         onFinish={runOnFinish}
         style={{ width: '100%', marginTop: 10 }}
         initialValues={{
-          method: node?.method,
+          method: infoData?.method,
           api: infoData?.mock_url
         }}
       >
