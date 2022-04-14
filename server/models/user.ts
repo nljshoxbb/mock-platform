@@ -35,7 +35,7 @@ class UserModel extends BaseModel<UserModelI> {
   }
 
   public get(data: any = {}) {
-    return this.model.find({ ...data, soft_del: { $lte: 0 } }).select('username mark created_at update_at');
+    return this.model.find({ ...data, soft_del: { $lte: 0 } }).select('username mark created_at update_at role');
   }
 
   public update(id: number, item: Omit<UserItem, 'password' | 'username'>) {
@@ -108,6 +108,10 @@ class UserModel extends BaseModel<UserModelI> {
       return res.length;
     }
     return this.model.countDocuments();
+  }
+
+  public async getUserById(uid: string) {
+    return this.model.findById(uid);
   }
 }
 

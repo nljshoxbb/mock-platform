@@ -183,7 +183,16 @@ export default class InterfaceController extends BaseController {
    */
   public async list() {
     try {
-      const projectArray = await this.projectModel.get();
+      const uid = await this.getUid();
+
+      const account = await this.getAccount(uid);
+      let params = {};
+      /** 普通用户只能查看当前项目 */
+      if (account && account.role !== '0') {
+        params = { uid };
+      }
+
+      const projectArray = await this.projectModel.get(params);
       const result: any[] = [];
 
       for (let i = 0; i < projectArray.length; i++) {

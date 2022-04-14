@@ -74,6 +74,12 @@ export default class UserController extends BaseController {
   public async getList() {
     try {
       const { size = 10, page = 1, username, begin, end } = this.ctx.request.body;
+      const uid = await this.getUid();
+
+      const account = await this.getAccount(uid);
+      if (account && account?.role !== '0') {
+        return (this.ctx.body = responseBody({ list: [], page, size, total: 0 }, 200));
+      }
 
       const data = await this.model.listWithPaging(page, size, { username, begin, end });
       const list = data.map((i) => {
@@ -170,6 +176,8 @@ export default class UserController extends BaseController {
 
       /** 成功后退出登录 */
       this.logout();
+
+      return (this.ctx.body = responseBody(null, 200));
     } catch (error) {
       throw Error(error);
     }
