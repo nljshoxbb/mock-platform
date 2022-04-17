@@ -56,7 +56,9 @@ export default function interfaceRouter(router: KoaRouter) {
    *          parameters:
    *            type: string
    *            description: 同步的swagger对应的接口query请求参数。json 格式字符串
-
+   *          proxy:
+   *            type: boolean
+   *            description: 是否走代理
    *     Category:
    *       type: object
    *       properties:
@@ -85,6 +87,9 @@ export default function interfaceRouter(router: KoaRouter) {
    *         path:
    *           type: string
    *           description: 接口地址
+   *         proxy:
+   *           type: boolean
+   *           description: 是否走代理
    *     InterfaceListCategory:
    *       type: object
    *       properties:
@@ -191,6 +196,17 @@ export default function interfaceRouter(router: KoaRouter) {
    *           items:
    *             $ref: '#/components/schemas/InterfaceFlatListItem'
    *           description: "列表"
+   *     InterfaceEditProxyRequest:
+   *       type: object
+   *       properties:
+   *         id:
+   *           type: string
+   *           description: 接口id
+   *         proxy:
+   *           type: boolean
+   *           description: 是否开启代理
+   *     InterfaceEditProxyResponse:
+   *       type: object
    * /api/v1/interface/list:
    *   post:
    *     summary: 接口列表.
@@ -338,5 +354,28 @@ export default function interfaceRouter(router: KoaRouter) {
    */
   router.post('/v1/interface/flatlist', async (ctx: Context) => {
     await initController(ctx).flatlist();
+  });
+  /**
+   * @openapi
+   * /api/v1/interface/edit_proxy:
+   *   post:
+   *     summary: 针对此接口开启代理
+   *     tags:
+   *       - interface
+   *     requestBody:
+   *       content:
+   *         application/json:
+   *           schema:
+   *             $ref: '#/components/schemas/InterfaceEditProxyRequest'
+   *     responses:
+   *       200:
+   *         description: 返回结果
+   *         content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/InterfaceEditProxyResponse'
+   */
+  router.post('/v1/interface/edit_proxy', async (ctx: Context) => {
+    await initController(ctx).editProxy();
   });
 }

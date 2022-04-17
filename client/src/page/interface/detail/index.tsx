@@ -1,10 +1,13 @@
 import { MethodsColorEnum, MethodsColorEnumType } from '@/constant/color';
-import { InterfaceDetail, InterfaceDetailResponse } from '@/services';
+import { InterfaceDetail, InterfaceDetailResponse, InterfaceEdit_proxy } from '@/services';
+import { Dispatch } from '@/store';
 import { transformSchemaToArray } from '@/utils/transformSchemaToArray';
-import { Button, Col, Empty, Row, Spin, Table, Tabs, Tag, message } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import { Button, Col, Empty, Row, Spin, Switch, SwitchProps, Table, Tabs, Tag, Tooltip, message } from 'antd';
 import ClipboardJS from 'clipboard';
 import { isEmpty, method } from 'lodash';
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { generateBodyColumns, headersColumns, parameterColumns } from '../columns';
 import InterfaceEdit from './edit';
@@ -25,6 +28,7 @@ const Detail = (props: any) => {
   const [responsesData, setResponsesData] = useState<any>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [activeKey, setActiveKey] = useState<string>('1');
+  const dispatch = useDispatch<Dispatch>();
 
   const handleTabsOnChange = (key: React.SetStateAction<string>) => {
     setActiveKey(key);
@@ -52,68 +56,84 @@ const Detail = (props: any) => {
     );
   };
 
+  const getDetail = (id: string) => {
+    InterfaceDetail({ id })
+      .then((res) => {
+        if (!res.hasError) {
+          const infoData = res.data;
+          const { parameters, request_body, responses } = infoData;
+
+          if (parameters) {
+            const parametersJson = JSON.parse(parameters);
+            const data = parametersJson.map((i: any) => {
+              return {
+                name: i.name,
+                type: i.schema.type,
+                description: i.description
+              };
+            });
+            setParameterData(data);
+          }
+
+          if (request_body) {
+            let requestBody = JSON.parse(request_body || '{}');
+            const keys = Object.keys(requestBody.content);
+            const arr = Object.keys(requestBody.content).map((i) => {
+              return requestBody.content[i];
+            });
+
+            const headerData: any[] = [
+              {
+                name: 'content',
+                params: keys.join(';'),
+                required: '是',
+                mark: requestBody.description
+              }
+            ];
+            setHeadersData(headerData);
+            setRequestBody(transformSchemaToArray(arr[0].schema));
+          } else {
+            setHeadersData([]);
+            setRequestBody([]);
+          }
+
+          if (responses) {
+            const resData = JSON.parse(infoData.responses);
+            if (resData.content) {
+              setResponsesData(resData);
+            } else {
+              setResponsesData({});
+            }
+          }
+          setInfoData(infoData);
+        } else {
+          setInfoData(undefined);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
   useEffect(() => {
     if (interface_id) {
       setLoading(true);
       setInfoData(undefined);
-      InterfaceDetail({ id: interface_id })
-        .then((res) => {
-          if (!res.hasError) {
-            const infoData = res.data;
-            const { parameters, request_body, responses } = infoData;
-
-            if (parameters) {
-              const parametersJson = JSON.parse(parameters);
-              const data = parametersJson.map((i: any) => {
-                return {
-                  name: i.name,
-                  type: i.schema.type,
-                  description: i.description
-                };
-              });
-              setParameterData(data);
-            }
-
-            if (request_body) {
-              let requestBody = JSON.parse(request_body || '{}');
-              const keys = Object.keys(requestBody.content);
-              const arr = Object.keys(requestBody.content).map((i) => {
-                return requestBody.content[i];
-              });
-
-              const headerData: any[] = [
-                {
-                  name: 'content',
-                  params: keys.join(';'),
-                  required: '是',
-                  mark: requestBody.description
-                }
-              ];
-              setHeadersData(headerData);
-              setRequestBody(transformSchemaToArray(arr[0].schema));
-            } else {
-              setHeadersData([]);
-              setRequestBody([]);
-            }
-
-            if (responses) {
-              const resData = JSON.parse(infoData.responses);
-              if (resData.content) {
-                setResponsesData(resData);
-              } else {
-                setResponsesData({});
-              }
-            }
-            setInfoData(infoData);
-          } else {
-            setInfoData(undefined);
-          }
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+      getDetail(interface_id);
     }
   }, [interface_id]);
+
+  const onProxyChange: SwitchProps['onChange'] = (val) => {
+    if (infoData?.id) {
+      InterfaceEdit_proxy({ id: infoData?.id, proxy: val }).then((res) => {
+        if (!res.hasError) {
+          message.success('操作成功');
+          getDetail(infoData.id);
+          dispatch.tree.getInterfaceList();
+        }
+      });
+    }
+  };
 
   const disabled = infoData ? false : true;
 
@@ -140,7 +160,19 @@ const Detail = (props: any) => {
                 <Row gutter={[16, 6]} style={{ paddingLeft: 25, marginBottom: 10 }}>
                   <Col span={24}>{renderItem('接口描述', infoData?.description || '-')}</Col>
                 </Row>
-
+                <Row gutter={[16, 6]} style={{ paddingLeft: 25, marginBottom: 10 }}>
+                  <Col span={24}>
+                    {renderItem(
+                      '代理',
+                      <>
+                        <Switch onChange={onProxyChange} checked={infoData.proxy} />
+                        <Tooltip title="需要在项目中填写代理地址后开启">
+                          <QuestionCircleOutlined className="ml10" />
+                        </Tooltip>
+                      </>
+                    )}
+                  </Col>
+                </Row>
                 <h2 className={styles.title}>请求参数</h2>
                 <div style={{ paddingLeft: 25 }}>
                   {!isEmpty(parameterData) && (

@@ -93,7 +93,7 @@ const generateMockField = (schema: any, mockObject = {}) => {
 };
 
 const proxyRequest = async ({ url, method, query, header, body }) => {
-  Log.info(`proxy-> ${url}`);
+  Log.info(`proxy->${method}: ${url}`);
   let result;
   try {
     const config: any = {
@@ -153,8 +153,12 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
     return (ctx.body = responseBody(null, 400, 'project不存在'));
   }
 
+  /** 如果有启用的期望值，直接返回期望值 */
+  const [interfaceData] = await interfaceModel.getDataByPath(projectId, method.toLocaleLowerCase(), path);
+
   /** 优先走代理 */
-  if (isProjectExit.auto_proxy_url && isProjectExit.auto_proxy) {
+  if (isProjectExit.auto_proxy_url && isProjectExit.auto_proxy && interfaceData.proxy) {
+    /** 接口是否打开代理 */
     const resData = await proxyRequest({
       url: `${isProjectExit.auto_proxy_url}${path}`,
       method,
@@ -172,12 +176,9 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
     }
   }
 
-  /** 如果有启用的期望值，直接返回期望值 */
-  const res = await interfaceModel.getDataByPath(projectId, method.toLocaleLowerCase(), path);
-
-  if (res[0]) {
+  if (interfaceData) {
     let expectedResult;
-    const expectedRes = await expectedModel.findByInterfaceId(objectIdToString(res[0]._id));
+    const expectedRes = await expectedModel.findByInterfaceId(objectIdToString(interfaceData._id));
 
     const [expectedItem] = expectedRes.filter((i) => i.status);
 
@@ -194,7 +195,7 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
       return (ctx.body = responseBody(expectedResult, 200));
     }
 
-    const { request_body, responses } = res[0];
+    const { request_body, responses } = interfaceData;
 
     const response = JSON.parse(responses || '{}') as Response;
     const requestBody = JSON.parse(request_body || '{}') as RequestBody;

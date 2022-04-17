@@ -212,7 +212,8 @@ export default class InterfaceController extends BaseController {
               id: i._id,
               method: i.method,
               path: i.path,
-              description: i.description
+              description: i.description,
+              proxy: i.proxy
             }))
           };
 
@@ -328,6 +329,25 @@ export default class InterfaceController extends BaseController {
       const list = await this.model.getFlatlist();
 
       return (this.ctx.body = responseBody({ list }, 200, '操作成功'));
+    } catch (error) {
+      throw Error(error);
+    }
+  }
+
+  public async editProxy() {
+    try {
+      // const list = await this.model.getFlatlist();
+
+      // return (this.ctx.body = responseBody({ list }, 200, '操作成功'));
+
+      const { id, proxy } = this.ctx.request.body;
+
+      if (!id || proxy === undefined) {
+        return (this.ctx.body = responseBody({}, 400, '参数错误'));
+      }
+
+      await this.model.updateProxyById(id, proxy);
+      return (this.ctx.body = responseBody(null, 200, '操作成功'));
     } catch (error) {
       throw Error(error);
     }

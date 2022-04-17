@@ -212,10 +212,6 @@ export interface InterfaceOperationRequest {
 
 /** undefined 响应参数*/
 export interface InterfaceOperationResponse {
-      /** http状态码 */
-      status: number;
-      /** 响应结果 */
-      mock_response: string;
 }
 /** undefined */
 export const InterfaceOperation = (data: InterfaceOperationRequest,  config?: AxiosRequestConfig):Promise<BaseServeResponse<InterfaceOperationResponse>> => {
@@ -257,6 +253,8 @@ export interface InterfaceDetailResponse {
       responses: string;
       /** 同步的swagger对应的接口query请求参数。json 格式字符串 */
       parameters: string;
+      /** 是否走代理 */
+      proxy: boolean;
 }
 /** undefined */
 export const InterfaceDetail = (data: InterfaceDetailRequest,  config?: AxiosRequestConfig):Promise<BaseServeResponse<InterfaceDetailResponse>> => {
@@ -318,6 +316,31 @@ export const InterfaceFlatlist = (data: InterfaceFlatlistRequest,  config?: Axio
   })
 };
 
+/** ========================= **************** InterfaceEdit_proxy ****************** ========================= */
+
+/** undefined 请求参数 */
+export interface InterfaceEdit_proxyRequest {
+    /** 接口id */
+    id: string;
+    /** 是否开启代理 */
+    proxy: boolean;
+}
+
+/** undefined 响应参数*/
+export interface InterfaceEdit_proxyResponse {
+}
+/** undefined */
+export const InterfaceEdit_proxy = (data: InterfaceEdit_proxyRequest,  config?: AxiosRequestConfig):Promise<BaseServeResponse<InterfaceEdit_proxyResponse>> => {
+  return axiosInstance({
+    url:'/api/v1/interface/edit_proxy',
+    method: 'post',
+    
+    data,
+    headers: { "Content-Type": "application/json" },
+    ...InjectAbort(InterfaceEdit_proxy, config)
+  })
+};
+
 /** ========================= **************** ProjectList ****************** ========================= */
 
 /** undefined 请求参数 */
@@ -356,6 +379,10 @@ export interface ProjectCreateRequest {
     auto_sync: boolean;
     /** 自动同步时间。单位秒 */
     auto_sync_time: number;
+    /** 优先代理地址 */
+    auto_proxy_url: string;
+    /** 优先代理地址开启 */
+    auto_proxy: boolean;
 }
 
 /** undefined 响应参数*/
@@ -681,6 +708,8 @@ export interface InterfaceListApiItemTypes {
             name: string;
             /** 接口地址 */
             path: string;
+            /** 是否走代理 */
+            proxy: boolean;
 }
 export interface InterfaceListCategoryItemTypes {
             /** 类目id */
@@ -691,6 +720,8 @@ export interface InterfaceListCategoryItemTypes {
             interface_list: InterfaceListApiItemTypes[];
 }
 export interface InterfaceListItemTypes {
+            /** 同步的文档地址 */
+            api_address: string;
             /** 项目id */
             project_id: string;
             /** 项目名称 */

@@ -16,6 +16,8 @@ export interface InterfaceItem extends CommonSchema {
   description?: string;
   category_id?: string;
   api_address: string;
+  /** mock是走代理 */
+  proxy?: boolean;
 }
 
 export interface InterfaceModelI extends InterfaceItem, Document {}
@@ -39,11 +41,12 @@ class InterfaceModel extends BaseModel<InterfaceModelI> {
       api_address: { required: true, type: String },
       mark: { required: false, type: String },
       description: { required: false, type: String },
+      proxy: { required: false, type: Boolean },
       ...this.commonSchema
     };
   }
 
-  public async get(params: Partial<InterfaceItem> = {}, select: string = 'method name _id  description path  ') {
+  public async get(params: Partial<InterfaceItem> = {}, select: string = 'method name _id  description path proxy  ') {
     return this.model.find(params).select(select).exec();
   }
 
@@ -61,6 +64,10 @@ class InterfaceModel extends BaseModel<InterfaceModelI> {
 
   public async getFlatlist() {
     return this.model.find().select('id path project_id category_id').exec();
+  }
+
+  public async updateProxyById(id, proxy) {
+    return this.model.findByIdAndUpdate(id, { proxy });
   }
 }
 

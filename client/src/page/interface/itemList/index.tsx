@@ -1,12 +1,15 @@
 import Modal from '@/components/Modal';
-import { MethodsColorEnum } from '@/constant/color';
+import { MethodsColorEnum, ProxyColorEnum } from '@/constant/color';
 import useModal from '@/hooks/useModal';
-import { InterfaceFlatlist, InterfaceList, ProjectRemove } from '@/services';
+import { TreeData } from '@/models/tree';
+import { InterfaceFlatlist, ProjectRemove } from '@/services';
+import { Dispatch, RootState } from '@/store';
 import { DownOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Input, Spin, Tag, Tooltip, Tree, message } from 'antd';
 import type { TreeProps } from 'antd';
 import { isEmpty } from 'lodash';
 import React, { Key, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Eidt from './edit';
 import styles from './index.less';
@@ -17,32 +20,29 @@ type DataList = {
   key: string;
   title: string;
 };
-type TreeData = {
-  key: string;
-  title: string;
-  children: TreeData[];
-};
+
 interface ItemListProps {
   getIinterface?: (node: any) => void;
   interfaceId: string;
 }
 
 const ItemList: React.FC<ItemListProps> = ({ getIinterface, interfaceId }) => {
-  const [treeData, setTreeData] = useState<TreeData[]>([]);
   const [itemName, setItemName] = useState({
     name: '',
     desc: ''
   });
-  const [loading, setLoading] = useState<boolean>(false);
   const [selNode, setSelNode] = useState();
   const [expandedKeys, setExpandedKeys] = useState<Key[]>([]);
   const [autoExpandParent, setAutoExpandParent] = useState<boolean>(true);
   const [searchValue, setSearchValue] = useState<string>('');
   const [dataList, setDataList] = useState<DataList[]>([]);
+  const dispatch = useDispatch<Dispatch>();
+  const { treeData, loading } = useSelector((state: RootState) => state.tree);
 
   const editModal = useModal();
   useEffect(() => {
     reqList();
+
     InterfaceFlatlist({}).then((res) => {
       if (!res.hasError) {
         const list = res.data.list.map((i) => {
@@ -64,63 +64,26 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface, interfaceId }) => {
         const item = data[i];
         // path[data[i].key] = data[i].key;
         const dataKey = path[item.key];
-        console.log(dataKey);
         path[item.key] = dataKey ? dataKey.push(data[i].key) : [item.key];
         findPath(key, data[i].children, path);
       }
     }
   };
 
-  // useEffect(() => {
-  //   console.log(interfaceId, expandedKeys, treeData);
+  useEffect(() => {
+    console.log(interfaceId, expandedKeys, treeData);
 
-  //   if (!expandedKeys.includes(interfaceId)) {
-  //     // findPath(interfaceId, treeData, {});
-  //     // 展开到指定节点
-  //     // setExpandedKeys([...expandedKeys, interfaceId]);
-  //   }
-  // }, [interfaceId, expandedKeys, treeData]);
+    if (!expandedKeys.includes(interfaceId)) {
+      // findPath(interfaceId, treeData, {});
+      // 展开到指定节点
+      // setExpandedKeys([...expandedKeys, interfaceId]);
+    }
+  }, [interfaceId, expandedKeys, treeData]);
 
   const reqList = (params?: number) => {
-    setLoading(true);
-    InterfaceList({ project_id: params })
-      .then((res) => {
-        const data = treeChagenName(res.data.list, 'project_name', 'project_id', 'category_list', true);
-        setTreeData(data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err, 'err');
-        setLoading(false);
-      });
+    dispatch.tree.getInterfaceList({});
   };
 
-  const treeChagenName = (data: any[], title: string, key: string, children: string, isEdit?: boolean) => {
-    let newData: [] = [];
-    return data.map((item) => {
-      if (item.id) {
-        return {
-          ...item,
-          key: item.id,
-          title: item.path
-        };
-      } else {
-        if (item[children].length) {
-          //@ts-ignore
-          newData = treeChagenName(item[children], 'category_name', 'category_id', 'interface_list', false);
-        } else {
-          newData = [];
-        }
-        return {
-          ...item,
-          title: item[title],
-          key: item[key],
-          children: newData,
-          isEdit: isEdit
-        };
-      }
-    });
-  };
   const onSelect = (keys: React.Key[], info: any) => {
     if (info.node?.isEdit) {
       setItemName({
@@ -134,6 +97,7 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface, interfaceId }) => {
       getIinterface && getIinterface(undefined);
     }
   };
+
   const getParentKey = (key: any, tree: string | any[]) => {
     let parentKey = null as any;
     for (let i = 0; i < tree.length; i++) {
@@ -148,10 +112,12 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface, interfaceId }) => {
     }
     return parentKey;
   };
+
   const onExpand: TreeProps['onExpand'] = (expandedKeys) => {
     setExpandedKeys(expandedKeys);
     setAutoExpandParent(false);
   };
+
   const onSearch = (value: any) => {
     const expandedKeys = dataList
       .map((item) => {
@@ -166,6 +132,7 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface, interfaceId }) => {
     setSearchValue(value);
     setAutoExpandParent(true);
   };
+
   const loop = (data: TreeData[]): any => {
     return data?.map((item) => {
       const index = item.title.indexOf(searchValue);
@@ -193,6 +160,7 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface, interfaceId }) => {
       };
     });
   };
+
   return (
     <div className={styles.bigBox}>
       <header className={styles.header}>
@@ -235,10 +203,16 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface, interfaceId }) => {
                 >
                   <div className="flex align-center">
                     {isEmpty(node.children) && (
-                      <Tag className={styles.method} color={MethodsColorEnum[method]}>
-                        {method}
-                      </Tag>
+                      <>
+                        <Tag className={styles.method} color={MethodsColorEnum[method]}>
+                          {method}
+                        </Tag>
+                        <Tag className={styles.method} color={ProxyColorEnum[node.proxy ? 'open' : 'close']}>
+                          {node.proxy ? 'proxy open' : 'proxy close'}
+                        </Tag>
+                      </>
                     )}
+
                     <div className="ellipsis" style={{ display: 'inline-block', width: 180 }}>
                       <Tooltip title={node.title}>{node.title}</Tooltip>
                     </div>
@@ -262,18 +236,12 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface, interfaceId }) => {
                             title: '提示',
                             content: `是否要删除"${node.project_name}"项目`,
                             onOk: () => {
-                              setLoading(true);
-                              ProjectRemove({ id: node.project_id })
-                                .then((res) => {
-                                  if (!res.hasError) {
-                                    message.success('删除成功');
-                                    reqList();
-                                    setLoading(false);
-                                  }
-                                })
-                                .catch((err) => {
-                                  setLoading(false);
-                                });
+                              ProjectRemove({ id: node.project_id }).then((res) => {
+                                if (!res.hasError) {
+                                  message.success('删除成功');
+                                  reqList();
+                                }
+                              });
                             }
                           });
                         }}
