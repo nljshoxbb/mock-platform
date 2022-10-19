@@ -136,10 +136,11 @@ const Detail = (props: any) => {
   };
 
   const disabled = infoData ? false : true;
+
   return (
     <div className={styles.infoBigBox}>
       <Tabs activeKey={activeKey} onChange={(key) => handleTabsOnChange(key)} destroyInactiveTabPane>
-        <TabPane tab="接口详情" key="1" style={{ fontSize: 20 }} disabled={disabled}>
+        <TabPane tab="接口详情" key="1" style={{ fontSize: 20 }} disabled={disabled} forceRender>
           {infoData ? (
             <Spin spinning={loading}>
               <div>
@@ -205,11 +206,11 @@ const Detail = (props: any) => {
             <Empty />
           )}
         </TabPane>
-        <TabPane tab="运行" key="2" disabled={disabled}>
-          {infoData && <Run infoData={infoData} />}
+        <TabPane tab="运行" key="2" disabled={disabled} forceRender>
+          {<Run infoData={infoData} />}
         </TabPane>
-        <TabPane tab="mock期望 " key="3" disabled={disabled}>
-          {infoData && <MockExpected infoData={infoData} />}
+        <TabPane tab="mock期望 " key="3" disabled={disabled} forceRender>
+          {<MockExpected infoData={infoData} />}
         </TabPane>
       </Tabs>
     </div>
