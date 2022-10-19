@@ -1,8 +1,12 @@
+import fs from 'fs';
+import util from 'util';
+
 import InterfaceModel, { InterfaceItem } from '@/server/models/interface';
 import Log from '@/server/utils/Log';
 import SwaggerParser from '@apidevtools/swagger-parser';
 import axios from 'axios';
 import jsYaml from 'js-yaml';
+import stringify from 'json-stringify-safe';
 import { Context } from 'koa';
 
 import config from '../config';
@@ -35,6 +39,7 @@ export default class InterfaceController extends BaseController {
     try {
       const res = await axios.get(apiAddress);
       let jsonData;
+
       if (res.status === 200 && res.data) {
         if (type === SyncDataTypeEnum.yaml) {
           jsonData = jsYaml.load(res.data);
@@ -52,41 +57,52 @@ export default class InterfaceController extends BaseController {
       /** 关联所有ref */
       const api = (await SwaggerParser.dereference(jsonData)) as any;
       const interfaceBatchUpdate: InterfaceItem[] = [];
-
       const { paths } = api;
       const categoryMap = {};
       const pathArr: string[] = [];
 
+      // fs.writeFileSync('pathsData.json', util.inspect(api, { depth: 20 }));
+
       Object.keys(paths).forEach((i) => {
         pathArr.push(i);
-        const method = Object.keys(paths[i])[0];
-        const { tags, description, requestBody, responses, parameters } = paths[i][method];
 
-        let responseSchema;
+        Object.keys(paths[i]).forEach((method) => {
+          const { tags, description, requestBody, responses, parameters, summary } = paths[i][method];
 
-        const tag = tags[0];
-        categoryMap[tag] = {
-          name: tag,
-          project_id: projectId
-        };
+          let responseSchema;
 
-        Object.keys(responses).forEach((k) => {
-          if (k === '200') {
-            responseSchema = responses[k];
-          }
-        });
-
-        /** 批量更新 */
-        interfaceBatchUpdate.push({
-          path: i,
-          method,
-          project_id: projectId,
-          tags: tag,
-          description,
-          responses: JSON.stringify(responseSchema),
-          request_body: JSON.stringify(requestBody),
-          parameters: JSON.stringify(parameters),
-          api_address: apiAddress
+          const tag = tags[0];
+          categoryMap[tag] = {
+            name: tag,
+            project_id: projectId
+          };
+          Object.keys(responses).forEach((k) => {
+            if (k === '200') {
+              responseSchema = responses[k];
+            }
+          });
+          // function toJsonString(obj) {
+          //   const data = util.inspect(obj, { depth: null }).replace(/\n/g, '');
+          //   return JSON.stringify(eval('(' + data + ')'));
+          //   // eslint-disable-next-line no-eval
+          //   // return JSON.stringify(eval('(' + util.inspect(obj, { depth: null }).replace(/\n/g, '') + ')'));
+          // }
+          /** 批量更新 */
+          interfaceBatchUpdate.push({
+            path: i,
+            method,
+            project_id: projectId,
+            tags: tag,
+            description,
+            responses: stringify(responseSchema),
+            request_body: stringify(requestBody),
+            parameters: stringify(parameters),
+            summary: summary,
+            // responses: '{}',
+            // request_body: '{}',
+            // parameters: '{}',
+            api_address: apiAddress
+          });
         });
       });
 
@@ -137,6 +153,7 @@ export default class InterfaceController extends BaseController {
       Log.info(`projectid:${projectId}的接口同步成功`);
       return Promise.resolve({});
     } catch (error) {
+      console.log(error);
       return Promise.reject(error);
     }
   }
@@ -246,22 +263,31 @@ export default class InterfaceController extends BaseController {
    * @returns
    */
   public async detail() {
-    const { id } = this.ctx.request.body;
+    try {
+      const { id } = this.ctx.request.body;
 
-    const result = await this.model.getDetail(id as string);
+      const result = await this.model.getDetail(id as string);
+      const projectItem = await this.projectModel.get({
+        _id: result?.project_id
+      });
 
-    if (!result) {
-      return (this.ctx.body = responseBody(null, 404, 'id不存在'));
+      if (!result) {
+        return (this.ctx.body = responseBody(null, 404, 'id不存在'));
+      }
+
+      const data = {
+        ...result.toJSON(),
+        id: result._id,
+        mock_url: `http://${getIPAddress()}:${config.port}/mock/${result.project_id}${result.path}`,
+        auto_proxy: projectItem[0]?.auto_proxy,
+        auto_proxy_url: projectItem[0]?.auto_proxy_url
+      };
+      delete data._id;
+
+      this.ctx.body = responseBody(data);
+    } catch (error) {
+      throw Error(error);
     }
-
-    const data = {
-      ...result.toJSON(),
-      id: result._id,
-      mock_url: `http://${getIPAddress()}:${config.port}/mock/${result.project_id}${result.path}`
-    };
-    delete data._id;
-
-    this.ctx.body = responseBody(data);
   }
 
   /**
@@ -336,14 +362,14 @@ export default class InterfaceController extends BaseController {
 
   public async editProxy() {
     try {
-      // const list = await this.model.getFlatlist();
-
-      // return (this.ctx.body = responseBody({ list }, 200, '操作成功'));
-
+      /** 查找是否设置过代理 */
       const { id, proxy } = this.ctx.request.body;
-
+      const res = await this.projectModel.get({ id });
       if (!id || proxy === undefined) {
         return (this.ctx.body = responseBody({}, 400, '参数错误'));
+      }
+      if (res[0] && !res[0].auto_proxy_url) {
+        return (this.ctx.body = responseBody({}, 400, '项目未设置代理地址'));
       }
 
       await this.model.updateProxyById(id, proxy);

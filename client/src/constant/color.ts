@@ -7,7 +7,7 @@ export enum MethodsColorEnum {
 
 export enum ProxyColorEnum {
   'close' = 'gray',
-  'open' = '#61affe'
+  'open' = '#87d068'
 }
 
 export type MethodsColorEnumType = keyof typeof MethodsColorEnum;

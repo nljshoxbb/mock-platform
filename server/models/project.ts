@@ -55,7 +55,8 @@ class ProjectModel extends BaseModel<ProjectModelI> {
   }
 
   public remove(id: number) {
-    return this.model.findByIdAndUpdate(id, { soft_del: 1 });
+    // return this.model.findByIdAndUpdate(id, { soft_del: 1 });
+    return this.model.findByIdAndDelete(id);
   }
 }
 

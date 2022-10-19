@@ -55,7 +55,6 @@ const Detail = (props: any) => {
       </>
     );
   };
-
   const getDetail = (id: string) => {
     InterfaceDetail({ id })
       .then((res) => {
@@ -73,6 +72,8 @@ const Detail = (props: any) => {
               };
             });
             setParameterData(data);
+          } else {
+            setParameterData([]);
           }
 
           if (request_body) {
@@ -96,7 +97,6 @@ const Detail = (props: any) => {
             setHeadersData([]);
             setRequestBody([]);
           }
-
           if (responses) {
             const resData = JSON.parse(infoData.responses);
             if (resData.content) {
@@ -136,7 +136,6 @@ const Detail = (props: any) => {
   };
 
   const disabled = infoData ? false : true;
-
   return (
     <div className={styles.infoBigBox}>
       <Tabs activeKey={activeKey} onChange={(key) => handleTabsOnChange(key)} destroyInactiveTabPane>
@@ -165,7 +164,7 @@ const Detail = (props: any) => {
                     {renderItem(
                       '代理',
                       <>
-                        <Switch onChange={onProxyChange} checked={infoData.proxy} />
+                        <Switch onChange={onProxyChange} checked={infoData.proxy} disabled={!infoData.auto_proxy && !infoData.auto_proxy_url} />
                         <Tooltip title="需要在项目中填写代理地址后开启">
                           <QuestionCircleOutlined className="ml10" />
                         </Tooltip>

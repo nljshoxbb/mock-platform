@@ -11,7 +11,7 @@ export interface InterfaceItem extends CommonSchema {
   request_body: string;
   parameters: string;
   tags: string;
-
+  summary: string;
   mark?: string;
   description?: string;
   category_id?: string;
@@ -37,6 +37,7 @@ class InterfaceModel extends BaseModel<InterfaceModelI> {
       responses: { required: false, type: String },
       request_body: { required: false, type: String },
       parameters: { required: false, type: String },
+      summary: { required: false, type: String },
       tags: { required: true, type: String },
       api_address: { required: true, type: String },
       mark: { required: false, type: String },
@@ -68,6 +69,10 @@ class InterfaceModel extends BaseModel<InterfaceModelI> {
 
   public async updateProxyById(id, proxy) {
     return this.model.findByIdAndUpdate(id, { proxy });
+  }
+
+  public async batchRemove(projectId) {
+    return this.model.deleteMany({ project_id: projectId });
   }
 }
 

@@ -59,6 +59,12 @@ export default function interfaceRouter(router: KoaRouter) {
    *          proxy:
    *            type: boolean
    *            description: 是否走代理
+   *          auto_proxy:
+   *            type: boolean
+   *            description: 项目是否开启了代理
+   *          auto_proxy_url:
+   *            type: string
+   *            description: 开启代理代理地址
    *     Category:
    *       type: object
    *       properties:

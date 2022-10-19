@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Context, Next } from 'koa';
 import { isEmpty } from 'lodash';
 import Mock from 'mockjs';
+import { compile, match, parse, pathToRegexp } from 'path-to-regexp';
 import { RequestBody, Response } from 'swagger-jsdoc';
 
 import { getModelInstance, objectIdToString, responseBody } from './../utils/utils';
@@ -42,6 +43,15 @@ const delayFn = async (ms) => {
     setTimeout(() => {
       resolve();
     }, ms);
+  });
+};
+
+/** /api/${id}/${status} -> /api/:id/:status */
+const converPath = (pathString) => {
+  /** 转换，进行匹配 */
+  const decodePath = decodeURIComponent(pathString);
+  return decodePath.replace(/\{(.+?)\}/g, (val, val1) => {
+    return `:${val1}`;
   });
 };
 
@@ -120,7 +130,7 @@ const proxyRequest = async ({ url, method, query, header, body }) => {
 
 const mockMiddleware = async (ctx: Context, next: Next) => {
   const { request } = ctx;
-  const method = request.method as any;
+  const method = request.method.toLocaleLowerCase() as any;
   const body = request.body;
   const query = request.query as any;
   const header = request.header;
@@ -153,11 +163,26 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
     return (ctx.body = responseBody(null, 400, 'project不存在'));
   }
 
-  /** 如果有启用的期望值，直接返回期望值 */
-  const [interfaceData] = await interfaceModel.getDataByPath(projectId, method.toLocaleLowerCase(), path);
+  /** 进行url匹配 */
+  const allInterface = await interfaceModel.get({ project_id: projectId });
+  const result = allInterface.filter((i) => {
+    const fn = match(converPath(i.path), { decode: decodeURIComponent });
+    const val = fn(path);
+    if (val && i.method === method) {
+      return true;
+    }
+  });
+  if (!result || !result[0]) {
+    return (ctx.body = responseBody(null, 404, '没有mock数据'));
+  }
 
+  const interfaceData = await interfaceModel.getDetail(result[0].id);
+  console.log(decodeURIComponent(path));
+
+  /** 如果有启用的期望值，直接返回期望值 */
+  // const [interfaceData] = await interfaceModel.getDataByPath(projectId, method, decodeURIComponent(path));
   /** 优先走代理 */
-  if (isProjectExit.auto_proxy_url && isProjectExit.auto_proxy && interfaceData.proxy) {
+  if (interfaceData && isProjectExit.auto_proxy_url && isProjectExit.auto_proxy && interfaceData.proxy) {
     /** 接口是否打开代理 */
     const resData = await proxyRequest({
       url: `${isProjectExit.auto_proxy_url}${path}`,
@@ -209,12 +234,13 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
 
     if (content) {
       const types = Object.keys(content);
-
       if (types[0] === 'application/octet-stream') {
         return (ctx.body = 10101);
       } else {
         const { schema } = content[types[0]];
-        return (ctx.body = responseBody(expectedResult || Mock.mock(generateMockField(schema)), 200));
+        /** 可自定义返回格式+包裹mock数据 */
+        // return (ctx.body = responseBody(expectedResult || Mock.mock(generateMockField(schema)), 200));
+        return (ctx.body = expectedResult || Mock.mock(generateMockField(schema)));
       }
     }
   } else {

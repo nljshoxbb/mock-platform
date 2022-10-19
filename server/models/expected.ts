@@ -78,6 +78,10 @@ class ExpectedModel extends BaseModel<ExpectedModelI> {
   public findByInterfaceId(id: string) {
     return this.model.find({ interface_id: id, status: true });
   }
+
+  public async batchRemove(projectId) {
+    return this.model.deleteMany({ project_id: projectId });
+  }
 }
 
 export default ExpectedModel;

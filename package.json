@@ -24,6 +24,7 @@
     "http-proxy-middleware": "^2.0.4",
     "js-yaml": "^4.1.0",
     "json-schema-faker": "^0.5.0-rcv.41",
+    "json-stringify-safe": "^5.0.1",
     "jsonwebtoken": "^8.5.1",
     "koa": "^2.13.4",
     "koa-bodyparser": "^4.3.0",

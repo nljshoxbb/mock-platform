@@ -71,8 +71,6 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface, interfaceId }) => {
   };
 
   useEffect(() => {
-    console.log(interfaceId, expandedKeys, treeData);
-
     if (!expandedKeys.includes(interfaceId)) {
       // findPath(interfaceId, treeData, {});
       // 展开到指定节点
@@ -204,16 +202,18 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface, interfaceId }) => {
                   <div className="flex align-center">
                     {isEmpty(node.children) && (
                       <>
-                        <Tag className={styles.method} color={MethodsColorEnum[method]}>
-                          {method}
-                        </Tag>
+                        {method && (
+                          <Tag className={styles.method} color={MethodsColorEnum[method]} style={{ width: 50, textAlign: 'center' }}>
+                            {method}
+                          </Tag>
+                        )}
                         <Tag className={styles.method} color={ProxyColorEnum[node.proxy ? 'open' : 'close']}>
-                          {node.proxy ? 'proxy open' : 'proxy close'}
+                          proxy
                         </Tag>
                       </>
                     )}
 
-                    <div className="ellipsis" style={{ display: 'inline-block', width: 180 }}>
+                    <div className="ellipsis" style={{ display: 'inline-block', width: 100 }}>
                       <Tooltip title={node.title}>{node.title}</Tooltip>
                     </div>
                   </div>

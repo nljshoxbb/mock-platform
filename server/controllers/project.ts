@@ -3,6 +3,7 @@ import ProjectModel from '@/server/models/project';
 import { Context } from 'koa';
 import { isEmpty } from 'lodash';
 
+import ExpectedModel from '../models/expected';
 import InterfaceModel from '../models/interface';
 import Log from '../utils/Log';
 import { getModelInstance, objectIdToString, responseBody } from '../utils/utils';
@@ -18,11 +19,13 @@ const timerMap: Map<string, Timer> = new Map();
 export default class ProjectController extends BaseController {
   model: ProjectModel;
   interfaceMode: InterfaceModel;
+  expectedMode: ExpectedModel;
   interfaceController: InterfaceController;
   constructor(ctx: Context) {
     super(ctx);
     this.model = getModelInstance<ProjectModel>(ProjectModel);
     this.interfaceMode = getModelInstance<InterfaceModel>(InterfaceModel);
+    this.expectedMode = getModelInstance<ExpectedModel>(ExpectedModel);
     this.interfaceController = new InterfaceController(ctx);
     /** 检测是否用同步任务，重启 */
     const recoveryTask = async () => {
@@ -76,6 +79,7 @@ export default class ProjectController extends BaseController {
         return (this.ctx.body = responseBody(null, 400, '同步时间不能小于1分钟'));
       }
 
+      /** 是否开启事务，如果同步数据出错则添加不成功 */
       const res = await this.model.create({
         name,
         desc,
@@ -189,6 +193,9 @@ export default class ProjectController extends BaseController {
         return (this.ctx.body = responseBody(null, 400, 'id不存在'));
       }
       await this.model.remove(id);
+      /** 删除接口、expected */
+      await this.interfaceMode.batchRemove(id);
+      await this.expectedMode.batchRemove(id);
       this.ctx.body = responseBody(null, 200, '操作成功');
     } catch (error) {
       throw Error(error);

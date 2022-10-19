@@ -50,9 +50,12 @@ const InterfaceEditComponent: React.FC<InterfaceEditI> = ({ response, id = '' })
 
   useEffect(() => {
     let schema = {};
-
     if (response && response.content && response?.content['application/json']) {
       schema = response?.content['application/json'].schema;
+    }
+    /** 兼容通配符 */
+    if (response && response.content && response?.content['*/*']) {
+      schema = response.content && response?.content['*/*'].schema;
     }
 
     const cloneSchema = cloneDeep(schema);
@@ -112,8 +115,6 @@ const InterfaceEditComponent: React.FC<InterfaceEditI> = ({ response, id = '' })
               onClick={() => {
                 // 找出schema
                 const obj = findSchemaByPath(innerSchema.current, path);
-                console.log(obj, innerSchema.current, path);
-
                 setEditSchema(obj);
                 setCurrentFieldPath(path);
                 schemaModal.setVisible(true);

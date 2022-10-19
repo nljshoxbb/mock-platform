@@ -19,8 +19,8 @@ export default {
     name: 'mock-platform',
     // url: `mongodb://${isPro ? process.env.docker_db : '192.168.124.130:27017'}/mock-platform`,
     url: `mongodb://${isPro ? 'databaseroot:databaseroot@' + process.env.docker_db : 'localhost'}:27017/mock-platform`,
-    user: 'databaseroot',
-    pwd: 'databaseroot'
+    user: '',
+    pwd: ''
   },
   admin: 'admin',
   adminPwd: 'admin'
