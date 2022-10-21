@@ -194,6 +194,9 @@ export default function interfaceRouter(router: KoaRouter) {
    *         project_id:
    *           type: string
    *           description: 项目id
+   *         summary:
+   *           type: string
+   *           description: 接口描述
    *     InterfaceFlatListResponse:
    *       type: object
    *       properties:

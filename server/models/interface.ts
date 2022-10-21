@@ -47,7 +47,7 @@ class InterfaceModel extends BaseModel<InterfaceModelI> {
     };
   }
 
-  public async get(params: Partial<InterfaceItem> = {}, select: string = 'method name _id  description path proxy  ') {
+  public async get(params: Partial<InterfaceItem> = {}, select: string = 'method name _id  description path proxy summary') {
     return this.model.find(params).select(select).exec();
   }
 
@@ -64,7 +64,7 @@ class InterfaceModel extends BaseModel<InterfaceModelI> {
   }
 
   public async getFlatlist() {
-    return this.model.find().select('id path project_id category_id').exec();
+    return this.model.find().select('id path project_id category_id summary').exec();
   }
 
   public async updateProxyById(id, proxy) {

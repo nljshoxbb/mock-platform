@@ -1,6 +1,3 @@
-import fs from 'fs';
-import util from 'util';
-
 import InterfaceModel, { InterfaceItem } from '@/server/models/interface';
 import Log from '@/server/utils/Log';
 import SwaggerParser from '@apidevtools/swagger-parser';
@@ -230,7 +227,8 @@ export default class InterfaceController extends BaseController {
               method: i.method,
               path: i.path,
               description: i.description,
-              proxy: i.proxy
+              proxy: i.proxy,
+              summary: i.summary
             }))
           };
 

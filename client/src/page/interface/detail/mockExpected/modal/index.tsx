@@ -13,7 +13,7 @@ interface EditProps extends ModalProps {
 }
 const layout = {
   labelCol: { span: 4 },
-  wrapperCol: { span: 18 }
+  wrapperCol: { span: 20 }
 };
 const AddHopeModal: React.FC<EditProps> = ({ onSuccess, node, type, currentItem, ...modalProps }) => {
   const [form] = Form.useForm();

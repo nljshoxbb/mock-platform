@@ -118,14 +118,15 @@ const proxyRequest = async ({ url, method, query, header, body }) => {
       config.responseType = 'stream';
     }
     result = await axios(config);
+    Log.info(`proxy result->${result}`);
+    return Promise.resolve(result);
   } catch (error) {
+    Log.info(`proxy error->${error}`);
     if (error.response.status === 404) {
       return result;
     }
+    return Promise.resolve(error);
   }
-  return new Promise((resolve, reject) => {
-    resolve(result);
-  });
 };
 
 const mockMiddleware = async (ctx: Context, next: Next) => {
@@ -177,12 +178,11 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
   }
 
   const interfaceData = await interfaceModel.getDetail(result[0].id);
-  console.log(decodeURIComponent(path));
 
   /** 如果有启用的期望值，直接返回期望值 */
   // const [interfaceData] = await interfaceModel.getDataByPath(projectId, method, decodeURIComponent(path));
   /** 优先走代理 */
-  if (interfaceData && isProjectExit.auto_proxy_url && isProjectExit.auto_proxy && interfaceData.proxy) {
+  if (interfaceData?.proxy && isProjectExit.auto_proxy_url && isProjectExit.auto_proxy) {
     /** 接口是否打开代理 */
     const resData = await proxyRequest({
       url: `${isProjectExit.auto_proxy_url}${path}`,
@@ -193,14 +193,31 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
     });
     /** 有代理返回数据则返回，没有则走mock数据 */
     if (resData) {
-      Object.keys(resData.headers).forEach((i) => {
-        ctx.set(i, resData.headers[i]);
-      });
-      ctx.response.status = resData.status;
-      return (ctx.body = resData.data);
+      if (axios.isAxiosError(resData)) {
+        if (resData?.response) {
+          Object.keys(resData.response.headers).forEach((i) => {
+            if (resData.response?.headers[i]) {
+              ctx.set(i, resData.response?.headers[i]);
+            }
+          });
+
+          if (resData.response?.data) {
+            ctx.response.status = 200;
+            return (ctx.body = resData.response.data);
+          }
+        }
+      } else {
+        /** 200 */
+        resData.headers &&
+          Object.keys(resData.headers).forEach((i) => {
+            ctx.set(i, resData.headers[i]);
+          });
+
+        ctx.response.status = resData.status;
+        return (ctx.body = resData.data);
+      }
     }
   }
-
   if (interfaceData) {
     let expectedResult;
     const expectedRes = await expectedModel.findByInterfaceId(objectIdToString(interfaceData._id));

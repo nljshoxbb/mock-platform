@@ -19,6 +19,7 @@ const { Search } = Input;
 type DataList = {
   key: string;
   title: string;
+  path: string;
 };
 
 interface ItemListProps {
@@ -48,14 +49,14 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface, interfaceId }) => {
         const list = res.data.list.map((i) => {
           return {
             key: i._id,
-            title: i.path
+            title: i.summary,
+            path: i.path
           };
         });
         setDataList(list);
       }
     });
   }, []);
-
   const findPath = (key: string, data: any[], path: any = {}) => {
     for (let i = 0; i < data.length; i++) {
       if (data[i].key === key) {
@@ -119,7 +120,7 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface, interfaceId }) => {
   const onSearch = (value: any) => {
     const expandedKeys = dataList
       .map((item) => {
-        if (item.title.indexOf(value) !== -1) {
+        if (item?.title?.indexOf(value) !== -1 || item?.path?.indexOf(value) !== -1) {
           return getParentKey(item.key, treeData);
         }
         return null;
@@ -133,19 +134,29 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface, interfaceId }) => {
 
   const loop = (data: TreeData[]): any => {
     return data?.map((item) => {
-      const index = item.title.indexOf(searchValue);
-      const beforeStr = item.title.substring(0, index);
-      const afterStr = item.title.substring(index + searchValue.length);
-      const title =
-        index > -1 ? (
+      let index = item.title.indexOf(searchValue);
+      let beforeStr = item.title.substring(0, index);
+      let afterStr = item.title.substring(index + searchValue.length);
+
+      let title: any = '';
+
+      if (index > -1) {
+        title = (
           <span>
             {beforeStr}
             <span style={{ color: '#ff5500' }}>{searchValue}</span>
             {afterStr}
           </span>
-        ) : (
-          <span>{item.title}</span>
         );
+      } else {
+        const pathIndex = item?.path?.indexOf(searchValue);
+        if (pathIndex !== undefined && pathIndex > -1) {
+          title = <span style={{ color: '#ff5500' }}>{item.title}</span>;
+        } else {
+          title = <span>{item.title}</span>;
+        }
+      }
+
       if (item.children) {
         return { ...item, title, key: item.key, children: loop(item.children) };
       }
@@ -213,8 +224,8 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface, interfaceId }) => {
                       </>
                     )}
 
-                    <div className="ellipsis" style={{ display: 'inline-block', width: 100 }}>
-                      <Tooltip title={node.title}>{node.title}</Tooltip>
+                    <div className="ellipsis" style={{ display: 'inline-block', width: 200 }}>
+                      <Tooltip title={node.path}>{node.title}</Tooltip>
                     </div>
                   </div>
                   {node?.isEdit ? (

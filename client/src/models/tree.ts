@@ -7,6 +7,7 @@ export type TreeData = {
   key: string;
   title: string;
   children: TreeData[];
+  path?: string;
 };
 
 interface TreeState {
@@ -21,7 +22,7 @@ const treeChagenName = (data: any[], title: string, key: string, children: strin
       return {
         ...item,
         key: item.id,
-        title: item.path
+        title: item.summary || item.path
       };
     } else {
       if (item[children].length) {

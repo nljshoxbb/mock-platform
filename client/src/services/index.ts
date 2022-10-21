@@ -732,6 +732,8 @@ export interface InterfaceFlatListItemItemTypes {
   category_id: string;
   /** 项目id */
   project_id: string;
+  /** 接口描述 */
+  summary: string;
 }
 export interface ProjectListItemItemTypes {
   /** id */
