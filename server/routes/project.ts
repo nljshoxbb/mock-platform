@@ -92,6 +92,9 @@ export default function projectRouter(router: Router) {
    *         auto_proxy:
    *           type: boolean
    *           description: 优先代理地址开启
+   *         proxy_all:
+   *           type: boolean
+   *           description: 是否全部接口开启代理
    *     ProjectCreateResponse:
    *        type: object
    *        properties:

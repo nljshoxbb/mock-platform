@@ -142,6 +142,22 @@ const Eidt: React.FC<EditProps> = ({ onSuccess, type, selNode, ...modalProps }) 
               <Input disabled={!proxyDisabled} style={{ width: 248 }} placeholder="请输入代理地址" />
             </Form.Item>
           </Form.Item>
+          <Form.Item shouldUpdate noStyle>
+            {() => {
+              if (form.getFieldValue('auto_proxy')) {
+                return (
+                  <Form.Item label="开启全部接口" name="proxy_all" valuePropName="checked">
+                    <Switch
+                      className="mr10"
+                      onChange={(e) => {
+                        setProxyDisabled(e);
+                      }}
+                    />
+                  </Form.Item>
+                );
+              }
+            }}
+          </Form.Item>
           <Form.Item name="desc" label="描述">
             <Input.TextArea />
           </Form.Item>

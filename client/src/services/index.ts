@@ -375,6 +375,8 @@ export interface ProjectCreateRequest {
   auto_proxy_url: string;
   /** 优先代理地址开启 */
   auto_proxy: boolean;
+  /** 是否全部接口开启代理 */
+  proxy_all: boolean;
 }
 
 /** undefined 响应参数*/

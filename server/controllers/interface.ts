@@ -30,9 +30,10 @@ export default class InterfaceController extends BaseController {
    * @param projectId
    * @param apiAddress
    * @param type 目前只支持yaml json
+   * @param proxy 是否开启代理
    * @returns
    */
-  public async syncByPorjectId(projectId: string, apiAddress: string, type: string) {
+  public async syncByPorjectId(projectId: string, apiAddress: string, type: string, proxy: boolean = false) {
     try {
       const res = await axios.get(apiAddress);
       let jsonData;
@@ -58,8 +59,6 @@ export default class InterfaceController extends BaseController {
       const categoryMap = {};
       const pathArr: string[] = [];
 
-      // fs.writeFileSync('pathsData.json', util.inspect(api, { depth: 20 }));
-
       Object.keys(paths).forEach((i) => {
         pathArr.push(i);
 
@@ -78,12 +77,6 @@ export default class InterfaceController extends BaseController {
               responseSchema = responses[k];
             }
           });
-          // function toJsonString(obj) {
-          //   const data = util.inspect(obj, { depth: null }).replace(/\n/g, '');
-          //   return JSON.stringify(eval('(' + data + ')'));
-          //   // eslint-disable-next-line no-eval
-          //   // return JSON.stringify(eval('(' + util.inspect(obj, { depth: null }).replace(/\n/g, '') + ')'));
-          // }
           /** 批量更新 */
           interfaceBatchUpdate.push({
             path: i,
@@ -95,10 +88,8 @@ export default class InterfaceController extends BaseController {
             request_body: stringify(requestBody),
             parameters: stringify(parameters),
             summary: summary,
-            // responses: '{}',
-            // request_body: '{}',
-            // parameters: '{}',
-            api_address: apiAddress
+            api_address: apiAddress,
+            proxy
           });
         });
       });
@@ -162,7 +153,7 @@ export default class InterfaceController extends BaseController {
    */
   public async syncData() {
     try {
-      const { api_address, project_id, type } = this.ctx.request.body;
+      const { api_address, project_id, type, proxy } = this.ctx.request.body;
 
       if (!project_id || !api_address || !type) {
         return (this.ctx.body = responseBody(null, 400, '参数错误'));
@@ -175,7 +166,7 @@ export default class InterfaceController extends BaseController {
       if (!isExist) {
         return (this.ctx.body = responseBody(null, 200, 'project_id不存在'));
       }
-      const result = await this.syncByPorjectId(project_id, api_address, type);
+      const result = await this.syncByPorjectId(project_id, api_address, type, proxy);
       if (!result) {
         return (this.ctx.body = responseBody(null, 500, '地址错误'));
       }

@@ -63,7 +63,7 @@ export default class ProjectController extends BaseController {
 
   public async create() {
     try {
-      const { name, desc, api_address, type, auto_sync, auto_sync_time = DEFAULT_SYNC_TIME, auto_proxy_url, auto_proxy } = this.ctx.request.body;
+      const { name, desc, api_address, type, auto_sync, auto_sync_time = DEFAULT_SYNC_TIME, auto_proxy_url, auto_proxy, proxy_all } = this.ctx.request.body;
       const uid = await this.getUid();
 
       const count = await this.model.checkNameRepeat(name, uid);
@@ -95,7 +95,7 @@ export default class ProjectController extends BaseController {
       const porjectId = objectIdToString(res._id);
 
       if (res) {
-        await this.interfaceController.syncByPorjectId(porjectId, api_address, type);
+        await this.interfaceController.syncByPorjectId(porjectId, api_address, type, proxy_all);
 
         this.handleTimer(porjectId, auto_sync, auto_sync_time, async () => {
           await this.interfaceController.syncByPorjectId(porjectId, api_address, type);

@@ -122,9 +122,6 @@ const proxyRequest = async ({ url, method, query, header, body }) => {
     return Promise.resolve(result);
   } catch (error) {
     Log.info(`proxy error->${error}`);
-    if (error.response.status === 404) {
-      return result;
-    }
     return Promise.resolve(error);
   }
 };
