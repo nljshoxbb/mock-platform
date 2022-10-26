@@ -29,7 +29,8 @@ export default class ExpectedController extends BaseController {
         return (this.ctx.body = responseBody(null, 400, '参数错误'));
       }
 
-      const count = await this.model.checkNameRepeat(name);
+      /** 应与接口关联 */
+      const count = await this.model.checkNameRepeat(name, interface_id);
 
       if (count > 0) {
         return (this.ctx.body = responseBody(null, 400, '已存在'));

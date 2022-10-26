@@ -128,7 +128,7 @@ const MockExpected: React.FC<MockExpectedInterface> = (props) => {
         currentItem={currentItem}
         type={editModal.type}
         node={props.infoData}
-        width={800}
+        width={1000}
       />
     </div>
   );

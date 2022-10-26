@@ -87,6 +87,8 @@ const Eidt: React.FC<EditProps> = ({ onSuccess, type, selNode, ...modalProps }) 
         onOk={() => {
           onSubmit();
         }}
+        // okButtonProps={{c}}
+        confirmLoading={submitLoading}
       >
         <Form
           {...layout}

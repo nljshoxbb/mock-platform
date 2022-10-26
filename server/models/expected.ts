@@ -35,8 +35,8 @@ class ExpectedModel extends BaseModel<ExpectedModelI> {
     return await this.model.create({ ...data, soft_del: 0 });
   }
 
-  public checkNameRepeat(name) {
-    return this.model.find({ name, soft_del: { $lte: 0 } }).count();
+  public checkNameRepeat(name, interface_id) {
+    return this.model.find({ name, interface_id, soft_del: { $lte: 0 } }).count();
   }
 
   public get(data: any = {}) {
