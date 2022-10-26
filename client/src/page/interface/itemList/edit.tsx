@@ -59,7 +59,7 @@ const Eidt: React.FC<EditProps> = ({ onSuccess, type, selNode, ...modalProps }) 
           });
         })
         .finally(() => {
-          setSubmitLoading(true);
+          setSubmitLoading(false);
         });
     } else {
       form.validateFields().then(async (values) => {
@@ -74,7 +74,7 @@ const Eidt: React.FC<EditProps> = ({ onSuccess, type, selNode, ...modalProps }) 
             }
           })
           .finally(() => {
-            setSubmitLoading(true);
+            setSubmitLoading(false);
           });
       });
     }

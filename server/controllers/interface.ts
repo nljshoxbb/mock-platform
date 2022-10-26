@@ -1,4 +1,5 @@
 import InterfaceModel, { InterfaceItem } from '@/server/models/interface';
+import logger from '@/server/utils/Log';
 import Log from '@/server/utils/Log';
 import SwaggerParser from '@apidevtools/swagger-parser';
 import axios from 'axios';
@@ -58,10 +59,8 @@ export default class InterfaceController extends BaseController {
       const { paths } = api;
       const categoryMap = {};
       const pathArr: string[] = [];
-
       Object.keys(paths).forEach((i) => {
         pathArr.push(i);
-
         Object.keys(paths[i]).forEach((method) => {
           const { tags, description, requestBody, responses, parameters, summary } = paths[i][method];
 

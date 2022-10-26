@@ -37,6 +37,7 @@
     "koa2-connect": "^1.0.2",
     "koa2-swagger-ui": "^5.3.0",
     "lodash": "^4.17.21",
+    "log4js": "^6.7.0",
     "mockjs": "^1.1.0",
     "mongoose": "^6.2.3",
     "pm2": "^5.2.0",

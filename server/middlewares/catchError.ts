@@ -8,7 +8,7 @@ const catchError = async (ctx, next) => {
   } catch (error) {
     Log.error(error + ' from catchError middleware');
     if (error.errorCode) {
-      Log.warning('捕获异常');
+      Log.error('捕获异常');
       return (ctx.body = responseBody(null, 500, '系统错误'));
     } else {
       return (ctx.body = responseBody(null, 500, '系统错误'));

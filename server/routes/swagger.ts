@@ -29,7 +29,7 @@ export default function swaggerRouter(router: KoaRouter) {
     ctx.body = swaggerSpec;
   });
 
-  router.get('/doc/swagger', async function (ctx) {
+  router.get('/swagger.yaml', async function (ctx) {
     ctx.body = jsYaml.dump(swaggerSpec);
   });
 }

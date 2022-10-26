@@ -1,5 +1,6 @@
 import InterfaceModel from '@/server/models/interface';
 import axios from 'axios';
+import stringify from 'json-stringify-safe';
 import { Context, Next } from 'koa';
 import { isEmpty } from 'lodash';
 import Mock from 'mockjs';
@@ -103,7 +104,6 @@ const generateMockField = (schema: any, mockObject = {}) => {
 };
 
 const proxyRequest = async ({ url, method, query, header, body }) => {
-  Log.info(`proxy->${method}: ${url}`);
   let result;
   try {
     const config: any = {
@@ -113,15 +113,16 @@ const proxyRequest = async ({ url, method, query, header, body }) => {
       data: body,
       headers: header
     };
-
     if (header.range) {
       config.responseType = 'stream';
     }
+
+    Log.info(`proxy config->${JSON.stringify(config)}`);
     result = await axios(config);
-    Log.info(`proxy result->${result}`);
+    // Log.info(`proxy result->${stringify(result.data)}`);
     return Promise.resolve(result);
   } catch (error) {
-    Log.info(`proxy error->${error}`);
+    Log.error(`proxy error->${error}`);
     return Promise.resolve(error);
   }
 };
@@ -163,21 +164,37 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
 
   /** 进行url匹配 */
   const allInterface = await interfaceModel.get({ project_id: projectId });
-  const result = allInterface.filter((i) => {
-    const fn = match(converPath(i.path), { decode: decodeURIComponent });
-    const val = fn(path);
-    if (val && i.method === method) {
+
+  let result: any;
+
+  allInterface.some((i) => {
+    if (i.method === method && i.path === path) {
+      result = i;
       return true;
     }
   });
-  if (!result || !result[0]) {
-    return (ctx.body = responseBody(null, 404, '没有mock数据'));
+
+  if (!result) {
+    allInterface.some((i) => {
+      const fn = match(converPath(i.path), { decode: decodeURIComponent });
+      /** _query/_count 做处理 */
+      const val = fn(path);
+      if (val && i.method === method) {
+        result = i;
+        return true;
+      }
+    });
   }
 
-  const interfaceData = await interfaceModel.getDetail(result[0].id);
+  Log.info(`请求${method}:${path}匹配到数据库接口${result.method}:${result.path}`);
+  if (!result) {
+    return (ctx.body = responseBody(null, 404, '没有mock数据'));
+  }
+  const interfaceData = await interfaceModel.getDetail(result.id);
 
   /** 如果有启用的期望值，直接返回期望值 */
   // const [interfaceData] = await interfaceModel.getDataByPath(projectId, method, decodeURIComponent(path));
+  // console.log(interfaceData, isProjectExit);
   /** 优先走代理 */
   if (interfaceData?.proxy && isProjectExit.auto_proxy_url && isProjectExit.auto_proxy) {
     /** 接口是否打开代理 */
@@ -254,7 +271,12 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
         const { schema } = content[types[0]];
         /** 可自定义返回格式+包裹mock数据 */
         // return (ctx.body = responseBody(expectedResult || Mock.mock(generateMockField(schema)), 200));
-        return (ctx.body = expectedResult || Mock.mock(generateMockField(schema)));
+        const mockData = expectedResult || Mock.mock(generateMockField(schema));
+        if (mockData.status) {
+          mockData.status = 200;
+          mockData.timestamp = +new Date();
+        }
+        return (ctx.body = mockData);
       }
     }
   } else {

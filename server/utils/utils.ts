@@ -35,7 +35,7 @@ export const deleteModelInstance = (m) => {
 export const responseBody = <T>(data: T, code: number = 200, msg: string = '') => {
   return {
     data,
-    code,
+    status: code,
     msg,
     hasError: code > 200
   };
