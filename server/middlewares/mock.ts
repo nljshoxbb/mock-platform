@@ -245,6 +245,9 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
     }
   }
   if (interfaceData) {
+    const { request_body, responses } = interfaceData;
+    const response = JSON.parse(responses || '{}') as Response;
+    const requestBody = JSON.parse(request_body || '{}') as RequestBody;
     let expectedResult;
     const expectedRes = await expectedModel.findByInterfaceId(objectIdToString(interfaceData._id));
 
@@ -260,13 +263,9 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
       if (response_body) {
         expectedResult = JSON.parse(response_body);
       }
-      return (ctx.body = responseBody(expectedResult, 200));
+      return (ctx.body = expectedResult);
     }
 
-    const { request_body, responses } = interfaceData;
-
-    const response = JSON.parse(responses || '{}') as Response;
-    const requestBody = JSON.parse(request_body || '{}') as RequestBody;
     let requestBodySchema;
     if (!isEmpty(requestBody)) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars

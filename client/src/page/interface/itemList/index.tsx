@@ -7,7 +7,7 @@ import { Dispatch, RootState } from '@/store';
 import { DownOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button, Input, Spin, Tag, Tooltip, Tree, message } from 'antd';
 import type { TreeProps } from 'antd';
-import { isEmpty } from 'lodash';
+import { cloneDeep, isEmpty } from 'lodash';
 import React, { Key, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -39,6 +39,7 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface, interfaceId }) => {
   const [dataList, setDataList] = useState<DataList[]>([]);
   const dispatch = useDispatch<Dispatch>();
   const { treeData, loading } = useSelector((state: RootState) => state.tree);
+  const [displayTreeData, setDisplayTreeData] = useState<TreeData[]>([]);
 
   const editModal = useModal();
   useEffect(() => {
@@ -57,6 +58,11 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface, interfaceId }) => {
       }
     });
   }, []);
+
+  useEffect(() => {
+    setDisplayTreeData(cloneDeep(treeData));
+  }, [treeData]);
+
   const findPath = (key: string, data: any[], path: any = {}) => {
     for (let i = 0; i < data.length; i++) {
       if (data[i].key === key) {
@@ -77,7 +83,7 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface, interfaceId }) => {
       // 展开到指定节点
       // setExpandedKeys([...expandedKeys, interfaceId]);
     }
-  }, [interfaceId, expandedKeys, treeData]);
+  }, [interfaceId, expandedKeys, displayTreeData]);
 
   const reqList = (params?: number) => {
     dispatch.tree.getInterfaceList({});
@@ -120,13 +126,18 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface, interfaceId }) => {
   const onSearch = (value: any) => {
     const expandedKeys = dataList
       .map((item) => {
-        if (item?.title?.indexOf(value) !== -1 || item?.path?.indexOf(value) !== -1) {
+        if (item?.path?.indexOf(value) !== -1) {
           return getParentKey(item.key, treeData);
         }
         return null;
       })
       .filter((item, i, self) => item && self.indexOf(item) === i);
-
+    setDisplayTreeData((list) => {
+      list.forEach((i) => {
+        console.log(i);
+      });
+      return list;
+    });
     setExpandedKeys(expandedKeys);
     setSearchValue(value);
     setAutoExpandParent(true);
@@ -189,7 +200,7 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface, interfaceId }) => {
           </div>
         </div>
         <div className={styles.desc}>项目描述:{itemName.desc}</div>
-        <Search allowClear placeholder="输入项目名称或者接口地址" onSearch={(value) => onSearch(value)} enterButton />
+        <Search allowClear placeholder="输入接口地址查找" onSearch={(value) => onSearch(value)} enterButton />
       </header>
       <main>
         <Spin spinning={loading}>
@@ -199,7 +210,7 @@ const ItemList: React.FC<ItemListProps> = ({ getIinterface, interfaceId }) => {
             switcherIcon={<DownOutlined />}
             onSelect={onSelect}
             onExpand={onExpand}
-            treeData={loop(treeData)}
+            treeData={loop(displayTreeData)}
             titleRender={(node: any) => {
               const method = node?.method as keyof typeof MethodsColorEnum;
               return (
