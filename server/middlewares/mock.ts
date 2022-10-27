@@ -12,9 +12,8 @@ import ExpectedModel from '../models/expected';
 import ProjectModel from '../models/project';
 import Log from '../utils/Log';
 
-const handleType = (data) => {
+const handleType = (data, fieldName: string) => {
   let result;
-
   if (data.mock?.enum) {
     return `@pick(${data.mock?.enum})`;
   }
@@ -22,10 +21,19 @@ const handleType = (data) => {
   if (data.mock?.value) {
     return (result = data.mock.value);
   }
-
+  /**
+   * 1. 带有name转为中文
+   * 2. 带有time转为时间戳
+   * */
   switch (data.type) {
     case 'string':
-      result = `@string("lower", 20)`;
+      if (fieldName.toLocaleLowerCase().indexOf('name') !== -1) {
+        result = `@cword(20)`;
+      } else if (fieldName.toLocaleLowerCase().indexOf('time') !== -1) {
+        result = `@date("yyyy-MM-dd")`;
+      } else {
+        result = `@string("lower", 20)`;
+      }
       break;
     case 'integer':
       result = '@increment';
@@ -36,6 +44,7 @@ const handleType = (data) => {
     default:
       break;
   }
+
   return result;
 };
 
@@ -88,13 +97,13 @@ const generateMockField = (schema: any, mockObject = {}) => {
           } else if (value.type === 'object') {
             mockObject[key] = generateMockField(value);
           } else {
-            mockObject[key] = handleType(value.type);
+            mockObject[key] = handleType(value.type, key);
           }
         }
 
         if (['string', 'integer', 'boolean', 'number'].includes(value.type)) {
           /** 处理非对象字段 */
-          mockObject[key] = handleType(value);
+          mockObject[key] = handleType(value, key);
         }
       }
     }
