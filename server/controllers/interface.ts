@@ -235,7 +235,8 @@ export default class InterfaceController extends BaseController {
           auto_proxy: projectItem.auto_proxy,
           category_list: catResult,
           type: projectItem.type,
-          api_address: projectItem.api_address
+          api_address: projectItem.api_address,
+          proxy_all: projectItem.proxy_all
         });
       }
 
@@ -356,7 +357,7 @@ export default class InterfaceController extends BaseController {
       if (!id || proxy === undefined) {
         return (this.ctx.body = responseBody({}, 400, '参数错误'));
       }
-      if (res[0] && !res[0].auto_proxy_url) {
+      if (proxy && res[0] && !res[0].auto_proxy_url) {
         return (this.ctx.body = responseBody({}, 400, '项目未设置代理地址'));
       }
 

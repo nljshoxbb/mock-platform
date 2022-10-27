@@ -119,6 +119,9 @@ export default function projectRouter(router: Router) {
    *         auto_sync_time:
    *           type: number
    *           description: 自动同步时间。单位秒
+   *         update_interface:
+   *           type: boolean
+   *           description: 是否更新接口
    *     ProjectDeleteRequest:
    *       type: object
    *       properties:

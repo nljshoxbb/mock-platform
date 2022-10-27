@@ -89,7 +89,8 @@ export default class ProjectController extends BaseController {
         auto_sync_time,
         type,
         auto_proxy_url,
-        auto_proxy
+        auto_proxy,
+        proxy_all
       });
 
       const porjectId = objectIdToString(res._id);
@@ -132,7 +133,7 @@ export default class ProjectController extends BaseController {
 
   public async edit() {
     try {
-      const { id, name, desc, api_address, auto_sync, auto_sync_time, type, auto_proxy_url, auto_proxy } = this.ctx.request.body;
+      const { id, name, desc, api_address, auto_sync, auto_sync_time, type, auto_proxy_url, auto_proxy, update_interface, proxy_all } = this.ctx.request.body;
       const uid = await this.getUid();
       if (!id) {
         return (this.ctx.body = responseBody(null, 400, '缺少id'));
@@ -152,11 +153,13 @@ export default class ProjectController extends BaseController {
 
       // console.log(id, apiDoc, type);
       /** 地址解析失败 */
-
-      // const result = await this.interfaceController.syncByPorjectId(id, apiDoc, type);
-      // if (result === 'addressError') {
-      //   return (this.ctx.body = responseBody(null, 400, '地址错误,解析失败'));
-      // }
+      console.log(update_interface);
+      if (update_interface) {
+        const result = await this.interfaceController.syncByPorjectId(id, apiDoc, type, proxy_all);
+        if (result === 'addressError') {
+          return (this.ctx.body = responseBody(null, 400, '地址错误,解析失败'));
+        }
+      }
 
       // if (auto_sync && (auto_sync_time === null || auto_sync_time < 60)) {
       //   return (this.ctx.body = responseBody(null, 400, '同步时间不能小于1分钟'));

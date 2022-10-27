@@ -47,7 +47,7 @@ const InterfaceEditComponent: React.FC<InterfaceEditI> = ({ response, id = '' })
   const [editFieldForm] = useForm();
 
   const [resData, setResData] = useState<any[]>([]);
-  console.log(response);
+
   useEffect(() => {
     let schema = {};
     if (response && response.content && response?.content['application/json']) {

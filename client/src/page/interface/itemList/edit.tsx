@@ -30,7 +30,9 @@ const Eidt: React.FC<EditProps> = ({ onSuccess, type, selNode, ...modalProps }) 
           desc: selNode.desc,
           auto_proxy_url: selNode.auto_proxy_url,
           auto_proxy: selNode.auto_proxy,
-          api_address: selNode.api_address
+          api_address: selNode.api_address,
+          proxy_all: selNode.proxy_all,
+          type: selNode.type
         });
         setDisabledSwitch(true);
         setDisabled(false);
@@ -129,7 +131,7 @@ const Eidt: React.FC<EditProps> = ({ onSuccess, type, selNode, ...modalProps }) 
             <span className="ant-form-text ">分钟同步一次</span>
           </Form.Item> */}
 
-          <Form.Item label="优先使用代理">
+          <Form.Item label="代理优先">
             <Form.Item noStyle valuePropName="checked" name="auto_proxy">
               <Switch
                 checkedChildren="开启"
@@ -148,18 +150,20 @@ const Eidt: React.FC<EditProps> = ({ onSuccess, type, selNode, ...modalProps }) 
             {() => {
               if (form.getFieldValue('auto_proxy')) {
                 return (
-                  <Form.Item label="开启全部接口" name="proxy_all" valuePropName="checked">
-                    <Switch
-                      className="mr10"
-                      onChange={(e) => {
-                        setProxyDisabled(e);
-                      }}
-                    />
+                  <Form.Item label="开启全部" name="proxy_all" valuePropName="checked">
+                    <Switch className="mr10" />
                   </Form.Item>
                 );
               }
             }}
           </Form.Item>
+          {type === 'info' && (
+            <Form.Item shouldUpdate noStyle>
+              <Form.Item label="更新接口" name="update_interface" valuePropName="checked">
+                <Switch className="mr10" />
+              </Form.Item>
+            </Form.Item>
+          )}
           <Form.Item name="desc" label="描述">
             <Input.TextArea />
           </Form.Item>
