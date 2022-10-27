@@ -207,7 +207,7 @@ export default class InterfaceController extends BaseController {
         for (let k = 0; k < categoryList.length; k++) {
           const catId = categoryList[k]._id.toString();
 
-          const interfaceList = await this.model.get({ category_id: catId });
+          const interfaceList = await this.model.get({ category_id: catId, project_id: projectItem.id });
 
           const categoryItem: Record<string, any> = {
             category_id: catId,

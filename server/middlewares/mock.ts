@@ -179,14 +179,17 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
       const fn = match(converPath(i.path), { decode: decodeURIComponent });
       /** _query/_count 做处理 */
       const val = fn(path);
-      if (val && i.method === method) {
+      if (val && i && i.method === method) {
         result = i;
         return true;
       }
     });
   }
 
-  Log.info(`请求${method}:${path}匹配到数据库接口${result.method}:${result.path}`);
+  if (result) {
+    Log.info(`请求${method}:${path}匹配到数据库接口${result.method}:${result.path}`);
+  }
+
   if (!result) {
     return (ctx.body = responseBody(null, 404, '没有mock数据'));
   }
