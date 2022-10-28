@@ -226,10 +226,12 @@ const mockMiddleware = async (ctx: Context, next: Next) => {
               ctx.set(i, resData.response?.headers[i]);
             }
           });
-
-          if (resData.response?.data) {
-            ctx.response.status = 200;
-            return (ctx.body = resData.response.data);
+          /** 代理接口404自动走mock */
+          if (resData.response.status !== 404) {
+            if (resData.response?.data) {
+              ctx.response.status = 200;
+              return (ctx.body = resData.response.data);
+            }
           }
         }
       } else {
