@@ -54,14 +54,16 @@ const Eidt: React.FC<EditProps> = ({ onSuccess, type, selNode, ...modalProps }) 
           ProjectCreate({ ...values, auto_sync: disabled, auto_sync_time: autoTime }).then((res) => {
             if (!res.hasError) {
               message.success('新增成功');
+
               onSuccess && onSuccess();
             }
             //@ts-ignore
             modalProps.onCancel && modalProps.onCancel();
+            setSubmitLoading(false);
           });
         })
         .finally(() => {
-          setSubmitLoading(false);
+          console.log('finaly');
         });
     } else {
       form.validateFields().then(async (values) => {
@@ -74,14 +76,12 @@ const Eidt: React.FC<EditProps> = ({ onSuccess, type, selNode, ...modalProps }) 
               //@ts-ignore
               modalProps.onCancel && modalProps.onCancel();
             }
-          })
-          .finally(() => {
             setSubmitLoading(false);
-          });
+          })
+          .finally(() => {});
       });
     }
   };
-
   return (
     <>
       <Modal
