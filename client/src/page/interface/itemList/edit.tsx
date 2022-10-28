@@ -150,7 +150,7 @@ const Eidt: React.FC<EditProps> = ({ onSuccess, type, selNode, ...modalProps }) 
             {() => {
               if (form.getFieldValue('auto_proxy')) {
                 return (
-                  <Form.Item label="开启全部" name="proxy_all" valuePropName="checked">
+                  <Form.Item label="代理全部接口" name="proxy_all" valuePropName="checked">
                     <Switch className="mr10" />
                   </Form.Item>
                 );
