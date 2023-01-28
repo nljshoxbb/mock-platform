@@ -76,6 +76,8 @@ export default class InterfaceController extends BaseController {
               responseSchema = responses[k];
             }
           });
+          /** 更新schema */
+          console.log(requestBody);
           /** 批量更新 */
           interfaceBatchUpdate.push({
             path: i,

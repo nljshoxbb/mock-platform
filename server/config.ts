@@ -18,7 +18,10 @@ export default {
   db: {
     name: 'mock-platform',
     // url: `mongodb://${isPro ? process.env.docker_db : '192.168.124.130:27017'}/mock-platform`,
-    url: `mongodb://${isPro ? 'databaseroot:databaseroot@' + process.env.docker_db : 'localhost'}:27017/mock-platform`,
+    // mongodb://databaseroot:databaseroot@db:20718/mock-platform
+    /** 连接docker mongodb */
+    url: `mongodb://databaseroot:databaseroot@localhost:27018/mock-platform`,
+    // url: `mongodb://${isPro ? 'databaseroot:databaseroot@' + process.env.docker_db : 'localhost'}:27017/mock-platform`,
     user: 'databaseroot',
     pwd: 'databaseroot'
   },

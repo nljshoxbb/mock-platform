@@ -3,6 +3,8 @@ import Path from 'path';
 import chalk from 'chalk';
 import log4js from 'log4js';
 
+import Config from '../config';
+
 log4js.addLayout('json', function (config) {
   return function (logEvent) {
     return JSON.stringify(logEvent) + config.separator;
@@ -11,7 +13,7 @@ log4js.addLayout('json', function (config) {
 
 const dirName = 'info.log';
 
-const _path = Path.resolve(__dirname, `../logs/${dirName}`);
+const _path = Path.resolve(Config.APP_LOG, `${dirName}`);
 log4js.configure({
   // replaceConsole: true,
   appenders: {

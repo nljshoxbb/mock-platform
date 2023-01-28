@@ -33,4 +33,7 @@ localhost:3888/doc/swagger
 `yarn build`
 
 ### docker
-`docker-compose up -d --build`
+
+1. `deploy.sh`
+
+2. `docker-compose up -d --build`

@@ -22,3 +22,5 @@ jspm_packages
 mongo-volume
 
 public
+
+log/
