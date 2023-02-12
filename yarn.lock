@@ -428,6 +428,14 @@
     "@types/connect" "*"
     "@types/node" "*"
 
+"@types/co-body@^6.1.0":
+  version "6.1.0"
+  resolved "https://registry.npmmirror.com/@types/co-body/-/co-body-6.1.0.tgz#b52625390eb0d113c9b697ea92c3ffae7740cdb9"
+  integrity sha512-3e0q2jyDAnx/DSZi0z2H0yoZ2wt5yRDZ+P7ymcMObvq0ufWRT4tsajyO+Q1VwVWiv9PRR4W3YEjEzBjeZlhF+w==
+  dependencies:
+    "@types/node" "*"
+    "@types/qs" "*"
+
 "@types/connect@*":
   version "3.4.35"
   resolved "https://registry.npmjs.org/@types/connect/-/connect-3.4.35.tgz#5fcf6ae445e4021d1fc2219a4873cc73a3bb2ad1"
@@ -473,6 +481,13 @@
     "@types/express-serve-static-core" "^4.17.18"
     "@types/qs" "*"
     "@types/serve-static" "*"
+
+"@types/formidable@^2.0.5":
+  version "2.0.5"
+  resolved "https://registry.npmmirror.com/@types/formidable/-/formidable-2.0.5.tgz#e54e31d242ef750ac2d05aa163fa0274c8e6ef9c"
+  integrity sha512-uvMcdn/KK3maPOaVUAc3HEYbCEhjaGFwww4EsX6IJfWIJ1tzHtDHczuImH3GKdusPnAAmzB07St90uabZeCKPA==
+  dependencies:
+    "@types/node" "*"
 
 "@types/http-assert@*":
   version "1.5.3"
@@ -560,6 +575,20 @@
   version "2.13.4"
   resolved "https://registry.npmjs.org/@types/koa/-/koa-2.13.4.tgz#10620b3f24a8027ef5cbae88b393d1b31205726b"
   integrity sha512-dfHYMfU+z/vKtQB7NUrthdAEiSvnLebvBjwHtfFmpZmB7em2N3WVQdHgnFq+xvyVgxW5jKDmjWfLD3lw4g4uTw==
+  dependencies:
+    "@types/accepts" "*"
+    "@types/content-disposition" "*"
+    "@types/cookies" "*"
+    "@types/http-assert" "*"
+    "@types/http-errors" "*"
+    "@types/keygrip" "*"
+    "@types/koa-compose" "*"
+    "@types/node" "*"
+
+"@types/koa@^2.13.5":
+  version "2.13.5"
+  resolved "https://registry.npmmirror.com/@types/koa/-/koa-2.13.5.tgz#64b3ca4d54e08c0062e89ec666c9f45443b21a61"
+  integrity sha512-HSUOdzKz3by4fnqagwthW/1w/yJspTgppyyalPVbgZf8jQWvdIXcVW5h2DGtw4zYntOaeRGx49r1hxoPWrD4aA==
   dependencies:
     "@types/accepts" "*"
     "@types/content-disposition" "*"
@@ -891,6 +920,11 @@ array.prototype.flat@^1.2.5:
     define-properties "^1.1.3"
     es-abstract "^1.19.0"
 
+asap@^2.0.0:
+  version "2.0.6"
+  resolved "https://registry.npmmirror.com/asap/-/asap-2.0.6.tgz#e50347611d7e690943208bbdafebcbc2fb866d46"
+  integrity sha512-BSHWgDSAiKs50o2Re8ppvp3seVHXSRM44cdSsT9FfNEUUZLOGWVCsiWaRPWM1Znn+mqZ1OfVZ3z3DWEzSp7hRA==
+
 ast-types@^0.13.2:
   version "0.13.4"
   resolved "https://registry.npmmirror.com/ast-types/-/ast-types-0.13.4.tgz#ee0d77b343263965ecc3fb62da16e7222b2b6782"
@@ -1133,7 +1167,7 @@ cli-tableau@^2.0.0:
   dependencies:
     chalk "3.0.0"
 
-co-body@^6.0.0:
+co-body@^6.0.0, co-body@^6.1.0:
   version "6.1.0"
   resolved "https://registry.npmjs.org/co-body/-/co-body-6.1.0.tgz#d87a8efc3564f9bfe3aced8ef5cd04c7a8766547"
   integrity sha512-m7pOT6CdLN7FuXUcpuz/8lfQ/L77x8SchHCF4G0RBTJO20Wzmhn5Sp4/5WsKy8OSpifBSUrmg83qEqaDHdyFuQ==
@@ -1403,6 +1437,14 @@ detect-newline@^2.1.0:
   version "2.1.0"
   resolved "https://registry.npmjs.org/detect-newline/-/detect-newline-2.1.0.tgz#f41f1c10be4b00e87b5f13da680759f2c5bfd3e2"
   integrity sha1-9B8cEL5LAOh7XxPaaAdZ8sW/0+I=
+
+dezalgo@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.npmmirror.com/dezalgo/-/dezalgo-1.0.4.tgz#751235260469084c132157dfa857f386d4c33d81"
+  integrity sha512-rXSP0bf+5n0Qonsb+SVVfNfIsimO4HEtmnIpPHY8Q1UCzKlQrDMfdobr8nJOOsRgWCyMRqeSBQzmWUMq7zvVig==
+  dependencies:
+    asap "^2.0.0"
+    wrappy "1"
 
 dicer@0.2.5:
   version "0.2.5"
@@ -1887,6 +1929,16 @@ format-util@^1.0.3:
   resolved "https://registry.npmjs.org/format-util/-/format-util-1.0.5.tgz#1ffb450c8a03e7bccffe40643180918cc297d271"
   integrity sha512-varLbTj0e0yVyRpqQhuWV+8hlePAgaoFRhNFj50BNjEIrw1/DphHSObtqwskVCPWNgzwPoQrZAbfa/SBiicNeg==
 
+formidable@^2.0.1:
+  version "2.1.1"
+  resolved "https://registry.npmmirror.com/formidable/-/formidable-2.1.1.tgz#81269cbea1a613240049f5f61a9d97731517414f"
+  integrity sha512-0EcS9wCFEzLvfiks7omJ+SiYJAiD+TzK4Pcw1UlUoGnhUxDcMKjt0P7x8wEb0u6OHu8Nb98WG3nxtlF5C7bvUQ==
+  dependencies:
+    dezalgo "^1.0.4"
+    hexoid "^1.0.0"
+    once "^1.4.0"
+    qs "^6.11.0"
+
 fresh@~0.5.2:
   version "0.5.2"
   resolved "https://registry.npmjs.org/fresh/-/fresh-0.5.2.tgz#3d8cadd90d976569fa835ab1f8e4b23a105605a7"
@@ -2094,6 +2146,11 @@ has@^1.0.3:
   integrity sha512-f2dvO0VU6Oej7RkWJGrehjbzMAjFp5/VKPp5tTpWIV4JHHZK1/BxbFRtf/siA2SWTe09caDmVtYYzWEIbBS4zw==
   dependencies:
     function-bind "^1.1.1"
+
+hexoid@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmmirror.com/hexoid/-/hexoid-1.0.0.tgz#ad10c6573fb907de23d9ec63a711267d9dc9bc18"
+  integrity sha512-QFLV0taWQOZtvIRIAdBChesmogZrtuXvVWsFHZTk2SU+anspqZ2vMnoLg7IE1+Uk16N19APic1BuF8bC8c2m5g==
 
 hosted-git-info@^2.1.4:
   version "2.8.9"
@@ -2637,6 +2694,18 @@ keygrip@~1.1.0:
   integrity sha512-iYSchDJ+liQ8iwbSI2QqsQOvqv58eJCEanyJPJi+Khyu8smkcKSFUCbPwzFcL7YVtZ6eONjqRX/38caJ7QjRAQ==
   dependencies:
     tsscmp "1.0.6"
+
+koa-body@^6.0.1:
+  version "6.0.1"
+  resolved "https://registry.npmmirror.com/koa-body/-/koa-body-6.0.1.tgz#46c490033cceebb2874c53cfbb04c45562cf3c84"
+  integrity sha512-M8ZvMD8r+kPHy28aWP9VxL7kY8oPWA+C7ZgCljrCMeaU7uX6wsIQgDHskyrAr9sw+jqnIXyv4Mlxri5R4InIJg==
+  dependencies:
+    "@types/co-body" "^6.1.0"
+    "@types/formidable" "^2.0.5"
+    "@types/koa" "^2.13.5"
+    co-body "^6.1.0"
+    formidable "^2.0.1"
+    zod "^3.19.1"
 
 koa-bodyparser@^4.3.0:
   version "4.3.0"
@@ -3191,7 +3260,7 @@ on-finished@^2.3.0:
   dependencies:
     ee-first "1.1.1"
 
-once@^1.3.0:
+once@^1.3.0, once@^1.4.0:
   version "1.4.0"
   resolved "https://registry.npmjs.org/once/-/once-1.4.0.tgz#583b1aa775961d4b113ac17d9c50baef9dd76bd1"
   integrity sha1-WDsap3WWHUsROsF9nFC6753Xa9E=
@@ -3563,6 +3632,13 @@ punycode@^2.1.0, punycode@^2.1.1:
   resolved "https://registry.npmjs.org/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
 
+qs@^6.11.0:
+  version "6.11.0"
+  resolved "https://registry.npmmirror.com/qs/-/qs-6.11.0.tgz#fd0d963446f7a65e1367e01abd85429453f0c37a"
+  integrity sha512-MvjoMCJwEarSbUYk5O+nmoSzSutSsTwF85zcHPQ9OrlFoZOYIjaqBAJIqIXjptyD5vThxGq52Xu/MaJzRkIk4Q==
+  dependencies:
+    side-channel "^1.0.4"
+
 qs@^6.5.2:
   version "6.10.3"
   resolved "https://registry.npmjs.org/qs/-/qs-6.10.3.tgz#d6cde1b2ffca87b5aa57889816c5f81535e22e8e"
@@ -3859,6 +3935,11 @@ sorted-object@^2.0.1:
   version "2.0.1"
   resolved "https://registry.npmjs.org/sorted-object/-/sorted-object-2.0.1.tgz#7d631f4bd3a798a24af1dffcfbfe83337a5df5fc"
   integrity sha1-fWMfS9OnmKJK8d/8+/6DM3pd9fw=
+
+source-map-js@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.npmmirror.com/source-map-js/-/source-map-js-1.0.2.tgz#adbc361d9c62df380125e7f161f71c826f1e490c"
+  integrity sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==
 
 source-map-support@0.5.19:
   version "0.5.19"
@@ -4399,3 +4480,8 @@ z-schema@^5.0.1:
     validator "^13.7.0"
   optionalDependencies:
     commander "^2.7.1"
+
+zod@^3.19.1:
+  version "3.20.2"
+  resolved "https://registry.npmmirror.com/zod/-/zod-3.20.2.tgz#068606642c8f51b3333981f91c0a8ab37dfc2807"
+  integrity sha512-1MzNQdAvO+54H+EaK5YpyEy0T+Ejo/7YLHS93G3RnYWh5gaotGHwGeN/ZO687qEDU2y4CdStQYXVHIgrUl5UVQ==

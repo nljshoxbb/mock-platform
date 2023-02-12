@@ -26,7 +26,6 @@ const authMiddleware = async (ctx: Context, next: Next) => {
   try {
     const { authorization } = ctx.request.header;
     const { url } = ctx.request;
-
     if (UN_LOGIN_URL.includes(url) || url.indexOf('/api') === -1 || url.indexOf('/mock/') !== -1) {
       await next();
     } else {
@@ -49,11 +48,8 @@ const authMiddleware = async (ctx: Context, next: Next) => {
             } else {
               return tokenExpired();
             }
-          } else {
-            return notLogin();
           }
         }
-        return notLogin();
       }
 
       return notLogin();

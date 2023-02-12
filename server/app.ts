@@ -5,7 +5,8 @@ import catchError from '@/server/middlewares/catchError';
 import routes from '@/server/routes';
 import Log from '@/server/utils/Log';
 import Koa from 'koa';
-import bodyParser from 'koa-bodyparser';
+// import bodyParser from 'koa-bodyparser';
+import koaBody from 'koa-body';
 import serverStatic from 'koa-static';
 import { koaSwagger } from 'koa2-swagger-ui';
 
@@ -16,7 +17,8 @@ import { getIPAddress } from './utils/utils';
 
 const app = new Koa();
 
-app.use(bodyParser({ strict: false, jsonLimit: '2mb', formLimit: '2mb', textLimit: '2mb' }));
+// app.use(bodyParser({ strict: false, jsonLimit: '2mb', formLimit: '2mb', textLimit: '2mb' }));
+app.use(koaBody({ multipart: true }));
 app.use(serverStatic(path.join(Config.APP_RUNTIME, 'public'), { gzip: true }));
 
 app.use(mockMiddleware);
